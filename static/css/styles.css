@@ -199,6 +199,14 @@ p {
   margin-bottom: 0;
 } */
 
+.element1 {
+  margin-bottom: 5px; /* Reduce this value */
+}
+
+.element2 {
+  margin-bottom: 6px; /* Reduce this value */
+}
+
 abbr[title] {
   -webkit-text-decoration: underline dotted;
   text-decoration: underline dotted;

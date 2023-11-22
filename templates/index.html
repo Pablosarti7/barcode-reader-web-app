@@ -77,7 +77,8 @@
                                 <div class="card card-body">
                                     {% if ingredients_list %}
                                     {% for ingredient in ingredients_list %}
-                                    <p>{{ingredient}}</p>
+                                    <div class="element1"><strong>{{ingredient['name']}}:</strong></div>
+                                    <div class="element2">{{ingredient['description']}}</div>
                                     {% endfor %}
                                     {% else %}
                                     Your ingredients will appear here.
