@@ -1,5 +1,7 @@
 from openai import OpenAI
 import os
+import json
+import pprint
 
 client = OpenAI(
     api_key=os.environ.get('API_KEY'),
@@ -11,19 +13,29 @@ class ChatGPT:
     def __init__(self) -> None:
         pass
 
-    def get_response(self, ingredient):
+    def get_response(self, list_of_ingredients):
         tools = [
             {
                 "type": "function",
                 "function": {
                     "name": "set_ingredients",
-                    "description": "Use this function to structure the ingredient for a database.",
+                    "description": "Use this function to structure the list of ingredients for a database.",
                     "parameters": {
                         "type": "object",
                         "properties": {
-                            "name": {"type": "string"},
-                            "description": {"type": "string"},
+                            "ingredients": {
+                                "type": "array",
+                                "items": {
+                                    "type": "object",
+                                    "properties": {
+                                        "name": {"type": "string"},
+                                        "description": {"type": "string"}
+                                    },
+                                    "required": ["name", "description"],
+                                }
+                            },
                         },
+                        "required": ["ingredients"],
                     },
                 },
             }
@@ -31,7 +43,8 @@ class ChatGPT:
 
         messages = [
             {"role": "system", "content": "You are a knowledgeable nutritionist."},
-            {"role": "user", "content": f"For this food ingredient '{ingredient}' provide information about what it is and its impact on health."}
+            {"role": "user", "content": f"Please analyze each ingredient in this list individually {list_of_ingredients}. For each ingredient, \
+                 provide information about what it is and its impact on health."}
         ]
 
         completion = client.chat.completions.create(
@@ -43,6 +56,8 @@ class ChatGPT:
             messages=messages,
         )
         response = completion.choices[0].message
+        data = response.tool_calls[0].function.arguments
+        parsed_data = json.loads(data)
+        ingredients = parsed_data['ingredients']
 
-        return response
-    
+        return ingredients
