@@ -7,8 +7,6 @@ from ingredients_api import get_ingredient, add_ingredient
 from openai_api import ChatGPT
 import os
 import re
-import json
-import time
 
 
 app = Flask(__name__)
@@ -68,9 +66,9 @@ def home():
             final_list = []
             for c in array:
                 if re.search(r'[()\[\]0-9]', c):
-                    # print(f"1st from Inside-> {c}")
+
                     c = re.sub(r'[()\[\]0-9]', '', c)
-                    # print(f"2nd from inside-> {c}")
+                    
                     final_list.append(c)
                 else:
                     final_list.append(c)
@@ -78,17 +76,31 @@ def home():
             openai_list = []
             ingredients_list = []
             for final_ingredient in final_list:
+                # get the ingredient from your database
                 single_ingredient = get_ingredient(final_ingredient)
 
                 # if we get none instead of an object it means we we to search it because is not in the database
                 if single_ingredient != None:
+                    print(single_ingredient)
                     ingredients_list.append(single_ingredient)
                 else:
+                    print(single_ingredient)
                     openai_list.append(final_ingredient)
 
-            response_list = chatgpt.get_response(openai_list)
-            add_ingredient(response_list)
+            response_list = []
+            # if list is not empty
+            # have a flask loading message here so that if it happens then users will know 
+            if openai_list:
+                response = chatgpt.get_response(openai_list)
+                
+                for object in response:
+                    object['name'] = object['name'].title()
+                    response_list.append(object)
+                
+                add_ingredient(response_list)
+                
             complete_list = ingredients_list + response_list
+            
 
             return render_template('index.html', form=form, name=name, ingredients_list=complete_list)
         else:

@@ -1,7 +1,7 @@
 from openai import OpenAI
 import os
 import json
-import pprint
+
 
 client = OpenAI(
     api_key=os.environ.get('API_KEY'),
