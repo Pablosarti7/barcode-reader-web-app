@@ -14,8 +14,10 @@ import time
 app = Flask(__name__)
 app.secret_key = os.urandom(24)
 
+
 class SearchField(FlaskForm):
-    ingredients = StringField('Search', validators=[DataRequired()], render_kw={"placeholder": "Enter barcode here"})
+    ingredients = StringField('Search', validators=[DataRequired()], render_kw={
+                              "placeholder": "Enter barcode here"})
     submit = SubmitField('Search')
 
 
@@ -32,49 +34,50 @@ def home():
             product_info = ingredients['product']
 
             name = product_info.get('product_name', 'Sorry no name was found.')
-            ingredients = product_info.get('ingredients_text_en', 'Sorry no ingredients where found.')
-            
+            ingredients = product_info.get(
+                'ingredients_text_en', 'Sorry no ingredients where found.')
+
             # you might not need the code below
             def clean_ingredient(ingredient):
                 # Remove parentheses and their contents
                 ingredient = re.sub(r'\(.*?\)', '', ingredient)
-                
+
                 # Trim whitespace
                 ingredient = ingredient.strip()
-                
+
                 # Remove trailing special characters
                 ingredient = re.sub(r'[\*\)&]$', '', ingredient)
-                
+
                 # Convert to lowercase
                 return ingredient.lower()
 
             def clean_ingredients(input_string):
-                
+
                 splitted_string = re.split(',|\.|:', input_string)
 
                 # Clean each ingredient
-                cleaned_ingredients = [clean_ingredient(ingredient) for ingredient in splitted_string if ingredient]
-                
+                cleaned_ingredients = [clean_ingredient(
+                    ingredient) for ingredient in splitted_string if ingredient]
+
                 return cleaned_ingredients
 
             array = clean_ingredients(ingredients)
-            
+
             # refactor this code in the future
             # This is the final clean up of the string
-            final_array = []
+            final_list = []
             for c in array:
                 if re.search(r'[()\[\]0-9]', c):
                     # print(f"1st from Inside-> {c}")
                     c = re.sub(r'[()\[\]0-9]', '', c)
                     # print(f"2nd from inside-> {c}")
-                    final_array.append(c)
+                    final_list.append(c)
                 else:
-                    final_array.append(c)
-            
+                    final_list.append(c)
 
             openai_list = []
             ingredients_list = []
-            for final_ingredient in final_array:
+            for final_ingredient in final_list:
                 single_ingredient = get_ingredient(final_ingredient)
 
                 # if we get none instead of an object it means we we to search it because is not in the database
@@ -82,11 +85,10 @@ def home():
                     ingredients_list.append(single_ingredient)
                 else:
                     openai_list.append(final_ingredient)
-            
-            response_list = chatgpt.get_response(openai_list)
-            complete_list = ingredients_list + response_list
 
-                    
+            response_list = chatgpt.get_response(openai_list)
+            add_ingredient(response_list)
+            complete_list = ingredients_list + response_list
 
             return render_template('index.html', form=form, name=name, ingredients_list=complete_list)
         else:

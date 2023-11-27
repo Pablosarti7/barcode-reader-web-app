@@ -13,14 +13,18 @@ def get_ingredient(ingredient):
     else:
         return None
     
-def add_ingredient(ingredient_object):
+def add_ingredient(ingredients):
     add_url = 'https://ingredients-api-t2ja.onrender.com/add'
     headers = {
         "api-key": "secret_api_key",  # Replace with your actual API key
         "Content-Type": "application/json"
     }
 
-    response = requests.post(add_url, headers=headers, json=ingredient_object)
+    # If a single ingredient is passed, wrap it in a list
+    if isinstance(ingredients, dict):
+        ingredients = [ingredients]
+
+    response = requests.post(add_url, headers=headers, json=ingredients)
 
     # Error handling
     try:
