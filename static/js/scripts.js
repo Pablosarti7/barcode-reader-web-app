@@ -1,3 +1,8 @@
+document.getElementById('myForm').onsubmit = function() {
+    document.getElementById('loadingMessage').style.display = 'block';
+};
+
+
 // document.getElementById('startbutton').addEventListener('click', function() {
 //     Quagga.init({
 //         inputStream: {

@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField
 from wtforms.validators import DataRequired
@@ -24,7 +24,7 @@ def home():
     chatgpt = ChatGPT()
     form = SearchField()
 
-    if form.validate_on_submit():
+    if request.method == 'POST':
         barcode = form.ingredients.data
         ingredients = get_product_info(str(barcode))
 
@@ -39,24 +39,18 @@ def home():
             def clean_ingredient(ingredient):
                 # Remove parentheses and their contents
                 ingredient = re.sub(r'\(.*?\)', '', ingredient)
-
                 # Trim whitespace
                 ingredient = ingredient.strip()
-
                 # Remove trailing special characters
                 ingredient = re.sub(r'[\*\)&]$', '', ingredient)
-
                 # Convert to lowercase
                 return ingredient.lower()
 
             def clean_ingredients(input_string):
-
                 splitted_string = re.split(',|\.|:', input_string)
-
                 # Clean each ingredient
                 cleaned_ingredients = [clean_ingredient(
                     ingredient) for ingredient in splitted_string if ingredient]
-
                 return cleaned_ingredients
 
             array = clean_ingredients(ingredients)
@@ -66,9 +60,7 @@ def home():
             final_list = []
             for c in array:
                 if re.search(r'[()\[\]0-9]', c):
-
                     c = re.sub(r'[()\[\]0-9]', '', c)
-                    
                     final_list.append(c)
                 else:
                     final_list.append(c)
@@ -78,21 +70,16 @@ def home():
             for final_ingredient in final_list:
                 # get the ingredient from your database
                 single_ingredient = get_ingredient(final_ingredient)
-
                 # if we get none instead of an object it means we we to search it because is not in the database
                 if single_ingredient != None:
-                    
                     ingredients_list.append(single_ingredient)
                 else:
-                    
                     openai_list.append(final_ingredient)
 
             response_list = []
             # if list is not empty
-            # have a flask loading message here so that if it happens then users will know 
             if openai_list:
                 response = chatgpt.get_response(openai_list)
-                
                 for object in response:
                     object['name'] = object['name'].title()
                     response_list.append(object)

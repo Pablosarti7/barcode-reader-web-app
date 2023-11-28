@@ -31,7 +31,7 @@
                     <div class="text-center text-white">
                         <!-- Page heading-->
                         <h1 class="mb-5">Learn about food ingredients.</h1>
-                        <form method="POST" class="mb-5">
+                        <form id="myForm" method="POST" class="mb-5">
                             {{ form.hidden_tag() }}
                             <div class="row">
                                 <div class="form-group col">
@@ -55,6 +55,9 @@
                     <div class="card my-5 info-card">
                         <div class="card-header">
                             Product information
+                            <div id="loadingMessage" style="display: none;">
+                                Making API requests...
+                            </div>
                         </div>
                         <div class="card-body">
                             <h5 class="card-title mt-2">
