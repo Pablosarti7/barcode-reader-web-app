@@ -81,10 +81,10 @@ def home():
 
                 # if we get none instead of an object it means we we to search it because is not in the database
                 if single_ingredient != None:
-                    print(single_ingredient)
+                    
                     ingredients_list.append(single_ingredient)
                 else:
-                    print(single_ingredient)
+                    
                     openai_list.append(final_ingredient)
 
             response_list = []
@@ -98,7 +98,7 @@ def home():
                     response_list.append(object)
                 
                 add_ingredient(response_list)
-                
+
             complete_list = ingredients_list + response_list
             
 
