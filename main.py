@@ -35,59 +35,51 @@ def home():
             ingredients = product_info.get(
                 'ingredients_text_en', 'Sorry no ingredients where found.')
 
-            # you might not need the code below
             def clean_ingredient(ingredient):
                 # Remove parentheses and their contents
                 ingredient = re.sub(r'\(.*?\)', '', ingredient)
                 # Trim whitespace
                 ingredient = ingredient.strip()
                 # Remove trailing special characters
-                ingredient = re.sub(r'[\*\)&]$', '', ingredient)
-                # Convert to lowercase
+                ingredient = re.sub(r'[()\[\]0-9]', '', ingredient)
+
                 return ingredient.lower()
+                
 
             def clean_ingredients(input_string):
-                splitted_string = re.split(',|\.|:', input_string)
+                # Splitting the words by the chosen characters
+                split_string = re.split(',|\.|:', input_string)
                 # Clean each ingredient
-                cleaned_ingredients = [clean_ingredient(
-                    ingredient) for ingredient in splitted_string if ingredient]
-                return cleaned_ingredients
+                clean_ingredients = [clean_ingredient(ingredient) for ingredient in split_string if ingredient]
+                # Getting rid of the list item with % signs
+                filtered_list = [item for item in clean_ingredients if '%' not in item and 'contains' not in item]
 
-            array = clean_ingredients(ingredients)
+                return filtered_list
 
-            # refactor this code in the future
-            # This is the final clean up of the string
-            final_list = []
-            for c in array:
-                if re.search(r'[()\[\]0-9]', c):
-                    c = re.sub(r'[()\[\]0-9]', '', c)
-                    final_list.append(c)
-                else:
-                    final_list.append(c)
-
+            final_list = clean_ingredients(ingredients)
+            
             openai_list = []
             ingredients_list = []
             for final_ingredient in final_list:
-                # get the ingredient from your database
+                # Get the ingredient from your database
                 single_ingredient = get_ingredient(final_ingredient)
-                # if we get none instead of an object it means we we to search it because is not in the database
+                # If we get none instead of an object it means we we to search it because is not in the database
                 if single_ingredient != None:
                     ingredients_list.append(single_ingredient)
                 else:
                     openai_list.append(final_ingredient)
 
             response_list = []
-            # if list is not empty
+            # If list is not empty proceed
             if openai_list:
                 response = chatgpt.get_response(openai_list)
                 for object in response:
                     object['name'] = object['name'].title()
                     response_list.append(object)
-                
+
                 add_ingredient(response_list)
 
             complete_list = ingredients_list + response_list
-            
 
             return render_template('index.html', form=form, name=name, ingredients_list=complete_list)
         else:
