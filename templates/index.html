@@ -7,31 +7,52 @@
     <meta name="description" content="" />
     <meta name="author" content="" />
     <title>Nutriscanner</title>
-    <!-- Google fonts-->
+    <!-- Bootstrap -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
         integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <!-- Google fonts -->
     <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic,700italic" rel="stylesheet"
         type="text/css" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+        rel="stylesheet">
+    <!-- Styles CSS -->
     <link href="{{url_for('static', filename='/css/styles.css')}}" rel="stylesheet" />
 </head>
 
 {% block content %}
+
 <div class="content">
     <!-- Navigation-->
-    <nav class="navbar navbar-light bg-light static-top">
-        <div class="container">
-            <a class="navbar-brand">Nutriscanner</a>
-        </div>
+    <nav class="nav">
+        <a href="#" class="nav__link">
+            <i class="material-icons nav__icon">dashboard</i>
+            <span class="nav__text">Dashboard</span>
+        </a>
+        <a href="#" class="nav__link">
+            <i class="material-icons nav__icon">search</i>
+            <span class="nav__text">Search</span>
+        </a>
+        <a href="#" class="nav__link nav__link--active"  id="startbutton">
+            <i class="material-icons nav__icon">barcode_reader</i>
+            <span class="nav__text">Scanner</span>
+        </a>
+        <a href="{{url_for('about')}}" class="nav__link">
+            <i class="material-icons nav__icon">info</i>
+            <span class="nav__text">Info</span>
+        </a>
+        <a href="#" class="nav__link">
+            <i class="material-icons nav__icon">settings</i>
+            <span class="nav__text">Settings</span>
+        </a>
     </nav>
     <!-- Masthead-->
     <header class="masthead">
-        <div class="container position-relative">
+        <div class="container">
             <div class="row justify-content-center">
-                <div class="col-xl-6">
+                <div class="col-auto">
                     <div class="text-center text-white">
-                        <!-- Page heading-->
                         <h1 class="mb-5">Learn about food ingredients.</h1>
-                        <form id="myForm" method="POST" class="mb-5">
+                        <form id="myForm" method="POST">
                             {{ form.hidden_tag() }}
                             <div class="row">
                                 <div class="form-group col">
@@ -42,7 +63,10 @@
                                 </div>
                             </div>
                         </form>
-                        <div id="interactive" class="viewport"></div>
+                        <form id="barcodeForm" method="POST" action="/" style="display: none;">
+                            <input type="hidden" name="barcode" id="hiddenBarcodeInput">
+                        </form>
+                        <div id="scanner-container"></div>
                     </div>
                 </div>
             </div>
@@ -67,7 +91,8 @@
                                 Product Name
                                 {% endif %}
                             </h5>
-                            <p class="card-text">What are the ingredients in your food and what is the impact on your health.
+                            <p class="card-text">What are the ingredients in your food and what is the impact on your
+                                health.
                             </p>
                             <p>
                                 <button class="btn btn-primary" type="button" data-toggle="collapse"
@@ -95,35 +120,7 @@
         </div>
     </section>
 </div>
-<!-- Footer-->
-<footer class="footer bg-light">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-6 h-100 text-center text-lg-start my-auto">
-                <ul class="list-inline mb-2">
-                    <li class="list-inline-item"><a href="{{url_for('about')}}">About</a></li>
-                </ul>
-                <p class="text-muted small mb-4 mb-lg-0">
-                    &copy; Your Website 2023. All Rights Reserved.
-                </p>
-            </div>
-            <div class="col-lg-6 h-100 text-center text-lg-end my-auto">
-                <ul class="list-inline mb-0">
-                    <li class="list-inline-item me-4">
-                        <a href="#!"><i class="bi-facebook fs-3"></i></a>
-                    </li>
-                    <li class="list-inline-item me-4">
-                        <a href="#!"><i class="bi-twitter fs-3"></i></a>
-                    </li>
-                    <li class="list-inline-item">
-                        <a href="#!"><i class="bi-instagram fs-3"></i></a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </div>
-</footer>
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/quagga/0.12.1/quagga.min.js"></script>
 <script src="{{url_for('static', filename='js/scripts.js')}}"></script>
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
     integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"

@@ -4,7 +4,7 @@ from wtforms import StringField, SubmitField
 from wtforms.validators import DataRequired
 from openfoodfacts_api import get_product_info
 from ingredients_api import get_ingredient, add_ingredient
-from openai_api import ChatGPT
+from openai_api import get_response
 import os
 import re
 
@@ -21,11 +21,16 @@ class SearchField(FlaskForm):
 
 @app.route('/', methods=['GET', 'POST'])
 def home():
-    chatgpt = ChatGPT()
     form = SearchField()
 
     if request.method == 'POST':
-        barcode = form.ingredients.data
+        # Check for barcode in the form data
+        barcode = request.form.get('barcode')
+
+        if not barcode:
+            # If no barcode is found in the form data, fall back to the SearchField form
+            barcode = form.ingredients.data
+        
         ingredients = get_product_info(str(barcode))
 
         if 'product' in ingredients:
@@ -44,7 +49,6 @@ def home():
                 ingredient = re.sub(r'[()\[\]0-9]', '', ingredient)
 
                 return ingredient.lower()
-                
 
             def clean_ingredients(input_string):
                 # Splitting the words by the chosen characters
@@ -60,6 +64,7 @@ def home():
             
             openai_list = []
             ingredients_list = []
+
             for final_ingredient in final_list:
                 # Get the ingredient from your database
                 single_ingredient = get_ingredient(final_ingredient)
@@ -70,9 +75,9 @@ def home():
                     openai_list.append(final_ingredient)
 
             response_list = []
-            # If list is not empty proceed
+            # If list is not empty proceed (to save some time when the list is empty)
             if openai_list:
-                response = chatgpt.get_response(openai_list)
+                response = get_response(openai_list)
                 for object in response:
                     object['name'] = object['name'].title()
                     response_list.append(object)
@@ -80,7 +85,7 @@ def home():
                 add_ingredient(response_list)
 
             complete_list = ingredients_list + response_list
-
+            
             return render_template('index.html', form=form, name=name, ingredients_list=complete_list)
         else:
             return 'Sorry product not found.'

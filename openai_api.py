@@ -8,56 +8,51 @@ client = OpenAI(
 )
 
 
-class ChatGPT:
-
-    def __init__(self) -> None:
-        pass
-
-    def get_response(self, list_of_ingredients):
-        tools = [
-            {
-                "type": "function",
-                "function": {
-                    "name": "set_ingredients",
-                    "description": "Use this function to structure the list of ingredients for a database.",
-                    "parameters": {
-                        "type": "object",
-                        "properties": {
-                            "ingredients": {
-                                "type": "array",
-                                "items": {
-                                    "type": "object",
-                                    "properties": {
-                                        "name": {"type": "string"},
-                                        "description": {"type": "string"}
-                                    },
-                                    "required": ["name", "description"],
-                                }
-                            },
+def get_response(list_of_ingredients):
+    tools = [
+        {
+            "type": "function",
+            "function": {
+                "name": "set_ingredients",
+                "description": "Use this function to structure the list of ingredients for a database.",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "ingredients": {
+                            "type": "array",
+                            "items": {
+                                "type": "object",
+                                "properties": {
+                                    "name": {"type": "string"},
+                                    "description": {"type": "string"}
+                                },
+                                "required": ["name", "description"],
+                            }
                         },
-                        "required": ["ingredients"],
                     },
+                    "required": ["ingredients"],
                 },
-            }
-        ]
+            },
+        }
+    ]
 
-        messages = [
-            {"role": "system", "content": "You are a knowledgeable nutritionist."},
-            {"role": "user", "content": f"Please analyze each ingredient in this list individually {list_of_ingredients}. For each ingredient, \
-                 provide information about what it is and its impact on health."}
-        ]
+    messages = [
+        {"role": "system", "content": "You are a knowledgeable nutritionist."},
+        {"role": "user", "content": f"Please analyze each ingredient in this list individually {list_of_ingredients}. For each ingredient, \
+                provide information about what it is and its impact on health."}
+    ]
 
-        completion = client.chat.completions.create(
-            model="gpt-3.5-turbo-1106",
-            temperature=0.1,
-            tools=tools,
-            tool_choice={"type": "function",
-                         "function": {"name": "set_ingredients"}},
-            messages=messages,
-        )
-        response = completion.choices[0].message
-        data = response.tool_calls[0].function.arguments
-        parsed_data = json.loads(data)
-        ingredients = parsed_data['ingredients']
+    completion = client.chat.completions.create(
+        model="gpt-3.5-turbo-1106",
+        temperature=0.1,
+        tools=tools,
+        tool_choice={"type": "function",
+                        "function": {"name": "set_ingredients"}},
+        messages=messages,
+    )
+    response = completion.choices[0].message
+    data = response.tool_calls[0].function.arguments
+    parsed_data = json.loads(data)
+    ingredients = parsed_data['ingredients']
 
-        return ingredients
+    return ingredients
