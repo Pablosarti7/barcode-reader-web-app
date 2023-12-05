@@ -5,12 +5,20 @@ document.getElementById('myForm').onsubmit = function() {
 
 
 document.getElementById('startbutton').addEventListener('click', function() {
+
+    const maxWidth = 400;  // Optional: max width
+    const maxHeight = 400; // Optional: max height
+
+    // Calculate width and height, respecting the max values
+    const width = Math.min(window.innerWidth, maxWidth);
+    const height = Math.min(window.innerHeight, maxHeight);
+
     Quagga.init({
         inputStream: {
             type : "LiveStream",
             constraints: {
-                width: 400,
-                height: 400,
+                width: width,
+                height: height,
                 facingMode: "environment" // or "user" for front camera
             },
             target: document.querySelector('#scanner-container'),
