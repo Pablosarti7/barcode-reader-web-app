@@ -2,31 +2,15 @@ document.getElementById('myForm').onsubmit = function() {
     document.getElementById('loadingMessage').style.display = 'block';
 };
 
-function stopCameraStream() {
-    if (cameraStream) {
-        var tracks = cameraStream.getTracks();
-        tracks.forEach(function(track) {
-            track.stop();
-        });
-        cameraStream = null;
-    }
-}
 
 document.getElementById('startbutton').addEventListener('click', function() {
-
-    const maxWidth = 400;  // Optional: max width
-    const maxHeight = 400; // Optional: max height
-
-    // Calculate width and height, respecting the max values
-    const width = Math.min(window.innerWidth, maxWidth);
-    const height = Math.min(window.innerHeight, maxHeight);
 
     Quagga.init({
         inputStream: {
             type : "LiveStream",
             constraints: {
-                width: width,
-                height: height,
+                width: 300,
+                height: 300,
                 facingMode: "environment" // or "user" for front camera
             },
             target: document.querySelector('#scanner-container'),
@@ -41,9 +25,6 @@ document.getElementById('startbutton').addEventListener('click', function() {
             return;
         }
         Quagga.start();
-        navigator.mediaDevices.getUserMedia({ video: true }).then(function(stream) {
-            cameraStream = stream;
-        });
         document.getElementById('cameraModal').style.display = 'block';
     });
 
@@ -56,14 +37,12 @@ document.getElementById('startbutton').addEventListener('click', function() {
     // When the user clicks on <span> (x), close the modal
     span.onclick = function() {
         modal.style.display = "none";
-        stopCameraStream();
     }
 
     // Close the modal if the user clicks anywhere outside of it
     window.onclick = function(event) {
         if (event.target == modal) {
             modal.style.display = "none";
-            stopCameraStream();
         }
     }
 
