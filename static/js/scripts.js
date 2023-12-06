@@ -2,7 +2,15 @@ document.getElementById('myForm').onsubmit = function() {
     document.getElementById('loadingMessage').style.display = 'block';
 };
 
-
+function stopCameraStream() {
+    if (cameraStream) {
+        var tracks = cameraStream.getTracks();
+        tracks.forEach(function(track) {
+            track.stop();
+        });
+        cameraStream = null;
+    }
+}
 
 document.getElementById('startbutton').addEventListener('click', function() {
 
@@ -32,9 +40,32 @@ document.getElementById('startbutton').addEventListener('click', function() {
             console.log(err);
             return;
         }
-        console.log("Initialization finished. Ready to start");
         Quagga.start();
+        navigator.mediaDevices.getUserMedia({ video: true }).then(function(stream) {
+            cameraStream = stream;
+        });
+        document.getElementById('cameraModal').style.display = 'block';
     });
+
+    // Get the modal
+    var modal = document.getElementById("cameraModal");
+
+    // Get the <span> element that closes the modal
+    var span = document.getElementsByClassName("close")[0];
+
+    // When the user clicks on <span> (x), close the modal
+    span.onclick = function() {
+        modal.style.display = "none";
+        stopCameraStream();
+    }
+
+    // Close the modal if the user clicks anywhere outside of it
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+            stopCameraStream();
+        }
+    }
 
     let lastScannedBarcode = null;
     let debounceTimer = null;
