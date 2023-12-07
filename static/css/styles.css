@@ -4138,6 +4138,7 @@ fieldset:disabled .btn {
 }
 
 /* Navigation from youtube */
+
 .nav {
   position: fixed;
   bottom: 0;
@@ -4147,6 +4148,7 @@ fieldset:disabled .btn {
   background-color: #ffffff;
   display: flex;
   overflow-x: auto;
+  z-index: 5;
 }
 
 .nav__link {
