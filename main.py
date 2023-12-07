@@ -63,14 +63,14 @@ def home():
             final_list = clean_ingredients(ingredients)
             
             openai_list = []
-            ingredients_list = []
+            database_list = []
 
             for final_ingredient in final_list:
                 # Get the ingredient from your database
                 single_ingredient = get_ingredient(final_ingredient)
                 # If we get none instead of an object it means we we to search it because is not in the database
                 if single_ingredient != None:
-                    ingredients_list.append(single_ingredient)
+                    database_list.append(single_ingredient)
                 else:
                     openai_list.append(final_ingredient)
 
@@ -84,7 +84,7 @@ def home():
 
                 add_ingredient(response_list)
 
-            complete_list = ingredients_list + response_list
+            complete_list = database_list + response_list
             
             return render_template('index.html', form=form, name=name, ingredients_list=complete_list)
         else:

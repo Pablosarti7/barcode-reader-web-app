@@ -4826,7 +4826,14 @@ fieldset:disabled .btn {
   margin: 15% auto; 
   padding: 20px;
   border: 1px solid #888;
-  width: 80%; 
+  width: 90%;
+  max-width: 1000px;
+}
+
+canvas.drawing, canvas.drawingBuffer {
+  position: absolute;
+  left: 0;
+  top: 0;
 }
 
 .card {

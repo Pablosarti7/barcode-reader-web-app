@@ -2,33 +2,83 @@ document.getElementById('myForm').onsubmit = function() {
     document.getElementById('loadingMessage').style.display = 'block';
 };
 
-
 document.getElementById('startbutton').addEventListener('click', function() {
 
     Quagga.init({
         inputStream: {
-            type : "LiveStream",
-            constraints: {
-                width: 300,
-                height: 300,
-                facingMode: "environment" // or "user" for front camera
-            },
+            name: "Live",
+            type: "LiveStream",
             target: document.querySelector('#scanner-container'),
+            constraints: {
+                width: 320,
+                height: 480,
+                facingMode: "environment"
+            },
         },
         decoder: {
-            readers : ["ean_reader"] // list of barcode types to look for
+            readers: [
+                "code_128_reader",
+                "ean_reader",
+                "ean_8_reader",
+                "code_39_reader",
+                "code_39_vin_reader",
+                "codabar_reader",
+                "upc_reader",
+                "upc_e_reader",
+                "i2of5_reader"
+            ],
+            debug: {
+                showCanvas: true,
+                showPatches: true,
+                showFoundPatches: true,
+                showSkeleton: true,
+                showLabels: true,
+                showPatchLabels: true,
+                showRemainingPatchLabels: true,
+                boxFromPatches: {
+                    showTransformed: true,
+                    showTransformedBox: true,
+                    showBB: true
+                }
+            }
         },
-        locate: true // enables barcode localization, which shows where in the image the barcode is detected
-    }, function(err) {
+
+    }, function (err) {
         if (err) {
             console.log(err);
-            return;
+            return
         }
+
+        console.log("Initialization finished. Ready to start");
         Quagga.start();
         document.getElementById('cameraModal').style.display = 'block';
     });
 
-    // Get the modal
+    Quagga.onProcessed(function (result) {
+        var drawingCtx = Quagga.canvas.ctx.overlay,
+        drawingCanvas = Quagga.canvas.dom.overlay;
+
+        if (result) {
+            if (result.boxes) {
+                drawingCtx.clearRect(0, 0, parseInt(drawingCanvas.getAttribute("width")), parseInt(drawingCanvas.getAttribute("height")));
+                result.boxes.filter(function (box) {
+                    return box !== result.box;
+                }).forEach(function (box) {
+                    Quagga.ImageDebug.drawPath(box, { x: 0, y: 1 }, drawingCtx, { color: "green", lineWidth: 2 });
+                });
+            }
+
+            if (result.box) {
+                Quagga.ImageDebug.drawPath(result.box, { x: 0, y: 1 }, drawingCtx, { color: "#00F", lineWidth: 2 });
+            }
+
+            if (result.codeResult && result.codeResult.code) {
+                Quagga.ImageDebug.drawPath(result.line, { x: 'x', y: 'y' }, drawingCtx, { color: 'red', lineWidth: 3 });
+            }
+        }
+    });
+
+        // Get the modal
     var modal = document.getElementById("cameraModal");
 
     // Get the <span> element that closes the modal
