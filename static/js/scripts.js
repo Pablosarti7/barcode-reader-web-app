@@ -98,7 +98,7 @@ document.getElementById('startbutton').addEventListener('click', function() {
 
     let lastScannedBarcode = null;
     let debounceTimer = null;
-    // Scanning for barcode and sending submitting form.
+    // Scanning for barcode and submitting form.
     Quagga.onDetected(function(data) {
         const scannedBarcode = data.codeResult.code;
     
@@ -106,6 +106,7 @@ document.getElementById('startbutton').addEventListener('click', function() {
         if (scannedBarcode === lastScannedBarcode) {
             return;
         }
+
         lastScannedBarcode = scannedBarcode;
     
         // Clear the existing debounce timer
@@ -116,6 +117,7 @@ document.getElementById('startbutton').addEventListener('click', function() {
             document.getElementById('hiddenBarcodeInput').value = scannedBarcode;
 
             document.getElementById('loadingMessage').style.display = 'block';
+            modal.style.display = "none";
             // Submit the form
             document.getElementById('barcodeForm').submit();
         }, 5000);
