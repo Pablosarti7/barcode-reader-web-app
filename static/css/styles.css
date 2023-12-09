@@ -4198,7 +4198,7 @@ fieldset:disabled .btn {
 
   .nav__link {
     font-size: 10px; /* Smaller font size for icons */
-    width: 400px; /* Smaller width for each nav item */
+    width: 17%; /* Smaller width for each nav item */
   }
 
   .nav__link .nav__text {
