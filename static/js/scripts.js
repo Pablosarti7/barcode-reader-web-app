@@ -3,15 +3,13 @@ document.getElementById('myForm').onsubmit = function() {
 };
 
 document.getElementById('startbutton').addEventListener('click', function() {
-
+    // Initializing camera feed.
     Quagga.init({
         inputStream: {
             name: "Live",
             type: "LiveStream",
             target: document.querySelector('#scanner-container'),
             constraints: {
-                width: 320,
-                height: 480,
                 facingMode: "environment"
             },
         },
@@ -48,12 +46,11 @@ document.getElementById('startbutton').addEventListener('click', function() {
             console.log(err);
             return
         }
-
         console.log("Initialization finished. Ready to start");
         Quagga.start();
         document.getElementById('cameraModal').style.display = 'block';
     });
-
+    // Drawing squares and rectangles for the camera.
     Quagga.onProcessed(function (result) {
         var drawingCtx = Quagga.canvas.ctx.overlay,
         drawingCanvas = Quagga.canvas.dom.overlay;
@@ -87,18 +84,21 @@ document.getElementById('startbutton').addEventListener('click', function() {
     // When the user clicks on <span> (x), close the modal
     span.onclick = function() {
         modal.style.display = "none";
+        Quagga.stop()
+        
     }
 
     // Close the modal if the user clicks anywhere outside of it
     window.onclick = function(event) {
         if (event.target == modal) {
             modal.style.display = "none";
+            Quagga.stop()
         }
     }
 
     let lastScannedBarcode = null;
     let debounceTimer = null;
-    
+    // Scanning for barcode and sending submitting form.
     Quagga.onDetected(function(data) {
         const scannedBarcode = data.codeResult.code;
     

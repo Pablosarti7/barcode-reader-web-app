@@ -4832,6 +4832,25 @@ fieldset:disabled .btn {
   max-width: 1000px;
 } */
 
+#scanner-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+video, canvas.drawingBuffer {
+  max-width: 100%;
+  height: auto;
+}
+
+@media only screen and (max-width: 600px) {
+  /* Styles for screens smaller than 600px */
+  video, canvas.drawingBuffer {
+      max-width: 90vw; /* Adjust based on your needs */
+  }
+}
+
 canvas.drawing, canvas.drawingBuffer {
   position: absolute;
   left: 0px;
