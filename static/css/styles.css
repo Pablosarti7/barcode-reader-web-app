@@ -426,12 +426,12 @@ select:disabled {
   display: none !important;
 }
 
-button,
+/* button,
 [type=button],
 [type=reset],
 [type=submit] {
   -webkit-appearance: button;
-}
+} */
 
 button:not(:disabled),
 [type=button]:not(:disabled),
@@ -489,10 +489,10 @@ legend+* {
   height: auto;
 }
 
-[type=search] {
+/* [type=search] {
   outline-offset: -2px;
   -webkit-appearance: textfield;
-}
+} */
 
 /* rtl:raw:
 [type="tel"],
@@ -510,10 +510,10 @@ legend+* {
   padding: 0;
 }
 
-::file-selector-button {
+/* ::file-selector-button {
   font: inherit;
   -webkit-appearance: button;
-}
+} */
 
 output {
   display: inline-block;
@@ -4810,7 +4810,7 @@ fieldset:disabled .btn {
 
 /* Header Section */
 
-.modal {
+/* .modal {
   display: none; 
   position: fixed; 
   z-index: 1; 
@@ -4830,11 +4830,11 @@ fieldset:disabled .btn {
   border: 1px solid #888;
   width: 90%;
   max-width: 1000px;
-}
+} */
 
 canvas.drawing, canvas.drawingBuffer {
   position: absolute;
-  left: 0;
+  left: 0px;
   top: 0;
 }
 

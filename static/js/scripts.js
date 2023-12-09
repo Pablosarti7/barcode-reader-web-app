@@ -78,7 +78,7 @@ document.getElementById('startbutton').addEventListener('click', function() {
         }
     });
 
-        // Get the modal
+    // Get the modal
     var modal = document.getElementById("cameraModal");
 
     // Get the <span> element that closes the modal
@@ -118,6 +118,6 @@ document.getElementById('startbutton').addEventListener('click', function() {
             document.getElementById('loadingMessage').style.display = 'block';
             // Submit the form
             document.getElementById('barcodeForm').submit();
-        }, 1000);
+        }, 5000);
     });
 });
