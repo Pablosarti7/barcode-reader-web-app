@@ -4270,6 +4270,7 @@ canvas.drawing, canvas.drawingBuffer {
 /* Entire Section */
 
 .section-padding {
+  margin-top: 60px;
   margin-bottom: 60px; /* Adjust this value based on the height of your navigation bar */
 }
 
