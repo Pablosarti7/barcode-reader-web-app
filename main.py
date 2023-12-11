@@ -19,6 +19,28 @@ class SearchField(FlaskForm):
     submit = SubmitField('Search')
 
 
+def clean_ingredient(ingredient):
+    # Remove parentheses and their contents
+    ingredient = re.sub(r'\(.*?\)', '', ingredient)
+    # Trim whitespace
+    ingredient = ingredient.strip()
+    # Remove trailing special characters
+    ingredient = re.sub(r'[()\[\]0-9]', '', ingredient)
+
+    return ingredient.lower()
+
+
+def clean_ingredients(input_string):
+    # Splitting the words by the chosen characters
+    split_string = re.split(',|\.|:', input_string)
+    # Clean each ingredient
+    clean_ingredients = [clean_ingredient(ingredient) for ingredient in split_string if ingredient]
+    # Getting rid of the list item with % signs
+    filtered_list = [item for item in clean_ingredients if '%' not in item and 'contains' not in item]
+
+    return filtered_list
+
+
 @app.route('/', methods=['GET', 'POST'])
 def home():
     form = SearchField()
@@ -40,30 +62,12 @@ def home():
             ingredients = product_info.get(
                 'ingredients_text_en', 'Sorry no ingredients where found.')
 
-            def clean_ingredient(ingredient):
-                # Remove parentheses and their contents
-                ingredient = re.sub(r'\(.*?\)', '', ingredient)
-                # Trim whitespace
-                ingredient = ingredient.strip()
-                # Remove trailing special characters
-                ingredient = re.sub(r'[()\[\]0-9]', '', ingredient)
-
-                return ingredient.lower()
-
-            def clean_ingredients(input_string):
-                # Splitting the words by the chosen characters
-                split_string = re.split(',|\.|:', input_string)
-                # Clean each ingredient
-                clean_ingredients = [clean_ingredient(ingredient) for ingredient in split_string if ingredient]
-                # Getting rid of the list item with % signs
-                filtered_list = [item for item in clean_ingredients if '%' not in item and 'contains' not in item]
-
-                return filtered_list
 
             final_list = clean_ingredients(ingredients)
-            
-            openai_list = []
-            database_list = []
+
+
+            # Ingredients that we in out database go in one list and non existing one ask chat gpt
+            openai_list, database_list = [], []
 
             for final_ingredient in final_list:
                 # Get the ingredient from your database
@@ -79,6 +83,7 @@ def home():
             if openai_list:
                 response = get_response(openai_list)
                 for object in response:
+                    # Check to see if you can take out the .title at one point
                     object['name'] = object['name'].title()
                     response_list.append(object)
 
@@ -86,6 +91,7 @@ def home():
 
             complete_list = database_list + response_list
             
+
             return render_template('index.html', form=form, name=name, ingredients_list=complete_list)
         else:
             return 'Sorry product not found.'
@@ -93,9 +99,18 @@ def home():
     return render_template('index.html', form=form)
 
 
+@app.route('/search')
+def search():
+    return render_template('search.html')
+
+
 @app.route('/about')
 def about():
     return render_template('about.html')
+
+@app.route('/settings')
+def settings():
+    return render_template('settings.html')
 
 
 if __name__ == '__main__':

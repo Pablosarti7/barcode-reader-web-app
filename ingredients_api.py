@@ -1,5 +1,14 @@
 import requests
 
+def get_all_ingredients():
+    url = 'https://ingredients-api-t2ja.onrender.com/all'
+
+    response = requests.get(url)
+
+    data = response.json()
+
+    return data['ingredients']
+
 def get_ingredient(ingredient):
     url = 'https://ingredients-api-t2ja.onrender.com/ingredients'
     parameters = {'name': ingredient}

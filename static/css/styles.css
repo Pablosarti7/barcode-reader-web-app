@@ -4218,8 +4218,6 @@ fieldset:disabled .btn {
   transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 } */
 
-/* Header Section */
-
 /* .modal {
   display: none; 
   position: fixed; 
@@ -4241,6 +4239,8 @@ fieldset:disabled .btn {
   width: 90%;
   max-width: 1000px;
 } */
+
+/* Modal Adjusting */
 
 #scanner-container {
   display: flex;
@@ -4265,6 +4265,12 @@ canvas.drawing, canvas.drawingBuffer {
   position: absolute;
   left: 0px;
   top: 0;
+}
+
+/* Entire Section */
+
+.section-padding {
+  margin-bottom: 60px; /* Adjust this value based on the height of your navigation bar */
 }
 
 .card {
