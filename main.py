@@ -83,7 +83,6 @@ def home():
             if openai_list:
                 response = get_response(openai_list)
                 for object in response:
-                    # Check to see if you can take out the .title at one point
                     object['name'] = object['name'].title()
                     response_list.append(object)
 
