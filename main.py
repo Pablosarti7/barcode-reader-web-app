@@ -13,9 +13,14 @@ app = Flask(__name__)
 app.secret_key = os.urandom(24)
 
 
-class SearchField(FlaskForm):
+class SearchBarcode(FlaskForm):
     ingredients = StringField('Search', validators=[DataRequired()], render_kw={
                               "placeholder": "Enter barcode here"})
+    submit = SubmitField('Search')
+
+class SearchIngredient(FlaskForm):
+    ingredient = StringField('Search', validators=[DataRequired()], render_kw={
+                              "placeholder": "Enter ingredient here"})
     submit = SubmitField('Search')
 
 
@@ -43,14 +48,14 @@ def clean_ingredients(input_string):
 
 @app.route('/', methods=['GET', 'POST'])
 def home():
-    form = SearchField()
+    form = SearchBarcode()
 
     if request.method == 'POST':
         # Check for barcode in the form data
         barcode = request.form.get('barcode')
 
         if not barcode:
-            # If no barcode is found in the form data, fall back to the SearchField form
+            # If no barcode is found in the form data, fall back to the SearchBarcode form
             barcode = form.ingredients.data
         
         ingredients = get_product_info(str(barcode))
@@ -98,14 +103,22 @@ def home():
     return render_template('index.html', form=form)
 
 
-@app.route('/search')
+@app.route('/search', methods=['GET', 'POST'])
 def search():
-    return render_template('search.html')
+    form = SearchIngredient()
+
+    if form.validate_on_submit():
+        searched_ingredient = form.ingredient.data
+        ingredient_from_db = get_ingredient(searched_ingredient)
+        return render_template('search.html', form=form, ingredient_info=ingredient_from_db)
+
+    return render_template('search.html', form=form)
 
 
 @app.route('/about')
 def about():
     return render_template('about.html')
+
 
 @app.route('/settings')
 def settings():

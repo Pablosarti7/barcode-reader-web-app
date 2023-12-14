@@ -20,31 +20,26 @@
 
 <body>
 
-<!-- Navbar -->
-<nav class="nav">
-    <span class="nav-indicator"></span>
-    <a href="{{url_for('home')}}" class="nav__link">
-        <i class="material-icons nav__icon">dashboard</i>
-        <span class="nav__text">Dashboard</span>
-    </a>
-    <a href="{{url_for('search')}}" class="nav__link">
-        <i class="material-icons nav__icon">search</i>
-        <span class="nav__text">Search</span>
-    </a>
-    <a href="#" class="nav__link nav__link__active" id="startbutton">
-        <i class="material-icons nav__icon">barcode_reader</i>
-        <span class="nav__text">Scanner</span>
-    </a>
-    <a href="{{url_for('about')}}" class="nav__link">
-        <i class="material-icons nav__icon">info</i>
-        <span class="nav__text">Info</span>
-    </a>
-    <a href="{{url_for('settings')}}" class="nav__link">
-        <i class="material-icons nav__icon">settings</i>
-        <span class="nav__text">Settings</span>
-    </a>
-</nav>
-<!-- Navbar -->
+<!-- Modal -->
+<div id="cameraModal" class="modal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-12">
+                        <div id="scanner-container">
+                            <!-- Ensure content here is mobile-friendly -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal -->
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/quagga/0.12.1/quagga.min.js"></script>
 <script src="{{url_for('static', filename='js/scripts.js')}}"></script>

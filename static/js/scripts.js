@@ -50,6 +50,7 @@ document.getElementById('startbutton').addEventListener('click', function() {
         Quagga.start();
         document.getElementById('cameraModal').style.display = 'block';
     });
+    
     // Drawing squares and rectangles for the camera.
     Quagga.onProcessed(function (result) {
         var drawingCtx = Quagga.canvas.ctx.overlay,
@@ -96,6 +97,7 @@ document.getElementById('startbutton').addEventListener('click', function() {
         }
     }
 
+    // Detecting barcode
     let lastScannedBarcode = null;
     let debounceTimer = null;
     // Scanning for barcode and submitting form.

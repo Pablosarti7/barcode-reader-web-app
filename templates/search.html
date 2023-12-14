@@ -1,14 +1,74 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Search</title>
 </head>
+
 <body>
+
     {% include "navigation.html" %}
+
+    <header class="search_header">
+        <div class="container my_container">
+            <div class="row justify-content-center">
+                <div class="col_auto">
+                    <div class="text-white">
+                        <h1 class="mb-5">Search for specific ingredients.</h1>
+                        <form id="myForm" method="POST">
+                            <div class="row">
+                                {{ form.hidden_tag() }}
+                                <div class="col">
+                                    {{ form.ingredient(class="form-control") }}
+                                </div>
+                                <div class="col-auto">
+                                    {{ form.submit(class="btn btn-primary") }}
+                                </div>
+                            </div>
+                        </form>
+                        <form id="barcodeForm" method="POST" action="/" style="display: none;">
+                            <input type="hidden" name="barcode" id="hiddenBarcodeInput">
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
     
-    <p>Work in progress</p>
+
+    <section class="d-flex flex-column" style="min-height: 50vh;">
+        <!-- Product ingredients information -->
+        <div class="container mt-5">
+            <div class="row">
+                <div class="col-12 mx-auto">
+                    <div class="card info-card">
+                        <div class="card-body">
+                            <h5 class="card-title mt-2">
+                                Ingredient Information
+                            </h5>
+                            <p class="card-text">Get ingredient information about the effects on your health.
+                            </p>
+
+                            <div class="card">
+                                {% if ingredient_info %}
+                                <p>Name: {{ingredient_info['name']}}</p>
+                                <p>Effects: {{ingredient_info['description']}}</p>
+                                <p>Rating: {{ingredient_info['rating']}}</p>
+                                {% else %}
+                                Nothing
+                                {% endif %}
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
 </body>
+
 </html>
