@@ -18,8 +18,8 @@ inputElement.addEventListener("keyup", function (event) {
                     return keyword.toLowerCase().includes(input.toLowerCase());
                 })
             }
+            console.log(result);
             display(result);
-
         })
         .catch(error => {
             console.error("Error:", error);
