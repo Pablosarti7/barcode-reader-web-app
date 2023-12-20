@@ -225,6 +225,18 @@ canvas.drawingBuffer {
 
 }
 
+.result-box {
+  border: 1px solid #999;
+  background-color: #ffffff;
+  color: black;
+  max-height: 200px;
+  overflow-y: scroll;
+}
+
+.result-box div {
+  padding: 15px 10px;
+}
+
 /* Testing */
 
 .flex-container {
