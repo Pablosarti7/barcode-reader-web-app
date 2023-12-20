@@ -26,7 +26,7 @@ class SearchIngredient(FlaskForm):
 
 
 def autosuggest(prefix):
-    ingredients = ['salt', 'sugar', 'sardines', 'sausage', 'split peas', 'soy beans', 'sea salt', 'do you know what sea salt is']
+    ingredients = ['salt', 'sugar', 'sardines', 'sausage', 'split peas', 'soy beans', 'sea salt', 'soy milk']
     # you can add code here that will specify not to append matches with less then 70 percent score if the words are not relevant
     if prefix:
         best_match = process.extract(prefix, ingredients)
