@@ -1,17 +1,12 @@
 var inputElement = document.getElementById("textbox");
 var resultBox = document.querySelector('.result-box');
 
-let delayTimer = null;
-
 inputElement.addEventListener("keyup", function (event) {
     var textBoxValue = inputElement.value;
 
     const query = encodeURIComponent(textBoxValue);
-
-    clearTimeout(delayTimer);
-
-    delayTimer = setTimeout(function() {
-        fetch(`http://127.0.0.1:5000/search-suggestions?q=${query}`)
+    
+    fetch(`http://127.0.0.1:5000/search-suggestions?q=${query}`)
         .then(response => response.json())
         .then(data => {
             
@@ -29,8 +24,6 @@ inputElement.addEventListener("keyup", function (event) {
         .catch(error => {
             console.error("Error:", error);
         });
-    }, 1000);
-
 });
 
 // displaying the suggestion on the result-box div
