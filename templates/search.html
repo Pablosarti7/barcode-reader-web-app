@@ -21,8 +21,10 @@
                             <div class="row">
                                 {{ form.hidden_tag() }}
                                 <div class="col">
-                                    {{ form.ingredient(class="form-control") }}
+                                    {{ form.ingredient(class="form-control", id="textbox") }}
+                                    <div class="result-box"></div>
                                 </div>
+
                                 <div class="col-auto">
                                     {{ form.submit(class="btn btn-primary") }}
                                 </div>
@@ -36,8 +38,6 @@
             </div>
         </div>
     </header>
-
-    
 
     <section class="d-flex flex-column" style="min-height: 50vh;">
         <!-- Product ingredients information -->
@@ -68,7 +68,8 @@
             </div>
         </div>
     </section>
-
+    
+    <script src="static/js/autocomplete.js"></script>
 </body>
 
 </html>

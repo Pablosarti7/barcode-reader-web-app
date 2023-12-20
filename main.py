@@ -1,10 +1,11 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, jsonify
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField
 from wtforms.validators import DataRequired
 from openfoodfacts_api import get_product_info
-from ingredients_api import get_ingredient, add_ingredient
+from ingredients_api import get_all_ingredients, get_ingredient, add_ingredient
 from openai_api import get_response
+from thefuzz import process
 import os
 import re
 
@@ -22,6 +23,19 @@ class SearchIngredient(FlaskForm):
     ingredient = StringField('Search', validators=[DataRequired()], render_kw={
                               "placeholder": "Enter ingredient here"})
     submit = SubmitField('Search')
+
+
+def autosuggest(prefix):
+    ingredients = ['salt', 'sugar', 'sardines', 'sausage', 'split peas', 'soy beans', 'sea salt', 'do you know what sea salt is']
+    # you can add code here that will specify not to append matches with less then 70 percent score if the words are not relevant
+    if prefix:
+        best_match = process.extract(prefix, ingredients)
+        
+        matches_list = [t[0] for t in best_match]
+
+        return matches_list
+    
+    return ''
 
 
 def clean_ingredient(ingredient):
@@ -108,11 +122,22 @@ def search():
     form = SearchIngredient()
 
     if form.validate_on_submit():
+        print('Inside')
         searched_ingredient = form.ingredient.data
         ingredient_from_db = get_ingredient(searched_ingredient)
         return render_template('search.html', form=form, ingredient_info=ingredient_from_db)
 
     return render_template('search.html', form=form)
+
+
+@app.route('/search-suggestions')
+def search_suggestions():
+
+    query = request.args['q'].lower()
+    
+    prefix = autosuggest(query)
+    
+    return jsonify(suggestions=prefix)
 
 
 @app.route('/about')

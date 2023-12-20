@@ -6,8 +6,13 @@ def get_all_ingredients():
     response = requests.get(url)
 
     data = response.json()
+    
+    possible_words_list = []
+    
+    for item in data['ingredients']:
+        possible_words_list.append(item['name'].lower())
 
-    return data['ingredients']
+    return possible_words_list
 
 def get_ingredient(ingredient):
     url = 'https://ingredients-api-t2ja.onrender.com/ingredients'
