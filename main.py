@@ -5,6 +5,7 @@ from wtforms.validators import DataRequired
 from openfoodfacts_api import get_product_info
 from ingredients_api import get_all_ingredients, get_ingredient, add_ingredient
 from openai_api import get_response
+from flask_caching import Cache
 from thefuzz import process
 import os
 import re
@@ -13,6 +14,7 @@ import re
 app = Flask(__name__)
 app.secret_key = os.urandom(24)
 
+cache = Cache(app, config={'CACHE_TYPE': 'SimpleCache'})
 
 class SearchBarcode(FlaskForm):
     ingredients = StringField('Search', validators=[DataRequired()], render_kw={
@@ -26,7 +28,7 @@ class SearchIngredient(FlaskForm):
 
 
 def autosuggest(prefix):
-    ingredients = ['salt', 'sugar', 'sardines', 'sausage', 'split peas', 'soy beans', 'sea salt', 'soy milk']
+    ingredients = ['salt', 'sugar', 'sardines', 'water', 'wheat', 'whey', 'potatoes', 'peas', 'penne']
     # you can add code here that will specify not to append matches with less then 70 percent score if the words are not relevant
     if prefix:
         best_match = process.extract(prefix, ingredients)
@@ -122,7 +124,7 @@ def search():
     form = SearchIngredient()
 
     if form.validate_on_submit():
-        print('Inside')
+        
         searched_ingredient = form.ingredient.data
         ingredient_from_db = get_ingredient(searched_ingredient)
         return render_template('search.html', form=form, ingredient_info=ingredient_from_db)
@@ -131,10 +133,11 @@ def search():
 
 
 @app.route('/search-suggestions')
+@cache.cached(timeout=50, query_string=True)
 def search_suggestions():
 
     query = request.args['q'].lower()
-    
+    print(f"Function called for query: {query}")
     prefix = autosuggest(query)
     
     return jsonify(suggestions=prefix)
