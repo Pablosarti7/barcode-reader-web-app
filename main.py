@@ -4,6 +4,7 @@ from wtforms import StringField, SubmitField
 from wtforms.validators import DataRequired
 from openfoodfacts_api import get_product_info
 from ingredients_api import get_all_ingredients, get_ingredient, add_ingredient
+from flask_login import UserMixin, login_user, LoginManager, login_required, current_user, logout_user
 from openai_api import get_response
 from flask_caching import Cache
 from thefuzz import process
@@ -15,6 +16,14 @@ app = Flask(__name__)
 app.secret_key = os.urandom(24)
 
 cache = Cache(app, config={'CACHE_TYPE': 'SimpleCache'})
+
+# login_manager = LoginManager()
+# login_manager.init_app(app)
+
+
+# @login_manager.user_loader
+# def load_user(user_id):
+#     return User.query.get(int(user_id))
 
 class SearchBarcode(FlaskForm):
     ingredients = StringField('Search', validators=[DataRequired()], render_kw={
@@ -118,7 +127,7 @@ def home():
 
     return render_template('index.html', form=form)
 
-
+# search page where users can search for specific ingredients
 @app.route('/search', methods=['GET', 'POST'])
 def search():
     form = SearchIngredient()
@@ -131,7 +140,7 @@ def search():
 
     return render_template('search.html', form=form)
 
-
+# talking to the javascript code sending requests to this url
 @app.route('/search-suggestions')
 @cache.cached(timeout=50, query_string=True)
 def search_suggestions():

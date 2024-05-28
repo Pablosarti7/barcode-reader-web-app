@@ -20,9 +20,9 @@
 
 {% block content %}
 
+<!-- class="content" is doing nothing -->
 <div class="content">
     <!-- Navigation-->
-
     <nav class="nav">
         <span class="nav-indicator"></span>
         <a href="{{url_for('home')}}" class="nav__link">
@@ -49,9 +49,9 @@
 
     <!-- Masthead-->
     <header class="home_header">
-        <div class="container my_container">
+        <div class="container">
             <div class="row justify-content-center">
-                <div class="col-auto">
+                <div class="col-auto text-center">
                     <div class="text-white">
                         <h1 class="mb-5">Learn about food ingredients.</h1>
                         <form id="myForm" method="POST">
@@ -65,16 +65,13 @@
                                 </div>
                             </div>
                         </form>
-                        <form id="barcodeForm" method="POST" action="/" style="display: none;">
-                            <input type="hidden" name="barcode" id="hiddenBarcodeInput">
-                        </form>
                     </div>
                 </div>
             </div>
         </div>
     </header>
-    <!-- Camera Modal -->
 
+    <!-- Camera Modal -->
     <div id="cameraModal" class="modal">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -94,9 +91,96 @@
         </div>
     </div>
 
-    <!-- Section -->
-    <section class="d-flex flex-column justify-content-center section-padding" style="min-height: 50vh;">
-        <!-- Product ingredients information -->
+    <!-- Benefits Section -->
+    <section class="py-5 py-xl-8">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-12 col-md-10 col-lg-8 col-xl-7 col-xxl-6">
+                    <h2 class="mb-4 display-5 text-center">Benefits</h2>
+                    <hr class="w-50 mx-auto mb-5 mb-xl-9 border-dark-subtle">
+                </div>
+            </div>
+        </div>
+
+        <div>
+            <div class="row justify-content-center">
+                <div class="col-11 col-sm-6 col-lg-3 text-center">
+                    <div class="badge p-3 mb-4">
+                        <i class="material-icons nav__icon">menu_book</i>
+                    </div>
+                    <h4 class="mb-3">Informed Eating</h4>
+                    <p class="mb-3 text-secondary">Understand what's really in your food.</p>
+                </div>
+                <div class="col-11 col-sm-6 col-lg-3 text-center">
+                    <div class="badge p-3 mb-4">
+                        <i class="material-icons nav__icon">restaurant</i>
+                    </div>
+                    <h4 class="mb-3">Healthier Choices</h4>
+                    <p class="mb-3 text-secondary">Make better decisions with instant ingredient analysis.</p>
+                </div>
+                <div class="col-11 col-sm-6 col-lg-3 text-center">
+                    <div class="badge p-3 mb-4">
+                        <i class="material-icons nav__icon">monitor_weight</i>
+                    </div>
+                    <h4 class="mb-3">Diet Friendly</h4>
+                    <p class="mb-3 text-secondary">Whether you're vegan, gluten-free, or watching your sugar intake,
+                        know what's suitable for you.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    <hr>
+
+    <!-- How it work section -->
+    <section>
+        <div class="main_container">
+            <div class="my_text_center">
+                <h2 class="mb-4 display-5">How it works</h2>
+                <hr class="w-50 mx-auto mb-5 mb-xl-9 border-dark-subtle">
+            </div>
+            
+            <div class="my_row">
+                <div class="instructions">
+                    <h4>Scan or Type</h4>
+                    <p class="text-secondary">Scan the food item or type it in the search bar to get detailed insights into thousands of food ingredients.</p>
+                </div>
+                <div class="instructions">
+                    <h4>Learn about each ingredient</h4>
+                    <p class="text-secondary">The truth is that certain ingredients in our food are not the heathiest and learning about them can help us make better decisions on what we put in our bodies.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    <hr>
+    
+    <!-- Call to action -->
+    <section class="main_container">
+        <div class="container" id="5">
+            <div class="row justify-content-center">
+                <div class="_col-auto">
+                        <h2 class="mb-4 display-5 text-center">Product information</h2>
+                        <hr class="w-50 mx-auto mb-5 mb-xl-9 border-dark-subtle">
+                        <form id="myForm" method="POST">
+                            {{ form.hidden_tag() }}
+                            <div class="row">
+                                <div class="col">
+                                    {{ form.ingredients(class="form-control") }}
+                                </div>
+                                <div class="col-auto">
+                                    {{ form.submit(class="btn btn-primary") }}
+                                </div>
+                            </div>
+                        </form>
+                        <form id="barcodeForm" method="POST" action="/" style="display: none;">
+                            <input type="hidden" name="barcode" id="hiddenBarcodeInput">
+                        </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Product information section -->
+    <section class="main_container">
         <div class="container">
             <div class="row">
                 <div class="col-12 mx-auto">
