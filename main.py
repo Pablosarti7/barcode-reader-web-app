@@ -4,7 +4,6 @@ from wtforms import StringField, SubmitField
 from wtforms.validators import DataRequired
 from openfoodfacts_api import get_product_info
 from ingredients_api import get_all_ingredients, get_ingredient, add_ingredient
-from flask_login import UserMixin, login_user, LoginManager, login_required, current_user, logout_user
 from openai_api import get_response
 from flask_caching import Cache
 from thefuzz import process
