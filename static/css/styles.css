@@ -16,13 +16,28 @@ h1 {
   font-weight: 600; /* Bold */
 }
 
-.my_container {
-  width: 90%;
+.main_container {
+  width: 100%;
+  padding-right: 15px;
+  padding-left: 15px;
+  margin-right: auto;
+  margin-left: auto;
+  padding-top: 25px;
+  padding-bottom: 25px;
 }
 
-.row {
+.my_row {
+  height: auto;
+  width: auto;
   display: flex;
-  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin-left: 10vw;
+  margin-right: 10vw;
+}
+
+.my_text_center {
+  text-align: center;
 }
 
 .btn {
@@ -40,10 +55,22 @@ h1 {
   margin-bottom: 60px;
 }
 
-.col_auto {
-  flex: 0 0 auto;
-  width: auto;
-  max-width: 100%;
+@media (max-width: 700px) {
+  .main_container {
+    width: 100%;
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-right: auto;
+    margin-left: auto;
+  }
+  
+  .my_row {
+    height: auto;
+    width: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 3%;
+  }
 }
 
 /* Navigation (from youtube) */
@@ -124,17 +151,6 @@ h1 {
 
 }
 
-/* .nav .nav-indicator {
-  width: 90px;
-  height: 90px;
-  border-radius: 50%;
-  background-color: #000;
-  position: absolute;
-  top: -35px;
-  left: calc(300px - 45px);
-  transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-} */
-
 /* Modal Adjusting */
 
 #scanner-container {
@@ -177,6 +193,16 @@ canvas.drawingBuffer {
   margin: 0;
   padding: 0;
   font-size: 40px;
+}
+
+
+.instructions {
+  flex: 1;
+  text-align: center;
+}
+
+._col-auto {
+  width: 50vw;
 }
 
 @media (max-width: 600px) {
@@ -235,26 +261,4 @@ canvas.drawingBuffer {
 
 .result-box div {
   padding: 15px 10px;
-}
-
-/* Testing */
-
-.flex-container {
-  display: flex;
-}
-
-.div-card {
-  background: blue;
-  border: 30px solid white;
-  height: 100px;
-  flex: 1;
-}
-
-@media (max-width: 600px) {
-  .div-card {
-    background: rgb(125, 225, 140);
-    border: 5px solid white;
-    height: 50px;
-    flex: 1;
-  }
 }
