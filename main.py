@@ -36,7 +36,8 @@ class SearchIngredient(FlaskForm):
 
 
 def autosuggest(prefix):
-    ingredients = ['salt', 'sugar', 'sardines', 'water', 'wheat', 'whey', 'potatoes', 'peas', 'penne']
+    # ingredients = ['salt', 'sugar', 'sardines', 'water', 'wheat', 'whey', 'potatoes', 'peas', 'penne']
+    ingredients = get_all_ingredients()
     # you can add code here that will specify not to append matches with less then 70 percent score if the words are not relevant
     if prefix:
         best_match = process.extract(prefix, ingredients)
@@ -48,7 +49,7 @@ def autosuggest(prefix):
     return ''
 
 
-def clean_ingredient(ingredient):
+def clean_ingredient(ingredient): 
     # Remove parentheses and their contents
     ingredient = re.sub(r'\(.*?\)', '', ingredient)
     # Trim whitespace
@@ -126,7 +127,7 @@ def home():
 
     return render_template('index.html', form=form)
 
-# search page where users can search for specific ingredients
+# search page is where users can search for specific ingredients
 @app.route('/search', methods=['GET', 'POST'])
 def search():
     form = SearchIngredient()
@@ -145,7 +146,7 @@ def search():
 def search_suggestions():
 
     query = request.args['q'].lower()
-    print(f"Function called for query: {query}")
+    
     prefix = autosuggest(query)
     
     return jsonify(suggestions=prefix)
