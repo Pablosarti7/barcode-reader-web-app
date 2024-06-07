@@ -201,10 +201,6 @@ canvas.drawingBuffer {
   text-align: center;
 }
 
-._col-auto {
-  width: 50vw;
-}
-
 @media (max-width: 600px) {
 
   .home_header {
@@ -262,3 +258,6 @@ canvas.drawingBuffer {
 .result-box div {
   padding: 15px 10px;
 }
+
+/* About Page */
+
