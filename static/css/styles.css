@@ -261,3 +261,17 @@ canvas.drawingBuffer {
 
 /* About Page */
 
+
+
+/* Settings Page */
+
+.settings_section {
+  padding-left: 20px;
+}
+
+.list-group-item {
+  border: none; /* Remove border if desired */
+  border-radius: 0; /* Remove border radius if desired */
+  margin-bottom: 10px; /* Add space between items */
+  padding: 15px 20px; /* Adjust padding */
+}
