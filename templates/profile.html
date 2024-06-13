@@ -8,17 +8,14 @@
 
     <section class="container mt-4">
         <div class="list-group">
-            <a href="{{ url_for('profile') }}" class="list-group-item list-group-item-action">My Profile</a>
-            <a href="#" class="list-group-item list-group-item-action">My Lists</a>
-            <a href="#" class="list-group-item list-group-item-action">My Scan History</a>
-            <a href="#" class="list-group-item list-group-item-action">End User License Agreement</a>
-            <a href="#" class="list-group-item list-group-item-action">Contact Support</a>
-            <a href="#" class="list-group-item list-group-item-action">Follow IngredientAdvisor</a>
+            <a href="#" class="list-group-item list-group-item-action">Edit Profile</a>
+            <a href="#" class="list-group-item list-group-item-action">Logout</a>
+            <a href="#" class="list-group-item list-group-item-action">Delete Profile</a>
         </div>
     </section>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/quagga/0.12.1/quagga.min.js"></script>
-    <script src="{{url_for('static', filename='js/scripts.js')}}"></script>
+    <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
         integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
         crossorigin="anonymous"></script>
