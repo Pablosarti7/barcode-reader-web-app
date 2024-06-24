@@ -23,30 +23,7 @@
 <!-- class="content" is doing nothing -->
 <div class="content">
 
-    <!-- Navigation-->
-    <nav class="nav">
-        <span class="nav-indicator"></span>
-        <a href="{{ url_for('home') }}" class="nav__link">
-            <i class="material-icons nav__icon">dashboard</i>
-            <span class="nav__text">Dashboard</span>
-        </a>
-        <a href="{{ url_for('search') }}" class="nav__link">
-            <i class="material-icons nav__icon">search</i>
-            <span class="nav__text">Search</span>
-        </a>
-        <a href="#" class="nav__link nav__link__active" id="startbutton">
-            <i class="material-icons nav__icon">barcode_reader</i>
-            <span class="nav__text">Scanner</span>
-        </a>
-        <a href="{{ url_for('about') }}" class="nav__link">
-            <i class="material-icons nav__icon">info</i>
-            <span class="nav__text">Info</span>
-        </a>
-        <a href="{{ url_for('settings') }}" class="nav__link">
-            <i class="material-icons nav__icon">settings</i>
-            <span class="nav__text">Settings</span>
-        </a>
-    </nav>
+    {% include 'navigation.html' %}
 
     <!-- Masthead-->
     <header class="home_header">
@@ -54,7 +31,8 @@
             <div class="row justify-content-center">
                 <div class="col-auto text-center">
                     <div class="text-white">
-                        <h1 class="mb-5">Learn about food ingredients.</h1>
+                        <h1 class="mb-3">Learn about food ingredients.</h1>
+                        <p class="mb-5">Make better decisions with instant ingredient analysis.</p>
                         <form id="myForm" method="POST" action="#productInfoSection">
                             {{ form.hidden_tag() }}
                             <div class="row">
@@ -95,31 +73,27 @@
     <!-- Benefits Section -->
     <section id="productInfoSection">
         <div class="main_container">
-            <!-- <div class="row justify-content-center"> -->
             <div class="my_text_center">
-                <h2 class="mb-4 display-5 text-center">Benefits</h2>
-                <hr class="w-50 mx-auto mb-5 mb-xl-9 border-dark-subtle">
+                <h2 class="mb-5 text-center">Benefits</h2>
             </div>
-            <!-- </div> -->
-
             <div class="row justify-content-center">
                 <div class="col-11 col-sm-6 col-lg-3 text-center">
                     <div class="badge p-3 mb-4">
-                        <i class="material-icons nav__icon">menu_book</i>
+                        <i class="material-icons nav__icon home_icon">menu_book</i>
                     </div>
                     <h4 class="mb-3">Informed Eating</h4>
                     <p class="mb-3 text-secondary">Understand what's really in your food.</p>
                 </div>
                 <div class="col-11 col-sm-6 col-lg-3 text-center">
                     <div class="badge p-3 mb-4">
-                        <i class="material-icons nav__icon">restaurant</i>
+                        <i class="material-icons nav__icon home_icon">restaurant</i>
                     </div>
                     <h4 class="mb-3">Healthier Choices</h4>
                     <p class="mb-3 text-secondary">Make better decisions with instant ingredient analysis.</p>
                 </div>
                 <div class="col-11 col-sm-6 col-lg-3 text-center">
                     <div class="badge p-3 mb-4">
-                        <i class="material-icons nav__icon">monitor_weight</i>
+                        <i class="material-icons nav__icon home_icon">monitor_weight</i>
                     </div>
                     <h4 class="mb-3">Diet Friendly</h4>
                     <p class="mb-3 text-secondary">Whether you're vegan, gluten-free, or watching your sugar intake,
@@ -128,113 +102,125 @@
             </div>
         </div>
     </section>
-    <hr>
 
     <!-- How it works section -->
-    <section>
-        <div class="main_container">
+    <section class="how_it_works_section">
+        <div class="how_it_works_container">
             <div class="my_text_center">
-                <h2 class="mb-4 display-5 text-center">How it works</h2>
-                <hr class="w-50 mx-auto mb-5 mb-xl-9 border-dark-subtle">
+                <h2 class="text-center">How It Works</h2>
+                <p class="mb-5 text-secondary">Easy steps to do to know all information about your food ingredients</p>
             </div>
 
             <div class="my_row">
                 <div class="instructions">
-                    <h4>Scan or Type</h4>
-                    <p class="text-secondary">Scan the food item or type it in the search bar to get detailed insights
-                        into thousands of food ingredients.</p>
+                    <div class="circle">1</div>
+                    <div class="instruction_content">
+                        <h4>Scan or Type</h4>
+                        <p class="text-secondary">Scan the food item or type it in the search bar to get detailed
+                            insights
+                            into thousands of food ingredients.</p>
+                    </div>
                 </div>
                 <div class="instructions">
-                    <h4>Learn about each ingredient</h4>
-                    <p class="text-secondary">The truth is that certain ingredients in our food are not the healthiest
-                        and learning about them can help us make better decisions on what we put in our bodies.</p>
+                    <div class="circle">2</div>
+                    <div class="instruction_content">
+                        <h4>Learn about each ingredient</h4>
+                        <p class="text-secondary">The truth is that certain ingredients in our food are not the
+                            healthiest
+                            and learning about them can help us make better decisions on what we put in our bodies.</p>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
-    <hr>
+
 
     <!-- Product information section -->
-    <section>
-        <!-- Call to action -->
-        <div class="main_container">
-            <div class="mb-5">
-                <h2 class="mb-4 display-5 text-center">Product information</h2>
-                <hr class="w-50 mx-auto mb-5 mb-xl-9 border-dark-subtle">
-                <div class="row justify-content-center">
-                    <div class="col-auto col-6 text-center">
-                        <div class="text-white">
-                            <form id="myForm2" method="POST">
-                                {{ form.hidden_tag() }}
-                                <div class="row">
-                                    <div class="col">
-                                        {{ form.ingredients(class="form-control") }}
-                                    </div>
-                                    <div class="col-auto">
-                                        {{ form.submit(class="btn btn-primary") }}
-                                    </div>
+    <section class="container main_container">
+        <div class="row">
+            <div class="col-12 col-md-6 mx-auto mb-3">
+                <h2 class="mb-5">Product information</h2>
+                <div>
+                    <div>
+                        <form id="myForm2" method="POST">
+                            {{ form.hidden_tag() }}
+                            <div class="row">
+                                <div class="col-12 col-sm-8 mb-2 mb-sm-0">
+                                    {{ form.ingredients(class="form-control") }}
                                 </div>
-                            </form>
-                        </div>
+                                <div class="col-12 col-sm-4">
+                                    {{ form.submit(class="btn btn-primary w-100") }}
+                                </div>
+                            </div>
+                        </form>
                     </div>
                 </div>
-                <form id="barcodeForm" method="POST" action="/" style="display: none;">
-                    <input type="hidden" name="barcode" id="hiddenBarcodeInput">
-                </form>
             </div>
-            <div class="container">
-                <div class="row">
-                    <div class="col-12 mx-auto">
-                        <div class="card info-card">
-                            <div class="card-header">
-                                Product information
-                                <div id="loadingMessage" style="display: none;">
-                                    Making API requests...
-                                </div>
-                            </div>
-                            <div class="card-body">
-                                <h5 class="card-title mt-2">
-                                    {% if ingredients_list %}
-                                    {{ name }}
-                                    {% else %}
-                                    Product Name
-                                    {% endif %}
-                                </h5>
-                                <p class="card-text">What are the ingredients in your food and what is the impact on
-                                    your
-                                    health.
-                                </p>
 
-                                <div class="card">
-                                    <ul class="list-group list-group-flush">
-                                        {% if ingredients_list %}
-                                        {% for ingredient in ingredients_list %}
-                                        {% if ingredient['rating'] == "healthy" %}
-                                        <li class="list-group-item" style="background-color: rgb(216, 255, 216);">
-                                            <p class="element1"><strong>{{ ingredient['name'] }}:</strong></p>
-                                            <p class="element2">{{ ingredient['description'] }}</p>
-                                        </li>
-                                        {% else %}
-                                        <li class="list-group-item" style="background-color: rgb(255, 208, 208);">
-                                            <p class="element1"><strong>{{ ingredient['name'] }}:</strong></p>
-                                            <p class="element2">{{ ingredient['description'] }}</p>
-                                        </li>
-                                        {% endif %}
-                                        {% endfor %}
-                                        {% else %}
-                                        <li class="list-group-item">Your ingredients will appear here.</li>
-                                        {% endif %}
-                                    </ul>
-                                </div>
-
+            <div class="col-12 col-md-6 mx-auto mb-3">
+                <div class="card info-card">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <div id="loadingMessage" style="display: none;">
+                                Making API requests...
                             </div>
+                            {% if ingredients_list %}
+                            {{ name }}
+                            {% else %}
+                            Product Name
+                            {% endif %}
+                        </h5>
+                        <p class="card-text">What are the ingredients in your food and what is the impact on your
+                            health.</p>
+                        <div class="card">
+                            <ul class="list-group list-group-flush">
+                                {% if ingredients_list %}
+                                {% for ingredient in ingredients_list %}
+                                {% if ingredient['rating'] == "healthy" %}
+                                <li class="list-group-item" style="background-color: rgb(216, 255, 216);">
+                                    <p class="element1"><strong>{{ ingredient['name'] }}:</strong></p>
+                                    <p class="element2">{{ ingredient['description'] }}</p>
+                                </li>
+                                {% else %}
+                                <li class="list-group-item" style="background-color: rgb(255, 208, 208);">
+                                    <p class="element1"><strong>{{ ingredient['name'] }}:</strong></p>
+                                    <p class="element2">{{ ingredient['description'] }}</p>
+                                </li>
+                                {% endif %}
+                                {% endfor %}
+                                {% else %}
+                                <li class="list-group-item">Your ingredients will appear here.</li>
+                                {% endif %}
+                            </ul>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
+
+
 </div>
+
+<footer class="footer text-center py-3">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+                <p class="mt-3 mb-0">&copy; 2024 IngredientAdvisor. All rights reserved.</p>
+            </div>
+            <div class="col-md-4">
+                <h5>Contact Us</h5>
+                <p>Email: support@ingredientadvisor.com</p>
+            </div>
+            <div class="col-md-4">
+                <h5>Follow Us</h5>
+                <a href="#" class="mr-2">Facebook</a>
+                <a href="#" class="mr-2">Twitter</a>
+                <a href="#" class="">Instagram</a>
+            </div>
+        </div>
+    </div>
+</footer>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/quagga/0.12.1/quagga.min.js"></script>
 <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
