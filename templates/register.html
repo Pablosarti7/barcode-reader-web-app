@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+{% include "header.html" %}
+
+{% block content %}
+
+{% include 'navigation.html' %}
+
+<section class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-8 col-md-10 mx-auto">
+            <form method="POST" action="{{ url_for('register') }}" class="custom-form">
+
+                {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                {% for message in messages %}
+                <p>{{ message }}</p>
+                {% endfor %}
+                {% endif %}
+                {% endwith %}
+                {{ form.hidden_tag() }}
+
+                <div class="form-group">
+                    {{ form.name.label(class="form-label") }}
+                    {{ form.name(class="form-control") }}
+                </div>
+                <div class="form-group">
+                    {{ form.email.label(class="form-label") }}
+                    {{ form.email(class="form-control") }}
+                </div>
+                <div class="form-group">
+                    {{ form.password.label(class="form-label") }}
+                    {{ form.password(class="form-control") }}
+                </div>
+                <div class="form-group">
+                    {{ form.confirm_password.label(class="form-label") }}
+                    {{ form.confirm_password(class="form-control") }}
+                </div>
+                <div class="form-group text-center">
+                    {{ form.submit(class="btn btn-primary") }}
+                </div>
+            </form>
+        </div>
+    </div>
+
+</section>
+{% endblock %}
+</html>
