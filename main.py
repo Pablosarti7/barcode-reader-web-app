@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, jsonify, redirect, url_for, flash
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, PasswordField
-from wtforms.validators import DataRequired, Email, EqualTo
+from wtforms.validators import DataRequired, EqualTo
 from openfoodfacts_api import get_product_info
 from ingredients_api import get_all_ingredients, get_ingredient, add_ingredient
 from flask_login import UserMixin, login_user, LoginManager, login_required, current_user, logout_user
@@ -44,7 +44,7 @@ class Users(db.Model, UserMixin):
 #     db.create_all()
 
 class LoginForm(FlaskForm):
-    email = StringField('Email', validators=[DataRequired(), Email()], render_kw={"placeholder": "Enter Email"})
+    email = StringField('Email', validators=[DataRequired()], render_kw={"placeholder": "Enter Email"})
     password = PasswordField('Password', validators=[DataRequired()], render_kw={"placeholder": "Enter Password"})
     submit = SubmitField('Login')
 
