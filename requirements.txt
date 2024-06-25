@@ -9,3 +9,4 @@ requests==2.31.0
 thefuzz==0.20.0
 Flask-Caching==2.1.0
 flask_login==0.6.3
+flask_sqlalchemy==3.1.1
