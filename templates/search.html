@@ -38,34 +38,39 @@
     <section class="d-flex flex-column" style="min-height: 50vh;">
         <!-- Product ingredients information -->
         <div class="container mt-5">
-            <h2 class="mb-4 display-5 text-center">Ingredient information</h2>
-            <hr class="w-50 mx-auto mb-5 mb-xl-9 border-dark-subtle">
+            <h2 class="mb-5 display-5 text-center">Ingredient Information</h2>
             <div class="row">
                 <div class="col-12 mx-auto">
                     <div class="card info-card">
                         <div class="card-body">
-                            <h5 class="card-title mt-2">
-                                Ingredient Information
-                            </h5>
-                            <p class="card-text">Get ingredient information about the effects on your health.
-                            </p>
-
+                            <h5 class="card-title mt-2">Ingredient Information</h5>
+                            <p class="card-text">Get specific ingredient information.</p>
+    
                             <div class="card p-3">
                                 {% if ingredient_info %}
-                                <p>Name: {{ingredient_info['name']}}</p>
-                                <p>Effects: {{ingredient_info['description']}}</p>
-                                <p>Rating: {{ingredient_info['rating']}}</p>
+                                <div class="ingredient-detail mb-3">
+                                    <h6 class="font-weight-bold">Name</h6>
+                                    <p>{{ingredient_info['name']}}</p>
+                                </div>
+                                <div class="ingredient-detail mb-3">
+                                    <h6 class="font-weight-bold">Effects</h6>
+                                    <p>{{ingredient_info['description']}}</p>
+                                </div>
+                                <div class="ingredient-detail">
+                                    <h6 class="font-weight-bold">Rating</h6>
+                                    <p>{{ingredient_info['rating']}}</p>
+                                </div>
                                 {% else %}
-                                Nothing
+                                <p>Your ingredient information will appear here.</p>
                                 {% endif %}
                             </div>
-
+    
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </section>
+    </section>    
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/quagga/0.12.1/quagga.min.js"></script>
     <script src="{{url_for('static', filename='js/scripts.js')}}"></script>

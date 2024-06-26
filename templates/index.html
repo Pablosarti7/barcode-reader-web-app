@@ -141,22 +141,20 @@
             <div class="col-12 col-md-6 mx-auto mb-3">
                 <h2 class="mb-5">Product information</h2>
                 <div>
-                    <div>
-                        <form id="myForm2" method="POST">
-                            {{ form.hidden_tag() }}
-                            <div class="row">
-                                <div class="col-12 col-sm-8 mb-2 mb-sm-0">
-                                    {{ form.ingredients(class="form-control") }}
-                                </div>
-                                <div class="col-12 col-sm-4">
-                                    {{ form.submit(class="btn btn-primary w-100") }}
-                                </div>
+                    <form id="myForm2" method="POST">
+                        {{ form.hidden_tag() }}
+                        <div class="row">
+                            <div class="col-12 col-sm-8 mb-2 mb-sm-0">
+                                {{ form.ingredients(class="form-control") }}
                             </div>
-                        </form>
-                    </div>
+                            <div class="col-12 col-sm-4">
+                                {{ form.submit(class="btn btn-primary") }}
+                            </div>
+                        </div>
+                    </form>
                 </div>
             </div>
-
+    
             <div class="col-12 col-md-6 mx-auto mb-3">
                 <div class="card info-card">
                     <div class="card-body">
@@ -170,8 +168,7 @@
                             Product Name
                             {% endif %}
                         </h5>
-                        <p class="card-text">What are the ingredients in your food and what is the impact on your
-                            health.</p>
+                        <p class="card-text">What are the ingredients in your food items.</p>
                         <div class="card">
                             <ul class="list-group list-group-flush">
                                 {% if ingredients_list %}
@@ -198,6 +195,7 @@
             </div>
         </div>
     </section>
+    
 
 
 </div>

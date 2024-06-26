@@ -352,3 +352,32 @@ canvas.drawingBuffer {
 .form-group {
   margin-bottom: 15px;
 }
+
+/* Info card section */
+
+.info-card {
+  max-height: 400px; /* Set the maximum height of the card */
+  overflow-y: auto; /* Enable vertical scrolling */
+}
+
+.list-group-item {
+  white-space: nowrap; /* Prevent text wrapping */
+}
+
+.list-group-item p {
+  overflow: hidden;
+  text-overflow: ellipsis; /* Add ellipsis to overflowing text */
+}
+
+.info-card::-webkit-scrollbar {
+  width: 10px; /* Width of the scrollbar */
+}
+
+.info-card::-webkit-scrollbar-thumb {
+  background-color: #007bff; /* Color of the scrollbar thumb */
+  border-radius: 10px; /* Round the corners of the scrollbar thumb */
+}
+
+.info-card::-webkit-scrollbar-track {
+  background-color: #f1f1f1; /* Color of the scrollbar track */
+}
