@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, jsonify, redirect, url_for, flash
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, PasswordField
+from wtforms import StringField, SubmitField, PasswordField, validators
 from wtforms.validators import DataRequired, EqualTo
 from openfoodfacts_api import get_product_info
 from ingredients_api import get_all_ingredients, get_ingredient, add_ingredient
@@ -10,6 +10,7 @@ from flask_sqlalchemy import SQLAlchemy
 from openai_api import get_response
 from flask_caching import Cache
 from thefuzz import process
+from flask_wtf.csrf import CSRFProtect
 import os
 import re
 
@@ -17,15 +18,22 @@ import re
 app = Flask(__name__)
 app.secret_key = os.urandom(24)
 
-cache = Cache(app, config={'CACHE_TYPE': 'SimpleCache'})
-
 
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("DATABASE_URL")
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-db = SQLAlchemy(app)
+app.config['SESSION_COOKIE_SECURE'] = True  # Ensures cookies are only sent over HTTPS
+app.config['REMEMBER_COOKIE_SECURE'] = True
+app.config['SESSION_COOKIE_HTTPONLY'] = True  # Prevents JavaScript access to cookies
+app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'  # CSRF protection
 
+
+db = SQLAlchemy(app)
 login_manager = LoginManager()
 login_manager.init_app(app)
+login_manager.login_view = 'login'
+login_manager.login_message_category = 'info'
+csrf = CSRFProtect(app)
+cache = Cache(app, config={'CACHE_TYPE': 'SimpleCache'})
 
 
 @login_manager.user_loader
@@ -44,13 +52,13 @@ class Users(db.Model, UserMixin):
 #     db.create_all()
 
 class LoginForm(FlaskForm):
-    email = StringField('Email', validators=[DataRequired()], render_kw={"placeholder": "Enter Email"})
+    email = StringField('Email', validators=[DataRequired(), validators.Email()], render_kw={"placeholder": "Enter Email"})
     password = PasswordField('Password', validators=[DataRequired()], render_kw={"placeholder": "Enter Password"})
     submit = SubmitField('Login')
 
 class RegistrationForm(FlaskForm):
     name = StringField('Name', validators=[DataRequired()], render_kw={"placeholder": "Enter Name"})
-    email = StringField('Email', validators=[DataRequired()], render_kw={"placeholder": "Enter Email"})
+    email = StringField('Email', validators=[DataRequired(), validators.Email()], render_kw={"placeholder": "Enter Email"})
     password = PasswordField('Password', validators=[DataRequired()], render_kw={"placeholder": "Enter Password"})
     confirm_password = PasswordField('Confirm Password', validators=[DataRequired(), EqualTo('password')], render_kw={"placeholder": "Re-enter Password"})
     submit = SubmitField('Register')
@@ -259,6 +267,16 @@ def register():
 def logout():
     logout_user()
     return redirect(url_for('home'))
+
+
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template('404.html'), 404
+
+
+@app.errorhandler(500)
+def internal_server_error(e):
+    return render_template('500.html'), 500
 
 
 if __name__ == '__main__':
