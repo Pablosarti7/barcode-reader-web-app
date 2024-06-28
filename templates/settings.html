@@ -5,58 +5,91 @@
 
 {% block content %}
 
-{% include 'navigation.html' %}
+<div class="content">
 
-<section class="container mt-4">
+    {% include 'navigation.html' %}
 
-    <div class="mt-4">
+    <section class="container mt-4">
+
+        <div class="mt-4">
+
         <!-- {% if not logged_in: %}
         <a href="{{ url_for('login') }}" class="list-group-item list-group-item-action">Login</a>
         <a href="{{ url_for('register') }}" class="list-group-item list-group-item-action">Register</a>
         {% endif %} -->
 
+        
+            {% if subsection == 'profile' %}
 
-        {% if subsection == 'profile' %}
-        <div class="list-group">
+            <div class="list-group">
+
+                <a href="#" class="list-group-item list-group-item-action">Edit Profile</a>
+                <a href="#" class="list-group-item list-group-item-action">Logout</a>
+                <a href="#" class="list-group-item list-group-item-action">Delete Profile</a>
+
+            </div>
             
-            <a href="#" class="list-group-item list-group-item-action">Edit Profile</a>
-            <a href="#" class="list-group-item list-group-item-action">Logout</a>
-            <a href="#" class="list-group-item list-group-item-action">Delete Profile</a>
+            {% elif subsection == 'lists' %}
+            <!-- Content for My Lists -->
+            <div class="list-group">
+
+                <a href="#" class="list-group-item list-group-item-action">List</a>
+
+            </div>
+            {% elif subsection == 'scan_history' %}
+            <!-- Content for My Scan History -->
+            <div class="list-group">
+
+                <a href="#" class="list-group-item list-group-item-action">History</a>
+
+            </div>
+            {% elif subsection == 'eula' %}
+            <!-- Content for End User License Agreement -->
+            <div class="list-group">
+
+                <a href="#" class="list-group-item list-group-item-action">Agreement</a>
+
+            </div>
+            {% elif subsection == 'support' %}
+            <!-- Content for Contact Support -->
+            <div class="list-group">
+
+                <a href="#" class="list-group-item list-group-item-action">support@ingredientadvisor.com</a>
+
+            </div>
+            {% elif subsection == 'follow' %}
+            <!-- Content for Follow IngredientAdvisor -->
+            <div class="list-group">
+
+                <a href="#" class="list-group-item list-group-item-action">Instagram</a>
+
+            </div>
+            {% else %}
+
+            <div class="list-group">
+                <a href="{{ url_for('settings', section='profile') }}" class="list-group-item list-group-item-action">My
+                    Profile</a>
+                <a href="{{ url_for('settings', section='lists') }}" class="list-group-item list-group-item-action">My
+                    Lists</a>
+                <a href="{{ url_for('settings', section='scan_history') }}"
+                    class="list-group-item list-group-item-action">My Scan History</a>
+                <a href="{{ url_for('settings', section='eula') }}" class="list-group-item list-group-item-action">End
+                    User License Agreement</a>
+                <a href="{{ url_for('settings', section='support') }}"
+                    class="list-group-item list-group-item-action">Contact Support</a>
+                <a href="{{ url_for('settings', section='follow') }}"
+                    class="list-group-item list-group-item-action">Follow
+                    IngredientAdvisor</a>
+            </div>
+
+            {% endif %}
 
         </div>
-        {% elif subsection == 'lists' %}
-        <!-- Content for My Lists -->
-        {% elif subsection == 'scan_history' %}
-        <!-- Content for My Scan History -->
-        {% elif subsection == 'eula' %}
-        <!-- Content for End User License Agreement -->
-        {% elif subsection == 'support' %}
-        <!-- Content for Contact Support -->
-        {% elif subsection == 'follow' %}
-        <!-- Content for Follow IngredientAdvisor -->
-        <div class="list-group">
-            <a href="#" class="list-group-item list-group-item-action">Instagram</a>
-        </div>
-        {% else %}
+    </section>
 
-        <div class="list-group">
-            <a href="{{ url_for('settings', section='profile') }}" class="list-group-item list-group-item-action">My
-                Profile</a>
-            <a href="{{ url_for('settings', section='lists') }}" class="list-group-item list-group-item-action">My
-                Lists</a>
-            <a href="{{ url_for('settings', section='scan_history') }}"
-                class="list-group-item list-group-item-action">My Scan History</a>
-            <a href="{{ url_for('settings', section='eula') }}" class="list-group-item list-group-item-action">End
-                User License Agreement</a>
-            <a href="{{ url_for('settings', section='support') }}"
-                class="list-group-item list-group-item-action">Contact Support</a>
-            <a href="{{ url_for('settings', section='follow') }}" class="list-group-item list-group-item-action">Follow
-                IngredientAdvisor</a>
-        </div>
-        {% endif %}
+</div>
 
-    </div>
-</section>
+{% include 'footer.html' %}
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/quagga/0.12.1/quagga.min.js"></script>
 <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
