@@ -118,16 +118,52 @@ def home():
     if request.method == 'POST':
         # Check for barcode in the form data
         barcode = request.form.get('barcode')
-
+        
         if not barcode:
             # If no barcode is found in the form data, fall back to the SearchBarcode form
             barcode = form.ingredients.data
         
         ingredients = get_product_info(str(barcode))
-
+        
         if 'product' in ingredients:
             product_info = ingredients['product']
+            
+            # nutrients data extraction from the api
+            data = product_info.get('nutriments', 'Sorry no nutrients where found.')
+            
+            nutritional_info = {
+                "Energy": f"{data['energy-kcal_100g']} kcal",
+                "Fat": f"{data['fat_100g']} g",
+                "Saturated Fat": f"{data['saturated-fat_100g']} g",
+                "Trans Fat": f"{data['trans-fat_100g']} g",
+                "Cholesterol": f"{data['cholesterol_100g']} mg",
+                "Sodium": f"{data['sodium_100g']} mg",
+                "Carbohydrates": f"{data['carbohydrates_100g']} g",
+                "Fiber": f"{data['fiber_100g']} g",
+                "Sugars": f"{data['sugars_100g']} g",
+                "Proteins": f"{data['proteins_100g']} g",
+                "Calcium": f"{data['calcium_100g']} mg",
+                "Iron": f"{data['iron_100g']} mg",
+                "Vitamin A": f"{data['vitamin-a_100g']} IU",
+                "Vitamin C": f"{data['vitamin-c_100g']} mg"
+            }
 
+            # nutriscore data extraction from the api
+            nutriscore = product_info.get('nutriscore', 'Sorry no nutrients where found.')
+
+            most_recent_year = max(nutriscore.keys())
+            most_recent_nutriscore = nutriscore[most_recent_year]
+
+            grade = most_recent_nutriscore['grade']
+            score = most_recent_nutriscore['score']
+
+            nutriscore_dict = {'grade': grade, 'score': score}
+
+            # ingredients percentages extraction from the api
+            ingredients_percentages = product_info.get('ingredients', 'Sorry no nutrients where found.')
+
+
+            # original data extraction
             name = product_info.get('product_name', 'Sorry no name was found.')
             ingredients = product_info.get(
                 'ingredients_text_en', 'Sorry no ingredients where found.')
@@ -161,7 +197,7 @@ def home():
             complete_list = database_list + response_list
             
 
-            return render_template('index.html', form=form, name=name, ingredients_list=complete_list)
+            return render_template('index.html', form=form, name=name, ingredients_list=complete_list, nutritional_information=nutritional_info, nutriscore=nutriscore_dict, ingredient_percentage=ingredients_percentages)
         else:
             return 'Sorry product not found.'
 

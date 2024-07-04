@@ -20,6 +20,10 @@ h2 {
   font-weight: bold;
 }
 
+h3 {
+  font-weight: bold;
+}
+
 .main_container {
   width: 100%;
   padding-right: 15px;
@@ -373,31 +377,131 @@ body {
   margin-bottom: 15px;
 }
 
-/* Info card section */
+/* Info Card Section */
 
 .info-card {
-  max-height: 400px; /* Set the maximum height of the card */
-  overflow-y: auto; /* Enable vertical scrolling */
+  max-height: 400px;
+  overflow-y: auto;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Shadow for depth */
 }
 
-.list-group-item {
-  white-space: nowrap; /* Prevent text wrapping */
-}
-
-.list-group-item p {
-  overflow: hidden;
-  text-overflow: ellipsis; /* Add ellipsis to overflowing text */
+.info-card .card-title {
+  font-weight: bold;
+  font-size: 1.25em;
+  margin-bottom: 10px;
 }
 
 .info-card::-webkit-scrollbar {
-  width: 10px; /* Width of the scrollbar */
+  width: 10px;
 }
 
 .info-card::-webkit-scrollbar-thumb {
-  background-color: #007bff; /* Color of the scrollbar thumb */
-  border-radius: 10px; /* Round the corners of the scrollbar thumb */
+  background-color: rgb(64, 110, 175);
+  border-radius: 10px;
 }
 
 .info-card::-webkit-scrollbar-track {
-  background-color: #f1f1f1; /* Color of the scrollbar track */
+  background-color: #f1f1f1;
+}
+
+/* Nutritional Card Section */
+
+.nutrients-card {
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Shadow for depth */
+}
+
+.nutrients-card .card-title {
+  font-weight: bold;
+  font-size: 1.25em;
+  margin-bottom: 10px;
+}
+
+.nutrition-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.nutrition-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  font-size: 14px;
+}
+
+.nutrition-table tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+.nutrition-table tr:hover {
+  background-color: #ddd;
+}
+
+.nutrition-table td:first-child {
+  font-weight: bold;
+}
+
+.nutrition-table td:last-child {
+  text-align: right;
+}
+
+.nutrition-table td, .nutrition-table th {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+.nutrition-table tr:nth-child(even){background-color: #f2f2f2;}
+
+.nutrition-table tr:hover {background-color: #ddd;}
+
+.nutrition-table th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  background-color: #4CAF50;
+  color: white;
+}
+
+/* Nutriscore Card */
+
+.nutriscore-card {
+  border: 1px solid #ddd; /* Add a border */
+  border-radius: 10px; /* Rounded corners */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Shadow for depth */
+}
+
+.nutriscore-card .card-title {
+  font-weight: bold;
+  font-size: 1.25em;
+  margin-bottom: 10px;
+}
+
+.nutriscore-grade, .nutriscore-score {
+  font-size: 1.1em;
+  padding: 10px; /* Inner padding */
+  border-radius: 5px; /* Rounded corners */
+  margin: 5px 0; /* Vertical spacing */
+}
+
+.nutriscore-grade {
+  background-color: #f8f9fa; /* Light background for grade */
+  text-align: center; /* Center align the text */
+}
+
+.nutriscore-score {
+  background-color: #e9ecef; /* Light background for score */
+  text-align: center; /* Center align the text */
+}
+
+/* Ingredient Percentage Card */
+
+.ingredient-percentage-card {
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Shadow for depth */
+}
+
+.ingredient-percentage-card .card-title {
+  font-weight: bold;
+  font-size: 1.25em;
+  margin-bottom: 10px;
 }
