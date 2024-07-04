@@ -119,24 +119,32 @@
 
     <!-- Product information section -->
     <section class="container main_container">
-        <div class="row">
-            <div class="col-12 col-md-6 mx-auto mb-3">
-                <h2 class="mb-5">Product information</h2>
-                <div>
-                    <form id="myForm2" method="POST">
-                        {{ form.hidden_tag() }}
-                        <div class="row">
-                            <div class="col-12 col-sm-8 mb-2 mb-sm-0">
-                                {{ form.ingredients(class="form-control") }}
-                            </div>
-                            <div class="col-12 col-sm-4">
-                                {{ form.submit(class="btn btn-primary") }}
-                            </div>
+        <div class="col-12 col-md-6 mx-auto mb-3m text-center">
+            <h2 class="mb-5">Product information</h2>
+            <div>
+                <form id="myForm2" method="POST" class="mb-5">
+                    {{ form.hidden_tag() }}
+                    <div class="row">
+                        <div class="col">
+                            {{ form.ingredients(class="form-control") }}
                         </div>
-                    </form>
-                </div>
+                        <div class="col-auto">
+                            {{ form.submit(class="btn btn-primary") }}
+                        </div>
+                    </div>
+                </form>
             </div>
-
+        </div>
+        <div class="col-auto text-center mb-4">
+            <h3 class="text-capitalize">
+                {% if ingredients_list %}
+                {{ name }}
+                {% else %}
+                Product Name
+                {% endif %}
+            </h3>
+        </div>
+        <div class="row">
             <div class="col-12 col-md-6 mx-auto mb-3">
                 <div class="card info-card">
                     <div class="card-body">
@@ -144,14 +152,9 @@
                             <div id="loadingMessage" style="display: none;">
                                 Making API requests...
                             </div>
-                            {% if ingredients_list %}
-                            {{ name }}
-                            {% else %}
-                            Product Name
-                            {% endif %}
+                            Ingredients
                         </h5>
-                        <p class="card-text">What are the ingredients in your food items.</p>
-                        <div class="card">
+                        <div class="">
                             <ul class="list-group list-group-flush">
                                 {% if ingredients_list %}
                                 {% for ingredient in ingredients_list %}
@@ -167,11 +170,129 @@
                                 </li>
                                 {% endif %}
                                 {% endfor %}
-                                {% else %}
-                                <li class="list-group-item">Your ingredients will appear here.</li>
                                 {% endif %}
                             </ul>
                         </div>
+                    </div>
+                </div>
+                <div class="card ingredient-percentage-card mt-2">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            Ingredient Percentage
+                        </h5>
+
+                        {% for info in ingredient_percentage %}
+
+                        {% set vegan = info.get('vegan', 'unknown') %}
+                        {% set vegetarian = info.get('vegetarian', 'unknown') %}
+
+                        {% if vegan == 'yes' %}
+                        {% set vegan_status = 'Vegan' %}
+                        {% else %}
+                        {% set vegan_status = 'Unknown vegan status' %}
+                        {% endif %}
+
+                        {% if vegetarian == 'yes' %}
+                        {% set vegetarian_status = 'Vegetarian' %}
+                        {% else %}
+                        {% set vegetarian_status = 'Unknown vegetarian status' %}
+                        {% endif %}
+
+                        <p class="text-secondary text-capitalize">
+                            <strong>{{ info['text'] }}</strong>
+                            {{ info['percent_estimate'] | round(2) }}%
+                            ({{ vegan_status }}, {{ vegetarian_status }})
+                        </p>
+
+                        {% endfor %}
+
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-md-6 mx-auto mb-3">
+                <div class="card nutrients-card">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            Nutritional Information
+                        </h5>
+                        {% if ingredients_list %}
+                        <table class="nutrition-table">
+                            <tr>
+                                <td>Calories</td>
+                                <td>{{ nutritional_information['Energy'] }}</td>
+                            </tr>
+                            <tr>
+                                <td>Total Fat</td>
+                                <td>{{ nutritional_information['Fat'] }}</td>
+                            </tr>
+                            <tr>
+                                <td>Saturated Fat</td>
+                                <td>{{ nutritional_information['Saturated Fat'] }}</td>
+                            </tr>
+                            <tr>
+                                <td>Trans Fat</td>
+                                <td>{{ nutritional_information['Trans Fat'] }}</td>
+                            </tr>
+                            <tr>
+                                <td>Cholesterol</td>
+                                <td>{{ nutritional_information['Cholesterol'] }}</td>
+                            </tr>
+                            <tr>
+                                <td>Sodium</td>
+                                <td>{{ nutritional_information['Sodium'] }}</td>
+                            </tr>
+                            <tr>
+                                <td>Total Carbohydrate</td>
+                                <td>{{ nutritional_information['Carbohydrates'] }}</td>
+                            </tr>
+                            <tr>
+                                <td>Dietary Fiber</td>
+                                <td>{{ nutritional_information['Fiber'] }}</td>
+                            </tr>
+                            <tr>
+                                <td>Total Sugars</td>
+                                <td>{{ nutritional_information['Sugars'] }}</td>
+                            </tr>
+                            <tr>
+                                <td>Protein</td>
+                                <td>{{ nutritional_information['Proteins'] }}</td>
+                            </tr>
+                            <tr>
+                                <td>Calcium</td>
+                                <td>{{ nutritional_information['Calcium'] }}</td>
+                            </tr>
+                            <tr>
+                                <td>Iron</td>
+                                <td>{{ nutritional_information['Iron'] }}</td>
+                            </tr>
+                            <tr>
+                                <td>Vitamin A</td>
+                                <td>{{ nutritional_information['Vitamin A'] }}</td>
+                            </tr>
+                            <tr>
+                                <td>Vitamin C</td>
+                                <td>{{ nutritional_information['Vitamin C'] }}</td>
+                            </tr>
+                        </table>
+                        {% endif %}
+
+                    </div>
+                </div>
+                <div class="card nutriscore-card mt-2">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            Nutriscore
+                        </h5>
+                        {% if ingredients_list %}
+                        <div class="nutriscore-grade">
+                            {% if nutriscore['grade'] == 'd' %}
+                            <h5 class="text-capitalize">Nutriscore grade {{ nutriscore['grade'] }}:</h5>
+                            <p>Indicates the product has lower nutritional quality. It generally has higher levels of
+                                less beneficial nutrients like sugars, saturated fats, and salt.</p>
+                            {% endif %}
+                        </div>
+                        {% endif %}
                     </div>
                 </div>
             </div>
