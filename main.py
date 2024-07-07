@@ -126,37 +126,25 @@ def home():
         ingredients = get_product_info(str(barcode))
         
         if 'product' in ingredients:
+            # accessing the key called product 
             product_info = ingredients['product']
             
             # nutrients data extraction from the api
-            data = product_info.get('nutriments', 'Sorry no nutrients where found.')
+            nutrients = product_info.get('nutriments', 'Sorry no nutrients where found.')
             
-            nutritional_info = {
-                "Energy": f"{data['energy-kcal_100g']} kcal",
-                "Fat": f"{data['fat_100g']} g",
-                "Saturated Fat": f"{data['saturated-fat_100g']} g",
-                "Trans Fat": f"{data['trans-fat_100g']} g",
-                "Cholesterol": f"{data['cholesterol_100g']} mg",
-                "Sodium": f"{data['sodium_100g']} mg",
-                "Carbohydrates": f"{data['carbohydrates_100g']} g",
-                "Fiber": f"{data['fiber_100g']} g",
-                "Sugars": f"{data['sugars_100g']} g",
-                "Proteins": f"{data['proteins_100g']} g",
-                "Calcium": f"{data['calcium_100g']} mg",
-                "Iron": f"{data['iron_100g']} mg",
-                "Vitamin A": f"{data['vitamin-a_100g']} IU",
-                "Vitamin C": f"{data['vitamin-c_100g']} mg"
-            }
-
             # nutriscore data extraction from the api
-            nutriscore = product_info.get('nutriscore', 'Sorry no nutrients where found.')
-
+            nutriscore = product_info.get('nutriscore', 'Sorry no nutriscore was found.')
+            
+            # getting the max key value
             most_recent_year = max(nutriscore.keys())
+            # using the key max value to find the latest year
             most_recent_nutriscore = nutriscore[most_recent_year]
 
+            #TODO might need to add if grade is true
             grade = most_recent_nutriscore['grade']
+            #TODO might need to add if score is true
             score = most_recent_nutriscore['score']
-
+            
             nutriscore_dict = {'grade': grade, 'score': score}
 
             # ingredients percentages extraction from the api
@@ -197,9 +185,9 @@ def home():
             complete_list = database_list + response_list
             
 
-            return render_template('index.html', form=form, name=name, ingredients_list=complete_list, nutritional_information=nutritional_info, nutriscore=nutriscore_dict, ingredient_percentage=ingredients_percentages)
+            return render_template('index.html', form=form, name=name, ingredients_list=complete_list, nutritional_information=nutrients, nutriscore=nutriscore_dict, ingredient_percentage=ingredients_percentages)
         else:
-            return 'Sorry product not found.'
+            return 'Sorry product key not found in data.'
 
     return render_template('index.html', form=form, logged_in=current_user.is_authenticated)
 
