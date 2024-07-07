@@ -45,7 +45,6 @@
                     <div class="row">
                         <div class="col-12">
                             <div id="scanner-container">
-                                <!-- Ensure content here is mobile-friendly -->
                             </div>
                         </div>
                     </div>
@@ -55,7 +54,7 @@
     </div>
 
     <!-- Benefits Section -->
-    <section id="productInfoSection">
+    <section>
         <div class="main_container">
             <div class="my_text_center">
                 <h2 class="mb-5 text-center">Benefits</h2>
@@ -118,7 +117,7 @@
     </section>
 
     <!-- Product information section -->
-    <section class="container main_container">
+    <section class="container main_container" id="productInfoSection">
         <div class="col-12 col-md-6 mx-auto mb-3m text-center">
             <h2 class="mb-5">Product information</h2>
             <div>
@@ -141,6 +140,9 @@
                 {{ name }}
                 {% else %}
                 Product Name
+                <div id="loadingMessage" style="display: none;">
+                    Making API requests...
+                </div>
                 {% endif %}
             </h3>
         </div>
@@ -149,9 +151,6 @@
                 <div class="card info-card">
                     <div class="card-body">
                         <h5 class="card-title">
-                            <div id="loadingMessage" style="display: none;">
-                                Making API requests...
-                            </div>
                             Ingredients
                         </h5>
                         <div class="">
@@ -220,59 +219,59 @@
                         <table class="nutrition-table">
                             <tr>
                                 <td>Calories</td>
-                                <td>{{ nutritional_information['Energy'] }}</td>
+                                <td>{{ nutritional_information['energy'] }}</td>
                             </tr>
                             <tr>
                                 <td>Total Fat</td>
-                                <td>{{ nutritional_information['Fat'] }}</td>
+                                <td>{{ nutritional_information['fat'] }}</td>
                             </tr>
                             <tr>
                                 <td>Saturated Fat</td>
-                                <td>{{ nutritional_information['Saturated Fat'] }}</td>
+                                <td>{{ nutritional_information['saturated-fat'] }}</td>
                             </tr>
                             <tr>
                                 <td>Trans Fat</td>
-                                <td>{{ nutritional_information['Trans Fat'] }}</td>
+                                <td>{{ nutritional_information['trans-fat'] }}</td>
                             </tr>
                             <tr>
                                 <td>Cholesterol</td>
-                                <td>{{ nutritional_information['Cholesterol'] }}</td>
+                                <td>{{ nutritional_information['cholesterol'] }}</td>
                             </tr>
                             <tr>
                                 <td>Sodium</td>
-                                <td>{{ nutritional_information['Sodium'] }}</td>
+                                <td>{{ nutritional_information['sodium'] }}</td>
                             </tr>
                             <tr>
                                 <td>Total Carbohydrate</td>
-                                <td>{{ nutritional_information['Carbohydrates'] }}</td>
+                                <td>{{ nutritional_information['carbohydrates'] }}</td>
                             </tr>
                             <tr>
                                 <td>Dietary Fiber</td>
-                                <td>{{ nutritional_information['Fiber'] }}</td>
+                                <td>{{ nutritional_information['fiber'] }}</td>
                             </tr>
                             <tr>
                                 <td>Total Sugars</td>
-                                <td>{{ nutritional_information['Sugars'] }}</td>
+                                <td>{{ nutritional_information['sugars'] }}</td>
                             </tr>
                             <tr>
                                 <td>Protein</td>
-                                <td>{{ nutritional_information['Proteins'] }}</td>
+                                <td>{{ nutritional_information['proteins'] }}</td>
                             </tr>
                             <tr>
                                 <td>Calcium</td>
-                                <td>{{ nutritional_information['Calcium'] }}</td>
+                                <td>{{ nutritional_information['calcium'] }}</td>
                             </tr>
                             <tr>
                                 <td>Iron</td>
-                                <td>{{ nutritional_information['Iron'] }}</td>
+                                <td>{{ nutritional_information['iron'] }}</td>
                             </tr>
                             <tr>
                                 <td>Vitamin A</td>
-                                <td>{{ nutritional_information['Vitamin A'] }}</td>
+                                <td>{{ nutritional_information['vitamin-a'] }}</td>
                             </tr>
                             <tr>
                                 <td>Vitamin C</td>
-                                <td>{{ nutritional_information['Vitamin C'] }}</td>
+                                <td>{{ nutritional_information['vitamin-c'] }}</td>
                             </tr>
                         </table>
                         {% endif %}
@@ -286,10 +285,36 @@
                         </h5>
                         {% if ingredients_list %}
                         <div class="nutriscore-grade">
-                            {% if nutriscore['grade'] == 'd' %}
+                            {% if nutriscore['grade'] == 'a' %}
                             <h5 class="text-capitalize">Nutriscore grade {{ nutriscore['grade'] }}:</h5>
-                            <p>Indicates the product has lower nutritional quality. It generally has higher levels of
-                                less beneficial nutrients like sugars, saturated fats, and salt.</p>
+                            <p>
+                                Indicates the product has high nutritional quality. It typically has low levels of
+                                sugars, saturated fats, and salt, and high levels of fruits, vegetables, fibers, and
+                                proteins.
+                            </p>
+                            {% elif nutriscore['grade'] == 'b' %}
+                            <h5 class="text-capitalize">Nutriscore grade {{ nutriscore['grade'] }}:</h5>
+                            <p>
+                                Indicates the product has good nutritional quality, but not as high as grade A.
+                            </p>
+                            {% elif nutriscore['grade'] == 'c' %}
+                            <h5 class="text-capitalize">Nutriscore grade {{ nutriscore['grade'] }}:</h5>
+                            <p>
+                                Indicates the product has moderate nutritional quality. It is an average score,
+                                suggesting a balance of beneficial and less beneficial nutrients.
+                            </p>
+                            {% elif nutriscore['grade'] == 'd' %}
+                            <h5 class="text-capitalize">Nutriscore grade {{ nutriscore['grade'] }}:</h5>
+                            <p>
+                                Indicates the product has lower nutritional quality. It generally has higher levels of
+                                less beneficial nutrients like sugars, saturated fats, and salt.
+                            </p>
+                            {% elif nutriscore['grade'] == 'e' %}
+                            <h5 class="text-capitalize">Nutriscore grade {{ nutriscore['grade'] }}:</h5>
+                            <p>
+                                Indicates the product has the lowest nutritional quality, with high levels of sugars,
+                                saturated fats, and salt.
+                            </p>
                             {% endif %}
                         </div>
                         {% endif %}
