@@ -10,7 +10,6 @@ from flask_sqlalchemy import SQLAlchemy
 from openai_api import get_response
 from flask_caching import Cache
 from thefuzz import process
-from flask_wtf.csrf import CSRFProtect
 import os
 import re
 
@@ -24,7 +23,6 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SESSION_COOKIE_SECURE'] = True  # Ensures cookies are only sent over HTTPS
 app.config['REMEMBER_COOKIE_SECURE'] = True
 app.config['SESSION_COOKIE_HTTPONLY'] = True  # Prevents JavaScript access to cookies
-app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'  # CSRF protection
 
 
 db = SQLAlchemy(app)
@@ -32,7 +30,6 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'login'
 login_manager.login_message_category = 'info'
-csrf = CSRFProtect(app)
 cache = Cache(app, config={'CACHE_TYPE': 'SimpleCache'})
 
 
@@ -137,19 +134,14 @@ def home():
             
             # getting the max key value
             most_recent_year = max(nutriscore.keys())
+
             # using the key max value to find the latest year
             most_recent_nutriscore = nutriscore[most_recent_year]
 
-            #TODO might need to add if grade is true
-            grade = most_recent_nutriscore['grade']
-            #TODO might need to add if score is true
-            score = most_recent_nutriscore['score']
-            
-            nutriscore_dict = {'grade': grade, 'score': score}
+            grade = most_recent_nutriscore.get('grade')
 
             # ingredients percentages extraction from the api
             ingredients_percentages = product_info.get('ingredients', 'Sorry no nutrients where found.')
-
 
             # original data extraction
             name = product_info.get('product_name', 'Sorry no name was found.')
@@ -185,7 +177,7 @@ def home():
             complete_list = database_list + response_list
             
 
-            return render_template('index.html', form=form, name=name, ingredients_list=complete_list, nutritional_information=nutrients, nutriscore=nutriscore_dict, ingredient_percentage=ingredients_percentages)
+            return render_template('index.html', form=form, name=name, ingredients_list=complete_list, nutritional_information=nutrients, nutriscore_grade=grade, ingredient_percentage=ingredients_percentages)
         else:
             return 'Sorry product key not found in data.'
 

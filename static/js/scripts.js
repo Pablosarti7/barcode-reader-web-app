@@ -118,7 +118,6 @@ document.getElementById('startbutton').addEventListener('click', function() {
             // Set the barcode value to the hidden form input
             document.getElementById('hiddenBarcodeInput').value = scannedBarcode;
 
-            document.getElementById('loadingMessage').style.display = 'block';
             modal.style.display = "none";
             // Submit the form
             document.getElementById('barcodeForm').submit();

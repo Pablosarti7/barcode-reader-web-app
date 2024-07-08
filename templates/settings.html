@@ -13,12 +13,12 @@
 
         <div class="mt-4">
 
-        <!-- {% if not logged_in: %}
-        <a href="{{ url_for('login') }}" class="list-group-item list-group-item-action">Login</a>
-        <a href="{{ url_for('register') }}" class="list-group-item list-group-item-action">Register</a>
-        {% endif %} -->
+        {% if not logged_in: %}
+        <a href="#" class="list-group-item list-group-item-action">Login</a>
+        <a href="#" class="list-group-item list-group-item-action">Register</a>
+        {% endif %}
 
-        
+        {% if logged_in %}
             {% if subsection == 'profile' %}
 
             <div class="list-group">
@@ -83,6 +83,7 @@
             </div>
 
             {% endif %}
+        {% endif %}
 
         </div>
     </section>
