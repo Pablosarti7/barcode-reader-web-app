@@ -28,6 +28,9 @@
                                 </div>
                             </div>
                         </form>
+                        <form id="barcodeForm" method="POST" action="#productInfoSection" style="display: none;">
+                            <input type="hidden" name="barcode" id="hiddenBarcodeInput">
+                        </form>
                     </div>
                 </div>
             </div>
@@ -140,9 +143,6 @@
                 {{ name }}
                 {% else %}
                 Product Name
-                <div id="loadingMessage" style="display: none;">
-                    Making API requests...
-                </div>
                 {% endif %}
             </h3>
         </div>
@@ -285,35 +285,39 @@
                         </h5>
                         {% if ingredients_list %}
                         <div class="nutriscore-grade">
-                            {% if nutriscore['grade'] == 'a' %}
-                            <h5 class="text-capitalize">Nutriscore grade {{ nutriscore['grade'] }}:</h5>
+                            {% if nutriscore_grade == 'a' %}
+                            <h5 class="text-capitalize">Nutriscore grade {{ nutriscore_grade }}:</h5>
                             <p>
                                 Indicates the product has high nutritional quality. It typically has low levels of
                                 sugars, saturated fats, and salt, and high levels of fruits, vegetables, fibers, and
                                 proteins.
                             </p>
-                            {% elif nutriscore['grade'] == 'b' %}
-                            <h5 class="text-capitalize">Nutriscore grade {{ nutriscore['grade'] }}:</h5>
+                            {% elif nutriscore_grade == 'b' %}
+                            <h5 class="text-capitalize">Nutriscore grade {{ nutriscore_grade }}:</h5>
                             <p>
                                 Indicates the product has good nutritional quality, but not as high as grade A.
                             </p>
-                            {% elif nutriscore['grade'] == 'c' %}
-                            <h5 class="text-capitalize">Nutriscore grade {{ nutriscore['grade'] }}:</h5>
+                            {% elif nutriscore_grade == 'c' %}
+                            <h5 class="text-capitalize">Nutriscore grade {{ nutriscore_grade }}:</h5>
                             <p>
                                 Indicates the product has moderate nutritional quality. It is an average score,
                                 suggesting a balance of beneficial and less beneficial nutrients.
                             </p>
-                            {% elif nutriscore['grade'] == 'd' %}
-                            <h5 class="text-capitalize">Nutriscore grade {{ nutriscore['grade'] }}:</h5>
+                            {% elif nutriscore_grade == 'd' %}
+                            <h5 class="text-capitalize">Nutriscore grade {{ nutriscore_grade }}:</h5>
                             <p>
                                 Indicates the product has lower nutritional quality. It generally has higher levels of
                                 less beneficial nutrients like sugars, saturated fats, and salt.
                             </p>
-                            {% elif nutriscore['grade'] == 'e' %}
-                            <h5 class="text-capitalize">Nutriscore grade {{ nutriscore['grade'] }}:</h5>
+                            {% elif nutriscore_grade == 'e' %}
+                            <h5 class="text-capitalize">Nutriscore grade {{ nutriscore_grade }}:</h5>
                             <p>
                                 Indicates the product has the lowest nutritional quality, with high levels of sugars,
                                 saturated fats, and salt.
+                            </p>
+                            {% else %}
+                            <p>
+                                {{ nutriscore_grade }}
                             </p>
                             {% endif %}
                         </div>
