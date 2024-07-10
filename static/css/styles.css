@@ -242,7 +242,15 @@ canvas.drawingBuffer {
   .home_header h1 {
     margin: 0;
     padding: 0;
-    font-size: 22px;
+    font-size: 24px;
+  }
+
+  .home_header p {
+    font-size: 14px;
+  }
+
+  .home_content h2 {
+    font-size: 25px;
   }
 
   .home_icon {
@@ -271,8 +279,6 @@ canvas.drawingBuffer {
     top: -20px;
     left: 10px; /* Adjust left positioning */
   }
-
-  
 
 }
 
@@ -496,6 +502,8 @@ body {
 /* Ingredient Percentage Card */
 
 .ingredient-percentage-card {
+  max-height: 400px;
+  overflow-y: auto;
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Shadow for depth */
 }
@@ -504,4 +512,17 @@ body {
   font-weight: bold;
   font-size: 1.25em;
   margin-bottom: 10px;
+}
+
+.ingredient-percentage-card::-webkit-scrollbar {
+  width: 10px;
+}
+
+.ingredient-percentage-card::-webkit-scrollbar-thumb {
+  background-color: rgb(64, 110, 175);
+  border-radius: 10px;
+}
+
+.ingredient-percentage-card::-webkit-scrollbar-track {
+  background-color: #f1f1f1;
 }
