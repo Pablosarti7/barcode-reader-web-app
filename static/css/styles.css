@@ -2,6 +2,11 @@
 
 /* Global */
 
+html, body {
+  height: 100%;
+  margin: 0;
+}
+
 body {
   font-family: 'Lato', sans-serif;
   font-weight: 400; /* Regular */
@@ -9,6 +14,8 @@ body {
   padding: 0;
   background-color: #f4f4f4;
   color: #333;
+  display: flex;
+  flex-direction: column;
 }
 
 h1 {
@@ -63,6 +70,16 @@ h3 {
   margin-bottom: 60px;
 }
 
+.content {
+  flex: 1;
+}
+
+.footer {
+  background-color: #eaeaea;
+  padding: 1rem;
+  text-align: center;
+}
+
 @media (max-width: 768px) {
   .main_container {
     width: 100%;
@@ -72,6 +89,22 @@ h3 {
     margin-left: auto;
   }
   
+  .footer {
+    display: none;
+  }
+
+  h2 {
+    font-size: 25px;
+  }
+
+  h4 {
+    font-size: 20px;
+  }
+
+  h5 {
+    font-size: 18px;
+  }
+
 }
 
 /* Navigation (from youtube) */
@@ -116,7 +149,7 @@ h3 {
     background-color: #ffffff;
     width: 100%;
     height: 60px;
-    border-radius: 20px;
+    border-radius: 20px 20px 0 0;
     overflow-x: auto;
     z-index: 5;
   }
@@ -249,10 +282,6 @@ canvas.drawingBuffer {
     font-size: 14px;
   }
 
-  .home_content h2 {
-    font-size: 25px;
-  }
-
   .home_icon {
     font-size: 40px; /* Adjust this value as needed */
   }
@@ -313,6 +342,7 @@ canvas.drawingBuffer {
 
 }
 
+/* Below are the auto suggest box styles */
 .result-box {
   border: 1px solid #999;
   background-color: #ffffff;
@@ -323,26 +353,6 @@ canvas.drawingBuffer {
 
 .result-box div {
   padding: 15px 10px;
-}
-
-html, body {
-  height: 100%;
-  margin: 0;
-}
-
-body {
-  display: flex;
-  flex-direction: column;
-}
-
-.content {
-  flex: 1;
-}
-
-.footer {
-  background-color: #f8f9fa;
-  padding: 1rem;
-  text-align: center;
 }
 
 /* About Page */
@@ -360,10 +370,6 @@ body {
   border-radius: 0; /* Remove border radius if desired */
   margin-bottom: 10px; /* Add space between items */
   padding: 15px 20px; /* Adjust padding */
-}
-
-.footer {
-  background-color: #eaeaea;
 }
 
 /* Login Page */
