@@ -73,7 +73,6 @@ class SearchIngredient(FlaskForm):
 
 
 def autosuggest(prefix):
-    # ingredients = ['salt', 'sugar', 'sardines', 'water', 'wheat', 'whey', 'potatoes', 'peas', 'penne']
     ingredients = get_all_ingredients()
     # you can add code here that will specify not to append matches with less then 70 percent score if the words are not relevant
     if prefix:
@@ -127,26 +126,18 @@ def home():
             product_info = ingredients['product']
             
             # nutrients data extraction from the api
-            nutrients = product_info.get('nutriments', 'Sorry no nutrients where found.')
+            # TODO do we need this strings of text after or can we find another method
+            nutrients = product_info.get('nutriments')
             
             # nutriscore data extraction from the api
-            nutriscore = product_info.get('nutriscore', 'Sorry no nutriscore was found.')
+            nutriscore = product_info.get('nutriscore')
             
-            # getting the max key value
-            most_recent_year = max(nutriscore.keys())
-
-            # using the key max value to find the latest year
-            most_recent_nutriscore = nutriscore[most_recent_year]
-
-            grade = most_recent_nutriscore.get('grade')
-
             # ingredients percentages extraction from the api
-            ingredients_percentages = product_info.get('ingredients', 'Sorry no nutrients where found.')
+            ingredients_percentages = product_info.get('ingredients', {})
 
-            # original data extraction
+            # original data extraction name and ingredients
             name = product_info.get('product_name', 'Sorry no name was found.')
-            ingredients = product_info.get(
-                'ingredients_text_en', 'Sorry no ingredients where found.')
+            ingredients = product_info.get('ingredients_text_en', 'Sorry no ingredients where found.')
 
 
             final_list = clean_ingredients(ingredients)
@@ -177,7 +168,7 @@ def home():
             complete_list = database_list + response_list
             
 
-            return render_template('index.html', form=form, name=name, ingredients_list=complete_list, nutritional_information=nutrients, nutriscore_grade=grade, ingredient_percentage=ingredients_percentages)
+            return render_template('index.html', form=form, name=name, ingredients_list=complete_list, nutritional_information=nutrients, nutriscore=nutriscore, ingredients_percentage=ingredients_percentages)
         else:
             return 'Sorry product key not found in data.'
 
