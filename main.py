@@ -131,7 +131,7 @@ def home():
             
             # nutriscore data extraction from the api
             nutriscore = product_info.get('nutriscore')
-            
+
             # ingredients percentages extraction from the api
             ingredients_percentages = product_info.get('ingredients', {})
 

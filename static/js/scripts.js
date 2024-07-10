@@ -1,7 +1,3 @@
-document.getElementById('myForm').onsubmit = function() {
-    document.getElementById('loadingMessage').style.display = 'block';
-};
-
 document.getElementById('startbutton').addEventListener('click', function() {
     // Initializing camera feed.
     Quagga.init({
@@ -86,7 +82,6 @@ document.getElementById('startbutton').addEventListener('click', function() {
     span.onclick = function() {
         modal.style.display = "none";
         Quagga.stop()
-        
     }
 
     // Close the modal if the user clicks anywhere outside of it
@@ -100,10 +95,10 @@ document.getElementById('startbutton').addEventListener('click', function() {
     // Detecting barcode
     let lastScannedBarcode = null;
     let debounceTimer = null;
+
     // Scanning for barcode and submitting form.
     Quagga.onDetected(function(data) {
         const scannedBarcode = data.codeResult.code;
-    
         // Check if the new barcode is the same as the last scanned one
         if (scannedBarcode === lastScannedBarcode) {
             return;
@@ -117,10 +112,19 @@ document.getElementById('startbutton').addEventListener('click', function() {
         debounceTimer = setTimeout(function() {
             // Set the barcode value to the hidden form input
             document.getElementById('hiddenBarcodeInput').value = scannedBarcode;
-
             modal.style.display = "none";
             // Submit the form
             document.getElementById('barcodeForm').submit();
         }, 5000);
     });
+
+    // Draw a reference rectangle on the camera feed
+    var scannerContainer = document.querySelector('#scanner-container');
+    var referenceRect = document.createElement('div');
+    referenceRect.style.position = 'absolute';
+    referenceRect.style.border = '3px solid red';
+    referenceRect.style.width = '80%';
+    referenceRect.style.height = '50%';
+    referenceRect.style.zIndex = '1000';
+    scannerContainer.appendChild(referenceRect);
 });
