@@ -12,6 +12,7 @@ from flask_caching import Cache
 from thefuzz import process
 import os
 import re
+import pprint
 
 
 app = Flask(__name__)
@@ -124,32 +125,33 @@ def home():
         if 'product' in ingredients:
             # accessing the key called product 
             product_info = ingredients['product']
-            
+            print(product_info)
             # nutrients data extraction from the api
             # TODO do we need this strings of text after or can we find another method
-            nutrients = product_info.get('nutriments')
-            
+            nutrients = product_info.get('nutriments', {})
+            print(nutrients)
             # nutriscore data extraction from the api
-            nutriscore = product_info.get('nutriscore')
-
+            nutriscore = product_info.get('nutriscore', {})
+            pprint.pprint(nutriscore)
             # ingredients percentages extraction from the api
             ingredients_percentages = product_info.get('ingredients', {})
-
+            print(ingredients_percentages)
             # original data extraction name and ingredients
             name = product_info.get('product_name', 'Sorry no name was found.')
             ingredients = product_info.get('ingredients_text_en', 'Sorry no ingredients where found.')
-
+            print(name)
+            print(ingredients)
 
             final_list = clean_ingredients(ingredients)
 
 
             # Ingredients that we in out database go in one list and non existing one ask chat gpt
             openai_list, database_list = [], []
-
+            
             for final_ingredient in final_list:
                 # Get the ingredient from your database
                 single_ingredient = get_ingredient(final_ingredient)
-                # If we get none instead of an object it means we we to search it because is not in the database
+                # If we get none instead of an object it means we need to search it because is not in the database
                 if single_ingredient != None:
                     database_list.append(single_ingredient)
                 else:
@@ -166,7 +168,7 @@ def home():
                 add_ingredient(response_list)
 
             complete_list = database_list + response_list
-            
+            print(complete_list)
 
             return render_template('index.html', form=form, name=name, ingredients_list=complete_list, nutritional_information=nutrients, nutriscore=nutriscore, ingredients_percentage=ingredients_percentages)
         else:

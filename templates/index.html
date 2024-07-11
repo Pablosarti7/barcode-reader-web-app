@@ -143,6 +143,8 @@
             <h3 class="text-capitalize">
                 {% if ingredients_list %}
                 <h2>{{ name }}</h2>
+                {% elif ingredients_list == [] %}
+                <h2>Sorry no information available</h2>
                 {% else %}
                 <h2>Product Name</h2>
                 {% endif %}

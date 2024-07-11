@@ -305,6 +305,9 @@ canvas.drawingBuffer {
   }
 
   .circle {
+    width: 35px;
+    height: 35px;
+    font-size: 18px;
     top: -20px;
     left: 10px; /* Adjust left positioning */
   }
