@@ -360,7 +360,11 @@ canvas.drawingBuffer {
 
 /* About Page */
 
-
+@media (max-width: 768px) {
+  .about_us_section {
+    margin-bottom: 80px;
+  }
+}
 
 /* Settings Page */
 
