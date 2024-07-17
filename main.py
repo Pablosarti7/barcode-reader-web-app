@@ -124,8 +124,8 @@ def home():
         if 'product' in ingredients:
             # accessing the key called product 
             product_info = ingredients['product']
+            print(product_info)
             # nutrients data extraction from the api
-            # TODO do we need this strings of text after or can we find another method
             nutrients = product_info.get('nutriments', {})
             # nutriscore data extraction from the api
             nutriscore = product_info.get('nutriscore', {})
@@ -165,7 +165,8 @@ def home():
 
             return render_template('index.html', form=form, name=name, ingredients_list=complete_list, nutritional_information=nutrients, nutriscore=nutriscore, ingredients_percentage=ingredients_percentages)
         else:
-            return 'Sorry product key not found in data.'
+            flash('Sorry product key not found in data.')
+            return redirect(url_for('home'))
 
     return render_template('index.html', form=form, logged_in=current_user.is_authenticated)
 
