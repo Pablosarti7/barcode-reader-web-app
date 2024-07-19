@@ -12,7 +12,6 @@ from flask_caching import Cache
 from thefuzz import process
 import os
 import re
-from flask_migrate import Migrate
 
 
 app = Flask(__name__)
@@ -32,7 +31,6 @@ login_manager.init_app(app)
 login_manager.login_view = 'login'
 login_manager.login_message_category = 'info'
 cache = Cache(app, config={'CACHE_TYPE': 'SimpleCache'})
-migrate = Migrate(app, db)
 
 
 
