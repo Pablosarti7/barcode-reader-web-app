@@ -12,6 +12,7 @@ from flask_caching import Cache
 from thefuzz import process
 import os
 import re
+from flask_migrate import Migrate
 
 
 app = Flask(__name__)
@@ -31,6 +32,8 @@ login_manager.init_app(app)
 login_manager.login_view = 'login'
 login_manager.login_message_category = 'info'
 cache = Cache(app, config={'CACHE_TYPE': 'SimpleCache'})
+migrate = Migrate(app, db)
+
 
 
 @login_manager.user_loader
@@ -44,6 +47,14 @@ class Users(db.Model, UserMixin):
     name = db.Column(db.String(100))
     email = db.Column(db.String(100), unique=True)
     password = db.Column(db.String(100))
+
+class ScanHistory(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    item_name = db.Column(db.String(100), nullable=False)
+    item_barcode = db.Column(db.String(100), nullable=True)
+
+    user = db.relationship('Users', backref=db.backref('scan_history', lazy=True))
 
 # with app.app_context():
 #     db.create_all()
@@ -106,7 +117,7 @@ def clean_ingredients(input_string):
 
     return filtered_list
 
-
+# TODO now you have find a way to grab the users id and store the necessary info
 @app.route('/', methods=['GET', 'POST'])
 def home():
     form = SearchBarcode()
@@ -124,7 +135,6 @@ def home():
         if 'product' in ingredients:
             # accessing the key called product 
             product_info = ingredients['product']
-            print(product_info)
             # nutrients data extraction from the api
             nutrients = product_info.get('nutriments', {})
             # nutriscore data extraction from the api
@@ -135,9 +145,9 @@ def home():
             name = product_info.get('product_name', 'Sorry no name was found.')
             ingredients = product_info.get('ingredients_text_en', 'Sorry no ingredients where found.')
 
-
+            
             final_list = clean_ingredients(ingredients)
-
+            
 
             # Ingredients that we in out database go in one list and non existing one ask chat gpt
             openai_list, database_list = [], []
@@ -162,6 +172,17 @@ def home():
                 add_ingredient(response_list)
 
             complete_list = database_list + response_list
+            
+            if current_user.is_authenticated:
+
+                new_item = ScanHistory(
+                user_id = current_user.id,
+                item_name = name,
+                item_barcode = barcode,
+                )
+                
+                db.session.add(new_item)
+                db.session.commit()
 
             return render_template('index.html', form=form, name=name, ingredients_list=complete_list, nutritional_information=nutrients, nutriscore=nutriscore, ingredients_percentage=ingredients_percentages)
         else:
@@ -203,7 +224,12 @@ def about():
 @app.route('/settings')
 def settings():
     subsection = request.args.get('section', 'main')
-    return render_template('settings.html', subsection=subsection, logged_in=current_user.is_authenticated)
+    if current_user.is_authenticated:
+        users_scan_history = ScanHistory.query.filter_by(user_id=current_user.id).all()
+    else:
+        users_scan_history = None
+
+    return render_template('settings.html', subsection=subsection, logged_in=current_user.is_authenticated, scan_history=users_scan_history)
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -212,16 +238,15 @@ def login():
     # add database
     
     if form.validate_on_submit():
-        # Perform login logic here
-        # flash('Login successful!', 'success')
 
         email = form.email.data
         password = form.password.data
 
         result = db.session.execute(
             db.select(Users).where(Users.email == email))
+        
         user = result.scalar()
-
+        
         if not user:
             flash("That email does not exist, please try again.")
             return redirect(url_for('login'))

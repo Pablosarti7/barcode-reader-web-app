@@ -123,8 +123,8 @@
 
     <!-- Product information section -->
     <section class="container main_container" id="productInfoSection">
-        <div class="col-12 col-md-6 mx-auto mb-3m text-center">
-            <h2 class="mb-5">Product information</h2>
+        <div class="col-12 col-md-6 mx-auto text-center">
+            
             {% with messages = get_flashed_messages() %}
             {% if messages %}
             {% for message in messages %}
@@ -132,19 +132,7 @@
             {% endfor %}
             {% endif %}
             {% endwith %}
-            <div>
-                <form id="myForm2" method="POST" class="mb-5">
-                    {{ form.hidden_tag() }}
-                    <div class="row">
-                        <div class="col">
-                            {{ form.ingredients(class="form-control") }}
-                        </div>
-                        <div class="col-auto">
-                            {{ form.submit(class="btn btn-primary") }}
-                        </div>
-                    </div>
-                </form>
-            </div>
+
         </div>
         <div class="col-auto text-center mb-4">
             <h3 class="text-capitalize">
