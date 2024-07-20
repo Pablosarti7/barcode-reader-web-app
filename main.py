@@ -12,11 +12,11 @@ from flask_caching import Cache
 from thefuzz import process
 import os
 import re
-
+from sqlalchemy import create_engine
+from sqlalchemy.orm import scoped_session, sessionmaker
 
 app = Flask(__name__)
 app.secret_key = os.urandom(24)
-
 
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("DATABASE_URL")
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -24,20 +24,25 @@ app.config['SESSION_COOKIE_SECURE'] = True  # Ensures cookies are only sent over
 app.config['REMEMBER_COOKIE_SECURE'] = True
 app.config['SESSION_COOKIE_HTTPONLY'] = True  # Prevents JavaScript access to cookies
 
+# Create engine with pool_pre_ping
+engine = create_engine(os.environ.get("DATABASE_URL"), pool_pre_ping=True)
 
-db = SQLAlchemy(app)
+# Create a custom session and bind to the engine
+session_factory = sessionmaker(bind=engine)
+Session = scoped_session(session_factory)
+
+# Initialize SQLAlchemy with the custom session
+db = SQLAlchemy(app, session_options={"bind": engine})
+
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'login'
 login_manager.login_message_category = 'info'
 cache = Cache(app, config={'CACHE_TYPE': 'SimpleCache'})
 
-
-
 @login_manager.user_loader
 def load_user(user_id):
     return Users.query.get(user_id)
-
 
 # your database
 class Users(db.Model, UserMixin):
@@ -53,6 +58,12 @@ class ScanHistory(db.Model):
     item_barcode = db.Column(db.String(100), nullable=True)
 
     user = db.relationship('Users', backref=db.backref('scan_history', lazy=True))
+
+# Ensure the custom session is removed after each request
+@app.teardown_appcontext
+def shutdown_session(exception=None):
+    Session.remove()
+
 
 # with app.app_context():
 #     db.create_all()
@@ -294,6 +305,9 @@ def logout():
     logout_user()
     return redirect(url_for('home'))
 
+@app.route('/test')
+def test():
+    return render_template('test.html')
 
 @app.errorhandler(404)
 def page_not_found(e):
