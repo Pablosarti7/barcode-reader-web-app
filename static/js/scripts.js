@@ -6,7 +6,8 @@ document.getElementById('startbutton').addEventListener('click', function() {
             type: "LiveStream",
             target: document.querySelector('#scanner-container'),
             constraints: {
-                facingMode: "environment"
+                facingMode: "environment",
+                focusMode: "continuous"  // Add this line for auto focus
             },
         },
         decoder: {
@@ -46,7 +47,7 @@ document.getElementById('startbutton').addEventListener('click', function() {
         Quagga.start();
         document.getElementById('cameraModal').style.display = 'block';
     });
-    
+
     // Drawing squares and rectangles for the camera.
     Quagga.onProcessed(function (result) {
         var drawingCtx = Quagga.canvas.ctx.overlay,
@@ -81,16 +82,16 @@ document.getElementById('startbutton').addEventListener('click', function() {
     // When the user clicks on <span> (x), close the modal
     span.onclick = function() {
         modal.style.display = "none";
-        Quagga.stop()
-    }
+        Quagga.stop();
+    };
 
     // Close the modal if the user clicks anywhere outside of it
     window.onclick = function(event) {
         if (event.target == modal) {
             modal.style.display = "none";
-            Quagga.stop()
+            Quagga.stop();
         }
-    }
+    };
 
     // Detecting barcode
     let lastScannedBarcode = null;
@@ -105,10 +106,10 @@ document.getElementById('startbutton').addEventListener('click', function() {
         }
 
         lastScannedBarcode = scannedBarcode;
-    
+
         // Clear the existing debounce timer
         clearTimeout(debounceTimer);
-    
+
         debounceTimer = setTimeout(function() {
             // Set the barcode value to the hidden form input
             document.getElementById('hiddenBarcodeInput').value = scannedBarcode;
@@ -127,4 +128,17 @@ document.getElementById('startbutton').addEventListener('click', function() {
     referenceRect.style.height = '50%';
     referenceRect.style.zIndex = '1000';
     scannerContainer.appendChild(referenceRect);
+
+    // Add touch-to-focus functionality
+    scannerContainer.addEventListener('click', function(event) {
+        var videoTrack = Quagga.CameraAccess.getActiveTrack();
+        if (videoTrack && typeof videoTrack.getCapabilities === 'function') {
+            var capabilities = videoTrack.getCapabilities();
+            if (capabilities.focusMode) {
+                videoTrack.applyConstraints({
+                    advanced: [{ focusMode: 'auto', pointsOfInterest: [{ x: event.offsetX / scannerContainer.clientWidth, y: event.offsetY / scannerContainer.clientHeight }] }]
+                });
+            }
+        }
+    });
 });
