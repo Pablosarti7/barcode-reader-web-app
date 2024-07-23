@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, jsonify, redirect, url_for, flash
+from flask import Flask, render_template, request, jsonify, redirect, url_for, flash, abort
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, PasswordField, validators
 from wtforms.validators import DataRequired, EqualTo
@@ -14,6 +14,7 @@ import os
 import re
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
+from functools import wraps
 
 app = Flask(__name__)
 app.secret_key = os.urandom(24)
@@ -24,14 +25,14 @@ app.config['SESSION_COOKIE_SECURE'] = True  # Ensures cookies are only sent over
 app.config['REMEMBER_COOKIE_SECURE'] = True
 app.config['SESSION_COOKIE_HTTPONLY'] = True  # Prevents JavaScript access to cookies
 
-# Create engine with pool_pre_ping
+# dont need this anymore
 engine = create_engine(os.environ.get("DATABASE_URL"), pool_pre_ping=True)
 
-# Create a custom session and bind to the engine
+# dont need this anymore
 session_factory = sessionmaker(bind=engine)
 Session = scoped_session(session_factory)
 
-# Initialize SQLAlchemy with the custom session
+# dont need this anymore
 db = SQLAlchemy(app, session_options={"bind": engine})
 
 login_manager = LoginManager()
@@ -59,7 +60,7 @@ class ScanHistory(db.Model):
 
     user = db.relationship('Users', backref=db.backref('scan_history', lazy=True))
 
-# Ensure the custom session is removed after each request
+# dont need this anymore
 @app.teardown_appcontext
 def shutdown_session(exception=None):
     Session.remove()
@@ -126,7 +127,15 @@ def clean_ingredients(input_string):
 
     return filtered_list
 
-# TODO now you have find a way to grab the users id and store the necessary info
+def admin_only(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if not current_user.is_authenticated or current_user.id != 1:
+            return abort(403)
+        return f(*args, **kwargs)
+    return decorated_function
+
+
 @app.route('/', methods=['GET', 'POST'])
 def home():
     form = SearchBarcode()
@@ -305,9 +314,13 @@ def logout():
     logout_user()
     return redirect(url_for('home'))
 
+
 @app.route('/test')
+@login_required
+@admin_only
 def test():
-    return render_template('test.html')
+    form = SearchBarcode()
+    return render_template('test.html', form=form)
 
 @app.errorhandler(404)
 def page_not_found(e):
