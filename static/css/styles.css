@@ -2,14 +2,16 @@
 
 /* Global */
 
-html, body {
+html,
+body {
   height: 100%;
   margin: 0;
 }
 
 body {
   font-family: 'Lato', sans-serif;
-  font-weight: 400; /* Regular */
+  font-weight: 400;
+  /* Regular */
   margin: 0;
   padding: 0;
   background-color: #f4f4f4;
@@ -20,7 +22,8 @@ body {
 
 h1 {
   font-family: 'Roboto', sans-serif;
-  font-weight: 600; /* Bold */
+  font-weight: 600;
+  /* Bold */
 }
 
 h2 {
@@ -88,7 +91,7 @@ h3 {
     margin-right: auto;
     margin-left: auto;
   }
-  
+
   .footer {
     display: none;
   }
@@ -190,8 +193,8 @@ canvas.drawingBuffer {
 
 @media only screen and (max-width: 768px) {
 
-  video,
-  canvas.drawingBuffer {
+video,
+canvas.drawingBuffer {
     max-width: 90vw;
   }
 }
@@ -224,11 +227,13 @@ canvas.drawingBuffer {
 .instructions {
   display: flex;
   align-items: flex-start;
-  background-color: #f9f9f9; /* Adjust as needed */
+  background-color: #f9f9f9;
+  /* Adjust as needed */
   padding: 20px;
   border-radius: 10px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  width: 45%; /* Adjust as needed */
+  width: 45%;
+  /* Adjust as needed */
   position: relative;
 }
 
@@ -283,7 +288,8 @@ canvas.drawingBuffer {
   }
 
   .home_icon {
-    font-size: 40px; /* Adjust this value as needed */
+    font-size: 40px;
+    /* Adjust this value as needed */
   }
 
   .works_main_container {
@@ -300,8 +306,10 @@ canvas.drawingBuffer {
   }
 
   .instructions {
-    width: 90%; /* Ensure it fits within the screen */
-    margin-bottom: 20px; /* Add space between items */
+    width: 90%;
+    /* Ensure it fits within the screen */
+    margin-bottom: 20px;
+    /* Add space between items */
   }
 
   .circle {
@@ -309,7 +317,8 @@ canvas.drawingBuffer {
     height: 35px;
     font-size: 18px;
     top: -20px;
-    left: 10px; /* Adjust left positioning */
+    left: 10px;
+    /* Adjust left positioning */
   }
 
 }
@@ -373,10 +382,14 @@ canvas.drawingBuffer {
 }
 
 .list-group-item {
-  border: none; /* Remove border if desired */
-  border-radius: 0; /* Remove border radius if desired */
-  margin-bottom: 10px; /* Add space between items */
-  padding: 15px 20px; /* Adjust padding */
+  border: none;
+  /* Remove border if desired */
+  border-radius: 0;
+  /* Remove border radius if desired */
+  margin-bottom: 10px;
+  /* Add space between items */
+  padding: 15px 20px;
+  /* Adjust padding */
 }
 
 /* Login Page */
@@ -402,7 +415,8 @@ canvas.drawingBuffer {
   max-height: 400px;
   overflow-y: auto;
   border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Shadow for depth */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  /* Shadow for depth */
 }
 
 .info-card .card-title {
@@ -428,7 +442,8 @@ canvas.drawingBuffer {
 
 .nutrients-card {
   border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Shadow for depth */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  /* Shadow for depth */
 }
 
 .nutrients-card .card-title {
@@ -464,14 +479,19 @@ canvas.drawingBuffer {
   text-align: right;
 }
 
-.nutrition-table td, .nutrition-table th {
+.nutrition-table td,
+.nutrition-table th {
   border: 1px solid #ddd;
   padding: 8px;
 }
 
-.nutrition-table tr:nth-child(even){background-color: #f2f2f2;}
+.nutrition-table tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
 
-.nutrition-table tr:hover {background-color: #ddd;}
+.nutrition-table tr:hover {
+  background-color: #ddd;
+}
 
 .nutrition-table th {
   padding-top: 12px;
@@ -484,9 +504,12 @@ canvas.drawingBuffer {
 /* Nutriscore Card */
 
 .nutriscore-card {
-  border: 1px solid #ddd; /* Add a border */
-  border-radius: 10px; /* Rounded corners */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Shadow for depth */
+  border: 1px solid #ddd;
+  /* Add a border */
+  border-radius: 10px;
+  /* Rounded corners */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  /* Shadow for depth */
 }
 
 .nutriscore-card .card-title {
@@ -495,21 +518,29 @@ canvas.drawingBuffer {
   margin-bottom: 10px;
 }
 
-.nutriscore-grade, .nutriscore-score {
+.nutriscore-grade,
+.nutriscore-score {
   font-size: 1.1em;
-  padding: 10px; /* Inner padding */
-  border-radius: 5px; /* Rounded corners */
-  margin: 5px 0; /* Vertical spacing */
+  padding: 10px;
+  /* Inner padding */
+  border-radius: 5px;
+  /* Rounded corners */
+  margin: 5px 0;
+  /* Vertical spacing */
 }
 
 .nutriscore-grade {
-  background-color: #f8f9fa; /* Light background for grade */
-  text-align: center; /* Center align the text */
+  background-color: #f8f9fa;
+  /* Light background for grade */
+  text-align: center;
+  /* Center align the text */
 }
 
 .nutriscore-score {
-  background-color: #e9ecef; /* Light background for score */
-  text-align: center; /* Center align the text */
+  background-color: #e9ecef;
+  /* Light background for score */
+  text-align: center;
+  /* Center align the text */
 }
 
 /* Ingredient Percentage Card */
@@ -518,7 +549,8 @@ canvas.drawingBuffer {
   max-height: 400px;
   overflow-y: auto;
   border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Shadow for depth */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  /* Shadow for depth */
 }
 
 .ingredient-percentage-card .card-title {
@@ -547,5 +579,6 @@ canvas.drawingBuffer {
   max-height: 200px;
   overflow-y: auto;
   border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Shadow for depth */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  /* Shadow for depth */
 }
