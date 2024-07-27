@@ -1,66 +1,68 @@
 <!DOCTYPE html>
 <html lang="en">
 
-{% block content %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="{{ url_for('static', filename='css/tailwind.css') }}" rel="stylesheet">
+    <title>About Page</title>
+</head>
 
-{% include "header.html" %}
-
-<div class="content">
+<body class="flex flex-col min-h-screen">
 
     {% include "navigation.html" %}
-    
-    <header class="search_header">
-        <div class="container my_container">
-            <div class="row justify-content-center">
-                <div class="col_auto">
-                    <div class="text-white">
-                        <h1 class="mt-5 mb-5">About IngredientAdvisor.</h1>
-                    </div>
+
+    <main class="flex-grow">
+    <section class="bg-white dark:bg-gray-900">
+        <div class="py-8 px-4 mx-auto max-w-screen-xl lg:py-16 lg:px-6">
+            <div class="max-w-screen-lg text-gray-500 sm:text-lg dark:text-gray-400">
+                <h2 class="mb-4 text-4xl tracking-tight font-bold text-gray-900 dark:text-white">About Us</h2>
+                <div class="container">
+                    <h2>What We Do</h2>
+                    <p class="mb-5">
+                        Our app is designed to bring a fun twist to grocery shopping. Simply scan the barcode of any
+                        food
+                        item,
+                        and
+                        voila! We'll present you with a whimsical interpretation of the ingredients and their so-called
+                        "impact"
+                        on your
+                        health.
+                    </p>
+
+                    <h2>Just for Fun</h2>
+                    <p class="mb-5">
+                        Remember, our app is all about entertainment and imagination! The information provided is purely
+                        fictional and
+                        created for your amusement. We haven't used real research or factual data, so please don't take
+                        it
+                        as
+                        health
+                        advice.
+                    </p>
+
+                    <h2>Disclaimer</h2>
+                    <p class="mb-5">
+                        Please note that the information provided by IngredientAdvisor is not intended to be taken
+                        seriously.
+                        It's a
+                        product of pure creativity and not based on scientific evidence or dietary guidelines. Always
+                        consult a
+                        healthcare professional for genuine dietary advice.
+                    </p>
                 </div>
             </div>
         </div>
-    </header>
-
-    <section class="about_us_section">
-        <div class="container mb-5">
-            <h2 class="mt-5 mb-3">What We Do</h2>
-            <p>
-                Our app is designed to bring a fun twist to grocery shopping. Simply scan the barcode of any food
-                item,
-                and
-                voila! We'll present you with a whimsical interpretation of the ingredients and their so-called
-                "impact"
-                on your
-                health.
-            </p>
-
-            <h2 class="mt-5 mb-3">Just for Fun</h2>
-            <p>
-                Remember, our app is all about entertainment and imagination! The information provided is purely
-                fictional and
-                created for your amusement. We haven't used real research or factual data, so please don't take it
-                as
-                health
-                advice.
-            </p>
-
-            <h2 class="mt-5 mb-3">Disclaimer</h2>
-            <p>
-                Please note that the information provided by IngredientAdvisor is not intended to be taken seriously.
-                It's a
-                product of pure creativity and not based on scientific evidence or dietary guidelines. Always
-                consult a
-                healthcare professional for genuine dietary advice.
-            </p>
-        </div>
     </section>
+    </main>
 
-</div>
+    {% include 'footer.html' %}
 
-{% include 'footer.html' %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/quagga/0.12.1/quagga.min.js"></script>
+    <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/popup.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flowbite@2.4.1/dist/flowbite.min.js"></script>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/quagga/0.12.1/quagga.min.js"></script>
-
-{% endblock %}
+</body>
 
 </html>

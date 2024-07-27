@@ -5,307 +5,101 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="{{ url_for('static', filename='css/tailwind.css') }}" rel="stylesheet">
-    <title>Search Page</title>
-    <style>
-        #scanner-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-        }
 
-        video,
-        canvas.drawingBuffer {
-            max-width: 100%;
-            height: auto;
-        }
-
-        @media only screen and (max-width: 768px) {
-
-            video,
-            canvas.drawingBuffer {
-                max-width: 90vw;
-            }
-        }
-
-        canvas.drawing,
-        canvas.drawingBuffer {
-            position: absolute;
-            left: 0px;
-            top: 0;
-        }
-    </style>
+    <title>Document</title>
 </head>
 
-<body class="bg-slate-100 text-black">
+<body>
 
-    <header>
-        <nav class="bg-white border-gray-200 px-4 lg:px-6 py-2.5 dark:bg-gray-300">
-            <div class="flex flex-wrap justify-between items-center mx-auto max-w-screen-xl">
-                <a href="{{ url_for('home') }}" class="flex items-center">
-                    <span class="self-center text-xl font-semibold whitespace-nowrap dark:text-black">Ingredient
-                        Advisor</span>
-                </a>
-                <div class="flex items-center lg:order-2">
-                    <a href="{{ url_for('login') }}"
-                        class="text-gray-800 dark:text-black hover:bg-gray-200 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2 focus:outline-none dark:focus:ring-gray-800">Log
-                        in</a>
 
-                    <button data-collapse-toggle="mobile-menu-2" type="button"
-                        class="inline-flex items-center p-2 ml-1 text-sm text-gray-500 rounded-lg lg:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-black dark:hover:bg-gray-700 dark:focus:ring-gray-600"
-                        aria-controls="mobile-menu-2" aria-expanded="false">
-                        <span class="sr-only">Open main menu</span>
-                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                            <path fill-rule="evenodd"
-                                d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
-                                clip-rule="evenodd"></path>
-                        </svg>
-                        <svg class="hidden w-6 h-6" fill="currentColor" viewBox="0 0 20 20"
-                            xmlns="http://www.w3.org/2000/svg">
-                            <path fill-rule="evenodd"
-                                d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                                clip-rule="evenodd"></path>
-                        </svg>
-                    </button>
-                </div>
-                <div class="hidden justify-between items-center w-full lg:flex lg:w-auto lg:order-1" id="mobile-menu-2">
-                    <ul class="flex flex-col mt-4 font-medium lg:flex-row lg:space-x-8 lg:mt-0">
+
+    <section class="bg-white py-8 antialiased dark:bg-gray-900 md:py-16">
+        <div class="mx-auto max-w-screen-xl px-4 2xl:px-0">
+            <div class="mx-auto max-w-5xl">
+                <div class="mx-auto max-w-2xl space-y-6">
+                    <div class="columns-2">
+                        <p class="text-base font-normal text-gray-500 dark:text-gray-400">The iMac "M1" 8-Core
+                            CPU/8-Core
+                            GPU/4 USB-C Shaped Ports (2021) model features a 5-nm Apple M1 processor with 8 cores (4
+                            performance cores and 4 efficiency cores), an 8-core GPU, a 16-core Neural Engine, 8 GB of
+                            onboard RAM, and a 1 TB onboard SSD.</p>
+
+                        <p class="text-base font-normal text-gray-500 dark:text-gray-400">
+                            This all is housed in a wafer thin aluminum case with flat edges that includes a 23.5"
+                            4480x2520, 218 PPI, LED-backlit, "True Tone" widescreen "Retina 4.5K" display mounted on a
+                            svelte aluminum stand. This specific model is offered in the a two-tone Blue color. It also
+                            has
+                            an integrated 1080p FaceTime HD camera, a "studio-quality three-mic array" and a
+                            "high-fidelity
+                            six-speaker system" that supports Spatial Audio with Dolby Atmos.
+                        </p>
+                    </div>
+                    <p class="text-base font-semibold text-gray-900 dark:text-white">Key Features and Benefits:</p>
+                    <ul
+                        class="list-outside list-disc space-y-4 pl-4 text-base font-normal text-gray-500 dark:text-gray-400">
                         <li>
-                            <a href="{{ url_for('home') }}"
-                                class="block py-2 pr-4 pl-3 text-white rounded bg-primary-700 lg:bg-transparent lg:text-primary-700 lg:p-0 dark:text-black"
-                                aria-current="page">Home</a>
+                            <span class="font-semibold text-gray-900 dark:text-white"> Brilliant 4.5K Retina display:
+                            </span>
+                            see the big picture and all the detailsSee it all in sharp, glorious detail on the immersive
+                            24-inch 4.5K Retina display. The P3 wide color gamut brings what you're watching to life in
+                            over a billion colors. Images shine with a brilliant 500 nits of brightness.
+                            Industry-leading anti-reflective coating delivers greater comfort and readability. And True
+                            Tone technology automatically adjusts the color temperature of your display to the ambient
+                            light of your
+                            environment, for a more natural viewing experience. So whether you're editing photos,
+                            working on presentations, or watching your favorite shows and movies, everything looks
+                            incredible on iMac.
                         </li>
                         <li>
-                            <a href="{{ url_for('search') }}"
-                                class="block py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-primary-700 lg:p-0 dark:text-black dark:hover:bg-gray-700 dark:hover:text-black lg:dark:hover:bg-transparent dark:border-gray-700">Search</a>
+                            <span class="font-semibold text-gray-900 dark:text-white"> 1080p FaceTime HD camera: </span>
+                            ready for your close-upIt's the best camera system ever in a Mac. Double the resolution for
+                            higher-quality video calls. A larger sensor that captures more light. And the advanced image
+                            signal processor (ISP) of M1 greatly improves image quality. So from collaborating with
+                            coworkers to catching up with friends and family, you'll always look your best.
                         </li>
+
                         <li>
-                            <a href="{{ url_for('about') }}"
-                                class="block py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-primary-700 lg:p-0 dark:text-black dark:hover:bg-gray-700 dark:hover:text-black lg:dark:hover:bg-transparent dark:border-gray-700">About</a>
+                            <span class="font-semibold text-gray-900 dark:text-white"> Studio-quality mics for
+                                high-quality conversations: </span>
+                            whether you're on a video call with a friend, cutting a track, or recording a podcast, the
+                            microphones on iMac make sure you come through loud, crisp, and clear. The studio-quality
+                            three-mic array is designed to reduce feedback, so conversations flow more naturally and you
+                            interrupt each other less. And beamforming technology helps the mics ignore background
+                            noise. Which means everyone hears you - not what's going on around you.
                         </li>
+
                         <li>
-                            <a href="settings"
-                                class="block py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-primary-700 lg:p-0 dark:text-black dark:hover:bg-gray-700 dark:hover:text-black lg:dark:hover:bg-transparent dark:border-gray-700">Settings</a>
+                            <span class="font-semibold text-gray-900 dark:text-white"> Six-speaker sound system: audio
+                                that really fills a room: </span>
+                            the sound system on iMac brings incredible, room-filling audio to any space. Two pairs of
+                            force-canceling woofers create rich, deep bass without unwanted vibrations. And each pair is
+                            balanced with a high-performance tweeter. The result is a massive, detailed soundstage that
+                            takes your movies, music, and more to the next level.
+                        </li>
+
+                        <li>
+                            <span class="font-semibold text-gray-900 dark:text-white"> M1 chip: with great power comes
+                                great capability: </span>
+                            M1 is the most powerful chip Apple has ever made. macOS Big Sur is an advanced desktop
+                            operating system. Combined, they take iMac to entirely new levels of performance,
+                            efficiency, and security. iMac wakes from sleep almost instantly, apps launch in a flash,
+                            and the whole system feels fluid, smooth, and snappy. With up to 85 percent faster CPU
+                            performance and up to two times faster graphics performance than standard 21.5-inch iMac
+                            models, you can use apps like
+                            Xcode and Affinity Photo to compile code in a fraction of the time or edit photos in real
+                            time. And it runs cool and quiet even while tackling these intense workloads. That's the
+                            power of hardware, software, and silicon - all designed together.
                         </li>
                     </ul>
                 </div>
-            </div>
-        </nav>
-    </header>
-
-    <section class="bg-white dark:bg-slate-100">
-        <div class="py-8 px-4 mx-auto max-w-screen-xl text-center lg:py-16 lg:px-12">
-            <a href="#" id="startbutton"
-                class="inline-flex justify-between items-center py-1 px-1 pr-4 mb-7 text-sm text-gray-700 bg-gray-100 rounded-full dark:bg-gray-300 dark:text-black hover:bg-gray-200"
-                role="alert">
-                <span class="text-xs bg-blue-600 rounded-full text-white px-4 py-1.5 mr-3">Try</span> <span
-                    class="text-sm font-medium">Scanning with your mobile device.</span>
-                <svg class="ml-2 w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                    <path fill-rule="evenodd"
-                        d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                        clip-rule="evenodd"></path>
-                </svg>
-            </a>
-            <h1
-                class="mb-4 text-4xl font-extrabold tracking-tight leading-none text-gray-900 md:text-5xl lg:text-6xl dark:text-black">
-                Learn about food ingredients.</h1>
-            <p class="mb-8 text-lg font-normal text-gray-500 lg:text-xl sm:px-16 xl:px-48 dark:text-black">
-                Make better decisions with instant ingredient analysis.
-            </p>
-            <div class="flex flex-col mb-8 mt-8 sm:justify-center lg:content-center max-w-screen-md mx-auto">
-                <form id="myForm" method="POST" action="#productInfoSection">
-                    <label for="search"
-                        class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-black">Search</label>
-                    <div class="relative">
-                        <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-                            <svg class="w-4 h-4 text-gray-500 dark:text-black" aria-hidden="true"
-                                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
-                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                    stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
-                            </svg>
-                        </div>
-                        {{ form.hidden_tag() }}
-                        {{ form.ingredients(class="block w-full p-4 ps-10 text-sm text-gray-900 border border-gray-300
-                        rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-300
-                        dark:placeholder-gray-400 dark:text-black dark:focus:ring-blue-500 dark:focus:border-blue-500")
-                        }}
-                        {{ form.submit(class="text-white absolute end-2.5 bottom-2.5 bg-blue-700 hover:bg-blue-800
-                        focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2
-                        dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800") }}
-                    </div>
-                </form>
-                <form id="barcodeForm" method="POST" action="#productInfoSection" style="display: none;">
-                    <input type="hidden" name="barcode" id="hiddenBarcodeInput">
-                </form>
-
-
-            </div>
-
-        </div>
-    </section>
-
-    <!-- Main modal -->
-    <div id="cameraModal" tabindex="-1" aria-hidden="true"
-        class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
-        <div class="relative p-4 w-full max-w-2xl max-h-full">
-            <!-- Modal content -->
-            <div class="relative bg-white rounded-lg shadow dark:bg-gray-300">
-                <!-- Modal header -->
-                <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
-                    <h3 class="text-xl font-semibold text-gray-900 dark:text-black">
-                        Hold for two seconds
-                    </h3>
-                    <button type="button"
-                        class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white close">
-                        <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
-                            viewBox="0 0 14 14">
-                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
-                        </svg>
-                        <span class="sr-only">Close modal</span>
-                    </button>
-                </div>
-                <!-- Modal body -->
-                <div class="p-4 md:p-5 space-y-4">
-                    <div id="scanner-container" style="position: relative;">
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <section class="bg-white dark:bg-slate-100">
-        <div class="py-8 px-4 mx-auto max-w-screen-xl sm:py-16 lg:px-6">
-            <div class="max-w-screen-md mb-8 lg:mb-16">
-                <h2 class="mb-4 text-4xl tracking-tight font-extrabold text-gray-900 dark:text-black">Benefits</h2>
-            </div>
-            <div class="space-y-8 md:grid md:grid-cols-2 lg:grid-cols-3 md:gap-12 md:space-y-0">
-                <div>
-                    <div
-                        class="flex justify-center items-center mb-4 w-10 h-10 rounded-full bg-blue-200 lg:h-12 lg:w-12 dark:bg-primary-900">
-                        <svg class="w-5 h-5 text-primary-600 lg:w-6 lg:h-6 dark:text-blackry-300" fill="currentColor"
-                            viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                            <path fill-rule="evenodd"
-                                d="M3 3a1 1 0 000 2v8a2 2 0 002 2h2.586l-1.293 1.293a1 1 0 101.414 1.414L10 15.414l2.293 2.293a1 1 0 001.414-1.414L12.414 15H15a2 2 0 002-2V5a1 1 0 100-2H3zm11.707 4.707a1 1 0 00-1.414-1.414L10 9.586 8.707 8.293a1 1 0 00-1.414 0l-2 2a1 1 0 101.414 1.414L8 10.414l1.293 1.293a1 1 0 001.414 0l4-4z"
-                                clip-rule="evenodd"></path>
-                        </svg>
-                    </div>
-                    <h3 class="mb-2 text-xl font-bold dark:text-black">Informed Eating</h3>
-                    <p class="text-gray-500 dark:text-black">Understand what's really in your food.</p>
-                </div>
-                <div>
-                    <div
-                        class="flex justify-center items-center mb-4 w-10 h-10 rounded-full bg-blue-200 lg:h-12 lg:w-12 dark:bg-primary-900">
-                        <svg class="w-5 h-5 text-primary-600 lg:w-6 lg:h-6 dark:text-blackry-300" fill="currentColor"
-                            viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                            <path
-                                d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838L7.667 9.088l1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3zM3.31 9.397L5 10.12v4.102a8.969 8.969 0 00-1.05-.174 1 1 0 01-.89-.89 11.115 11.115 0 01.25-3.762zM9.3 16.573A9.026 9.026 0 007 14.935v-3.957l1.818.78a3 3 0 002.364 0l5.508-2.361a11.026 11.026 0 01.25 3.762 1 1 0 01-.89.89 8.968 8.968 0 00-5.35 2.524 1 1 0 01-1.4 0zM6 18a1 1 0 001-1v-2.065a8.935 8.935 0 00-2-.712V17a1 1 0 001 1z">
-                            </path>
-                        </svg>
-                    </div>
-                    <h3 class="mb-2 text-xl font-bold dark:text-black">Healthier Choices</h3>
-                    <p class="text-gray-500 dark:text-black">Make better decisions with instant ingredient analysis.</p>
-                </div>
-                <div>
-                    <div
-                        class="flex justify-center items-center mb-4 w-10 h-10 rounded-full bg-blue-200 lg:h-12 lg:w-12 dark:bg-primary-900">
-                        <svg class="w-5 h-5 text-primary-600 lg:w-6 lg:h-6 dark:text-blackry-300" fill="currentColor"
-                            viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                            <path fill-rule="evenodd"
-                                d="M6 6V5a3 3 0 013-3h2a3 3 0 013 3v1h2a2 2 0 012 2v3.57A22.952 22.952 0 0110 13a22.95 22.95 0 01-8-1.43V8a2 2 0 012-2h2zm2-1a1 1 0 011-1h2a1 1 0 011 1v1H8V5zm1 5a1 1 0 011-1h.01a1 1 0 110 2H10a1 1 0 01-1-1z"
-                                clip-rule="evenodd"></path>
-                            <path
-                                d="M2 13.692V16a2 2 0 002 2h12a2 2 0 002-2v-2.308A24.974 24.974 0 0110 15c-2.796 0-5.487-.46-8-1.308z">
-                            </path>
-                        </svg>
-                    </div>
-                    <h3 class="mb-2 text-xl font-bold dark:text-black">Diet Friendly</h3>
-                    <p class="text-gray-500 dark:text-black">Whether you're vegan, gluten-free, or watching your sugar
-                        intake, know what's suitable for you.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-
-    <section class="bg-white dark:bg-slate-100">
-        <div class="py-8 px-4 mx-auto max-w-screen-xl sm:py-16 lg:px-6">
-
-            <div class="max-w-screen-md mb-8 lg:mb-16">
-                <h2 class="mb-4 text-4xl tracking-tight font-extrabold text-gray-900 dark:text-black">How It Works</h2>
-                <p class="text-gray-500 sm:text-xl dark:text-black">Easy steps to do to know all information about your
-                    food ingredients.</p>
-            </div>
-            <div class="space-y-8 md:grid md:grid-cols-2 lg:grid-cols-2 md:gap-12 md:space-y-0">
-                <div>
-                    <div
-                        class="flex justify-center items-center mb-4 w-10 h-10 rounded-full bg-blue-200 lg:h-12 lg:w-12 dark:bg-primary-900">
-                        <svg class="w-5 h-5 text-primary-600 lg:w-6 lg:h-6 dark:text-blackry-300" fill="currentColor"
-                            viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                            <path fill-rule="evenodd"
-                                d="M3 3a1 1 0 000 2v8a2 2 0 002 2h2.586l-1.293 1.293a1 1 0 101.414 1.414L10 15.414l2.293 2.293a1 1 0 001.414-1.414L12.414 15H15a2 2 0 002-2V5a1 1 0 100-2H3zm11.707 4.707a1 1 0 00-1.414-1.414L10 9.586 8.707 8.293a1 1 0 00-1.414 0l-2 2a1 1 0 101.414 1.414L8 10.414l1.293 1.293a1 1 0 001.414 0l4-4z"
-                                clip-rule="evenodd"></path>
-                        </svg>
-                    </div>
-                    <h3 class="mb-2 text-xl font-bold dark:text-black">Scan or Type</h3>
-                    <p class="text-gray-500 dark:text-black">Scan the food item or type it in the search bar to get
-                        detailed insights into thousands of food ingredients.</p>
-                </div>
-                <div>
-                    <div
-                        class="flex justify-center items-center mb-4 w-10 h-10 rounded-full bg-blue-200 lg:h-12 lg:w-12 dark:bg-primary-900">
-                        <svg class="w-5 h-5 text-primary-600 lg:w-6 lg:h-6 dark:text-blackry-300" fill="currentColor"
-                            viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                            <path
-                                d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838L7.667 9.088l1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3zM3.31 9.397L5 10.12v4.102a8.969 8.969 0 00-1.05-.174 1 1 0 01-.89-.89 11.115 11.115 0 01.25-3.762zM9.3 16.573A9.026 9.026 0 007 14.935v-3.957l1.818.78a3 3 0 002.364 0l5.508-2.361a11.026 11.026 0 01.25 3.762 1 1 0 01-.89.89 8.968 8.968 0 00-5.35 2.524 1 1 0 01-1.4 0zM6 18a1 1 0 001-1v-2.065a8.935 8.935 0 00-2-.712V17a1 1 0 001 1z">
-                            </path>
-                        </svg>
-                    </div>
-                    <h3 class="mb-2 text-xl font-bold dark:text-black">Learn about each ingredient</h3>
-                    <p class="text-gray-500 dark:text-black">The truth is that certain ingredients in our food are not
-                        the healthiest and learning about them can help us make better decisions on what we put in our
-                        bodies.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="bg-white dark:bg-slate-100">
-        <div class="py-8 px-4 mx-auto max-w-screen-xl sm:py-16 lg:px-6 my-24">
-            <div class="mx-auto max-w-screen-sm text-center">
-                <h2 class="mb-4 text-4xl tracking-tight font-extrabold leading-tight text-gray-900 dark:text-black">
-                    Start scanning or typing the barcode.</h2>
-                <p class="mb-6 font-light text-gray-500 dark:text-black md:text-lg">To get the information you need
-                    about each ingredient in your food.</p>
-                <a href="#"
-                    class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-7 py-3 mr-2 mb-2 dark:bg-primary-600 focus:outline-none dark:focus:ring-primary-800">Try
-                    it for free</a>
 
             </div>
         </div>
     </section>
 
-    <!-- Footer -->
-    <footer class="p-4 bg-white md:p-8 lg:p-10 dark:bg-gray-300">
-        <div class="mx-auto max-w-screen-xl text-center">
-            <div class="flex flex-wrap justify-center items-center mb-6 text-gray-900 dark:text-black">
-                <div class="mr-4 hover:underline md:mr-6">
-                    <p>&copy; 2024 IngredientAdvisor. All rights reserved.</p>
-                </div>
-                <div class="mr-4 hover:underline md:mr-6">
-                    <p>support@ingredientadvisor.com</p>
-                </div>
-                <div class="mr-4 hover:underline md:mr-6 ">
-                    <p>About</p>
-                </div>
-            </div>
-        </div>
 
-    </footer>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/quagga/0.12.1/quagga.min.js"></script>
-    <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/flowbite@2.4.1/dist/flowbite.min.js"></script>
+
 
 </body>
 

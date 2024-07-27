@@ -1,9 +1,17 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   purge: ['./templates/**/*.html', './static/**/*.js'],
-  darkMode: false, // or 'media' or 'class'
+  darkMode: 'class', // or 'media' or 'class'
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        primary: {
+          600: '#1D4ED8', // example primary color
+          700: '#1E40AF', // example primary color for dark mode
+        },
+      },
+
+    },
   },
   variants: {
     extend: {},

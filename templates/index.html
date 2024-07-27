@@ -1,338 +1,434 @@
 <!DOCTYPE html>
 <html lang="en">
 
-{% block content %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="{{ url_for('static', filename='css/tailwind.css') }}" rel="stylesheet">
+    <title>Home Page</title>
+    <style>
+        #scanner-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
 
-{% include "header.html" %}
+        video,
+        canvas.drawingBuffer {
+            max-width: 100%;
+            height: auto;
+        }
 
-<div class="home_content content">
+        @media only screen and (max-width: 768px) {
 
-    {% include 'navigation.html' %}
+            video,
+            canvas.drawingBuffer {
+                max-width: 90vw;
+            }
+        }
 
-    <!-- Masthead-->
-    <header class="home_header">
-        <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-auto text-center">
-                    <div class="text-white">
-                        <h1 class="mb-3">Learn about food ingredients.</h1>
-                        <p class="mb-5">Make better decisions with instant ingredient analysis.</p>
-                        <form id="myForm" method="POST" action="#productInfoSection">
-                            {{ form.hidden_tag() }}
-                            <div class="row">
-                                <div class="col">
-                                    {{ form.ingredients(class="form-control") }}
-                                </div>
-                                <div class="col-auto">
-                                    {{ form.submit(class="btn btn-primary") }}
-                                </div>
-                            </div>
-                        </form>
-                        <form id="barcodeForm" method="POST" action="#productInfoSection" style="display: none;">
-                            <input type="hidden" name="barcode" id="hiddenBarcodeInput">
-                        </form>
-                    </div>
+        canvas.drawing,
+        canvas.drawingBuffer {
+            position: absolute;
+            left: 0px;
+            top: 0;
+        }
+    </style>
+</head>
+
+<body class="bg-white text-black">
+    
+    <header>
+        <nav class="bg-white border-gray-200 px-4 lg:px-6 py-2.5 dark:bg-gray-800">
+            <div class="flex flex-wrap justify-between items-center mx-auto max-w-screen-xl">
+                <a href="{{ url_for('home') }}" class="flex items-center">
+                    <span class="self-center text-xl font-semibold whitespace-nowrap dark:text-black">Ingredient
+                        Advisor</span>
+                </a>
+                <div class="flex items-center lg:order-2">
+                    {% if not logged_in %}
+                    <a href="{{ url_for('login') }}"
+                        class="text-gray-800 dark:text-black hover:bg-gray-200 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2 focus:outline-none dark:focus:ring-gray-800">Log
+                        in</a>
+                    {% endif %}
+                    <button data-collapse-toggle="mobile-menu-2" type="button"
+                        class="inline-flex items-center p-2 ml-1 text-sm text-gray-500 rounded-lg lg:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-black dark:hover:bg-gray-700 dark:focus:ring-gray-600"
+                        aria-controls="mobile-menu-2" aria-expanded="false">
+                        <span class="sr-only">Open main menu</span>
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd"
+                                d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
+                                clip-rule="evenodd"></path>
+                        </svg>
+                        <svg class="hidden w-6 h-6" fill="currentColor" viewBox="0 0 20 20"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd"
+                                d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                                clip-rule="evenodd"></path>
+                        </svg>
+                    </button>
+                </div>
+                <div class="hidden justify-between items-center w-full lg:flex lg:w-auto lg:order-1" id="mobile-menu-2">
+                    <ul class="flex flex-col mt-4 font-medium lg:flex-row lg:space-x-8 lg:mt-0">
+                        <li>
+                            <a href="{{ url_for('home') }}"
+                                class="block py-2 pr-4 pl-3 text-white rounded bg-primary-700 lg:bg-transparent lg:text-primary-700 lg:p-0 dark:text-black"
+                                aria-current="page">Home</a>
+                        </li>
+                        <li>
+                            <a href="{{ url_for('search') }}"
+                                class="block py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-primary-700 lg:p-0 dark:text-black dark:hover:bg-gray-700 dark:hover:text-black lg:dark:hover:bg-transparent dark:border-gray-700">Search</a>
+                        </li>
+                        <li>
+                            <a href="{{ url_for('about') }}"
+                                class="block py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-primary-700 lg:p-0 dark:text-black dark:hover:bg-gray-700 dark:hover:text-black lg:dark:hover:bg-transparent dark:border-gray-700">About</a>
+                        </li>
+                        <li>
+                            <a href="settings"
+                                class="block py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-primary-700 lg:p-0 dark:text-black dark:hover:bg-gray-700 dark:hover:text-black lg:dark:hover:bg-transparent dark:border-gray-700">Settings</a>
+                        </li>
+                    </ul>
                 </div>
             </div>
-        </div>
+        </nav>
     </header>
 
-    <!-- Camera Modal -->
-    <div id="cameraModal" class="modal">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <p class="mb-0 pb-0">Hold for two seconds.</p>
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                </div>
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="col-12">
-                            <div id="scanner-container" style="position: relative;">
-                            </div>
+    <section class="bg-white dark:bg-gray-900">
+        <div class="py-8 px-4 mx-auto max-w-screen-xl text-center lg:py-16 lg:px-12">
+            <a href="#" id="startbutton"
+                class="inline-flex justify-between items-center py-1 px-1 pr-4 mb-7 text-sm text-gray-700 bg-gray-100 rounded-full dark:bg-gray-300 dark:text-black hover:bg-gray-200"
+                role="alert">
+                <span class="text-xs bg-blue-600 rounded-full text-white px-4 py-1.5 mr-3">Try</span> <span
+                    class="text-sm font-medium">Scanning with your mobile device.</span>
+                <svg class="ml-2 w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd"
+                        d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                        clip-rule="evenodd"></path>
+                </svg>
+            </a>
+            <h1
+                class="mb-4 text-4xl font-extrabold tracking-tight leading-none text-gray-900 md:text-5xl lg:text-6xl dark:text-black">
+                Learn about food ingredients.</h1>
+            <p class="mb-8 text-lg font-normal text-gray-500 lg:text-xl sm:px-16 xl:px-48 dark:text-black">
+                Make better decisions with instant ingredient analysis.
+            </p>
+            <div class="flex flex-col mb-8 mt-8 sm:justify-center lg:content-center max-w-screen-md mx-auto">
+                <form id="myForm" method="POST" action="#productInfoSection">
+                    <label for="search"
+                        class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-black">Search</label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                            <svg class="w-4 h-4 text-gray-500 dark:text-black" aria-hidden="true"
+                                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                    stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
+                            </svg>
                         </div>
+                        {{ form.hidden_tag() }}
+                        {{ form.ingredients(class="block w-full p-4 ps-10 text-sm text-gray-900 border border-gray-300
+                        rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-300
+                        dark:placeholder-gray-400 dark:text-black dark:focus:ring-blue-500 dark:focus:border-blue-500")
+                        }}
+                        {{ form.submit(class="text-white absolute end-2.5 bottom-2.5 bg-blue-700 hover:bg-blue-800
+                        focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2
+                        dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800") }}
+                    </div>
+                </form>
+                <form id="barcodeForm" method="POST" action="#productInfoSection" style="display: none;">
+                    <input type="hidden" name="barcode" id="hiddenBarcodeInput">
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Camera modal -->
+    <div id="cameraModal" tabindex="-1" aria-hidden="true"
+        class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+        <div class="relative p-4 w-full max-w-2xl max-h-full">
+            <!-- Modal content -->
+            <div class="relative bg-white rounded-lg shadow dark:bg-gray-300">
+                <!-- Modal header -->
+                <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
+                    <h3 class="text-xl font-semibold text-gray-900 dark:text-black">
+                        Hold for two seconds
+                    </h3>
+                    <button type="button"
+                        class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white close">
+                        <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                            viewBox="0 0 14 14">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                        </svg>
+                        <span class="sr-only">Close modal</span>
+                    </button>
+                </div>
+                <!-- Modal body -->
+                <div class="p-4 md:p-5 space-y-4">
+                    <div id="scanner-container" style="position: relative;">
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
+    <section class="bg-white dark:bg-gray-900">
+        <div class="py-8 px-4 mx-auto max-w-screen-xl sm:py-16 lg:px-6">
+            <div class="max-w-screen-md mb-8 lg:mb-16">
+                <h2 class="mb-4 text-4xl tracking-tight font-extrabold text-gray-900 dark:text-black">Benefits</h2>
+            </div>
+            <div class="space-y-8 md:grid md:grid-cols-2 lg:grid-cols-3 md:gap-12 md:space-y-0">
+                <div>
+                    <div
+                        class="flex justify-center items-center mb-4 w-10 h-10 rounded-full bg-blue-200 lg:h-12 lg:w-12 dark:bg-primary-900">
+                        <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
+                            xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
+                            viewBox="0 0 24 24">
+                            <path fill-rule="evenodd"
+                                d="M11 4.717c-2.286-.58-4.16-.756-7.045-.71A1.99 1.99 0 0 0 2 6v11c0 1.133.934 2.022 2.044 2.007 2.759-.038 4.5.16 6.956.791V4.717Zm2 15.081c2.456-.631 4.198-.829 6.956-.791A2.013 2.013 0 0 0 22 16.999V6a1.99 1.99 0 0 0-1.955-1.993c-2.885-.046-4.76.13-7.045.71v15.081Z"
+                                clip-rule="evenodd" />
+                        </svg>
+                    </div>
+                    <h3 class="mb-2 text-xl font-bold dark:text-black">Informed Eating</h3>
+                    <p class="text-gray-500 dark:text-black">Understand what's really in your food.</p>
+                </div>
+                <div>
+                    <div
+                        class="flex justify-center items-center mb-4 w-10 h-10 rounded-full bg-blue-200 lg:h-12 lg:w-12 dark:bg-primary-900">
+                        <svg class="w-6 h-6 text-gray-800 dark:text-white" fill="currentColor" viewBox="0 0 20 20"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838L7.667 9.088l1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3zM3.31 9.397L5 10.12v4.102a8.969 8.969 0 00-1.05-.174 1 1 0 01-.89-.89 11.115 11.115 0 01.25-3.762zM9.3 16.573A9.026 9.026 0 007 14.935v-3.957l1.818.78a3 3 0 002.364 0l5.508-2.361a11.026 11.026 0 01.25 3.762 1 1 0 01-.89.89 8.968 8.968 0 00-5.35 2.524 1 1 0 01-1.4 0zM6 18a1 1 0 001-1v-2.065a8.935 8.935 0 00-2-.712V17a1 1 0 001 1z">
+                            </path>
+                        </svg>
+                    </div>
+                    <h3 class="mb-2 text-xl font-bold dark:text-black">Healthier Choices</h3>
+                    <p class="text-gray-500 dark:text-black">Make better decisions with instant ingredient analysis.</p>
+                </div>
+                <div>
+                    <div
+                        class="flex justify-center items-center mb-4 w-10 h-10 rounded-full bg-blue-200 lg:h-12 lg:w-12 dark:bg-primary-900">
+                        <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
+                            xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M14.99 9H15M8.99 9H9m12 3a9 9 0 1 1-18 0 9 9 0 0 1 18 0ZM7 13c0 1 .507 2.397 1.494 3.216a5.5 5.5 0 0 0 7.022 0C16.503 15.397 17 14 17 13c0 0-1.99 1-4.995 1S7 13 7 13Z" />
+                        </svg>
+                    </div>
+                    <h3 class="mb-2 text-xl font-bold dark:text-black">Diet Friendly</h3>
+                    <p class="text-gray-500 dark:text-black">Whether you're vegan, gluten-free, or watching your sugar
+                        intake, know what's suitable for you.</p>
+                </div>
+            </div>
+        </div>
+    </section>
 
-    <!-- Benefits Section -->
+    <section class="bg-white dark:bg-gray-900">
+        <div class="py-8 px-4 mx-auto max-w-screen-xl sm:py-16 lg:px-6">
+            <div class="max-w-screen-md mb-8 lg:mb-16">
+                <h2 class="mb-4 text-4xl tracking-tight font-extrabold text-gray-900 dark:text-black">How It Works</h2>
+                <p class="text-gray-500 sm:text-xl dark:text-black">Easy steps to do to know all information about your
+                    food ingredients.</p>
+            </div>
+            <div class="space-y-8 md:grid md:grid-cols-2 lg:grid-cols-2 md:gap-12 md:space-y-0">
+                <div>
+                    <div
+                        class="flex justify-center items-center mb-4 w-10 h-10 rounded-full bg-blue-200 lg:h-12 lg:w-12 dark:bg-primary-900">
+                        <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
+                            xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                            <path stroke="currentColor" stroke-linejoin="round" stroke-width="2"
+                                d="M4 4h6v6H4V4Zm10 10h6v6h-6v-6Zm0-10h6v6h-6V4Zm-4 10h.01v.01H10V14Zm0 4h.01v.01H10V18Zm-3 2h.01v.01H7V20Zm0-4h.01v.01H7V16Zm-3 2h.01v.01H4V18Zm0-4h.01v.01H4V14Z" />
+                            <path stroke="currentColor" stroke-linejoin="round" stroke-width="2"
+                                d="M7 7h.01v.01H7V7Zm10 10h.01v.01H17V17Z" />
+                        </svg>
+                    </div>
+                    <h3 class="mb-2 text-xl font-bold dark:text-black">Scan or Type</h3>
+                    <p class="text-gray-500 dark:text-black">Scan the food item or type it in the search bar to get
+                        detailed insights into thousands of food ingredients.</p>
+                </div>
+                <div>
+                    <div
+                        class="flex justify-center items-center mb-4 w-10 h-10 rounded-full bg-blue-200 lg:h-12 lg:w-12 dark:bg-primary-900">
+                        <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
+                            xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M10 3v4a1 1 0 0 1-1 1H5m8 7.5 2.5 2.5M19 4v16a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V7.914a1 1 0 0 1 .293-.707l3.914-3.914A1 1 0 0 1 9.914 3H18a1 1 0 0 1 1 1Zm-5 9.5a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0Z" />
+                        </svg>
+                    </div>
+                    <h3 class="mb-2 text-xl font-bold dark:text-black">Learn about each ingredient</h3>
+                    <p class="text-gray-500 dark:text-black">The truth is that certain ingredients in our food are not
+                        the healthiest and learning about them can help us make better decisions on what we put in our
+                        bodies.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="bg-white dark:bg-gray-900">
+        <div class="py-32 px-4 mx-auto max-w-screen-xl lg:px-6">
+            <div class="mx-auto max-w-screen-sm text-center">
+                <h2 class="mb-4 text-4xl tracking-tight font-extrabold leading-tight text-gray-900 dark:text-black">
+                    Start scanning or typing the barcode.</h2>
+                <p class="mb-6 font-light text-gray-500 dark:text-black md:text-lg">And get the information you need
+                    for each ingredient.</p>
+
+                <button data-modal-target="large-modal" data-modal-toggle="large-modal"
+                    class="mx-auto block w-full md:w-auto text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                    type="button">
+                    Try it for free
+                </button>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Ingredients modal -->
     <section>
-        <div class="main_container">
-            <div class="my_text_center">
-                <h2 class="mb-5 text-center">Benefits</h2>
-            </div>
-            <div class="row justify-content-center">
-                <div class="col-11 col-sm-6 col-lg-3 text-center">
-                    <div class="badge p-3 mb-4">
-                        <i class="material-icons nav__icon home_icon">menu_book</i>
-                    </div>
-                    <h4 class="mb-3">Informed Eating</h4>
-                    <p class="mb-3 text-secondary">Understand what's really in your food.</p>
-                </div>
-                <div class="col-11 col-sm-6 col-lg-3 text-center">
-                    <div class="badge p-3 mb-4">
-                        <i class="material-icons nav__icon home_icon">restaurant</i>
-                    </div>
-                    <h4 class="mb-3">Healthier Choices</h4>
-                    <p class="mb-3 text-secondary">Make better decisions with instant ingredient analysis.</p>
-                </div>
-                <div class="col-11 col-sm-6 col-lg-3 text-center">
-                    <div class="badge p-3 mb-4">
-                        <i class="material-icons nav__icon home_icon">monitor_weight</i>
-                    </div>
-                    <h4 class="mb-3">Diet Friendly</h4>
-                    <p class="mb-3 text-secondary">Whether you're vegan, gluten-free, or watching your sugar intake,
-                        know what's suitable for you.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- How it works section -->
-    <section class="how_it_works_section">
-        <div class="how_it_works_container">
-            <div class="my_text_center">
-                <h2 class="text-center">How It Works</h2>
-                <p class="mb-5 text-secondary">Easy steps to do to know all information about your food ingredients</p>
-            </div>
-            <div class="my_row">
-                <div class="instructions">
-                    <div class="circle">1</div>
-                    <div class="instruction_content">
-                        <h4>Scan or Type</h4>
-                        <p class="text-secondary">Scan the food item or type it in the search bar to get detailed
-                            insights
-                            into thousands of food ingredients.</p>
-                    </div>
-                </div>
-                <div class="instructions">
-                    <div class="circle">2</div>
-                    <div class="instruction_content">
-                        <h4>Learn about each ingredient</h4>
-                        <p class="text-secondary">The truth is that certain ingredients in our food are not the
-                            healthiest
-                            and learning about them can help us make better decisions on what we put in our bodies.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Product information section -->
-    <section class="container main_container" id="productInfoSection">
-        <div class="col-12 col-md-6 mx-auto text-center">
-            
-            {% with messages = get_flashed_messages() %}
-            {% if messages %}
-            {% for message in messages %}
-            <p>{{ message }}</p>
-            {% endfor %}
-            {% endif %}
-            {% endwith %}
-
-        </div>
-        <div class="col-auto text-center mb-4">
-            <h3 class="text-capitalize">
-                {% if ingredients_list %}
-                <h2>{{ name }}</h2>
-                {% elif ingredients_list == [] %}
-                <h2>Sorry no information available</h2>
-                {% else %}
-                <h2>Product Name</h2>
-                {% endif %}
-            </h3>
-        </div>
-        <div class="row">
-            <div class="col-12 col-md-6 mx-auto mb-3">
-                <div class="card info-card">
-                    <div class="card-body">
-                        <h5 class="card-title">
-                            Ingredients
-                        </h5>
-                            <ul class="list-group list-group-flush">
+        <div class="block space-y-4 md:flex md:space-y-0 md:space-x-4 rtl:space-x-reverse">
+            <!-- Large Modal -->
+            <div id="large-modal" tabindex="-1"
+                class="fixed top-0 left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
+                <div class="relative w-full max-w-4xl max-h-full">
+                    <!-- Modal content -->
+                    <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+                        <!-- Modal header -->
+                        <div
+                            class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
+                            <h3 class="text-xl font-bold text-gray-900 dark:text-white">
+                                Ingredients
+                            </h3>
+                            <button type="button"
+                                class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                                data-modal-hide="large-modal">
+                                <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                    viewBox="0 0 14 14">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                        stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                                </svg>
+                                <span class="sr-only">Close modal</span>
+                            </button>
+                        </div>
+                        <!-- Modal body -->
+                        <div class="p-4 md:p-5 space-y-4">
+                            <div>
+                                <h5 class="text-xl capitalize font-bold">
+                                    {% if ingredients_list %}
+                                    {{ name }}
+                                    {% elif ingredients_list == [] %}
+                                    Sorry no information available
+                                    {% endif %}
+                                </h5>
+                                <h5 class="text-xl capitalize">
+                                    {% with messages = get_flashed_messages() %}
+                                    {% if messages %}
+                                    {% for message in messages %}
+                                    {{ message }}
+                                    {% endfor %}
+                                    {% endif %}
+                                    {% endwith %}
+                                </h5>
+                            </div>
+                            <ul class="list-none">
                                 {% if ingredients_list %}
+                                <script>
+                                    window.ingredientsListPresent = true;
+                                </script>
+                                {% endif %}
                                 {% for ingredient in ingredients_list %}
                                 {% if ingredient['rating'] == "healthy" %}
-                                <li class="list-group-item" style="background-color: rgb(216, 255, 216);">
-                                    <p class="element1"><strong>{{ ingredient['name'] }}:</strong></p>
-                                    <p class="element2">{{ ingredient['description'] }}</p>
+                                <li class="bg-green-200 p-2 mb-2 rounded-lg">
+                                    <p class="font-bold">{{ ingredient['name'] }}:</p>
+                                    <p>{{ ingredient['description'] }}</p>
                                 </li>
                                 {% else %}
-                                <li class="list-group-item" style="background-color: rgb(255, 208, 208);">
-                                    <p class="element1"><strong>{{ ingredient['name'] }}:</strong></p>
-                                    <p class="element2">{{ ingredient['description'] }}</p>
+                                <li class="bg-red-200 p-2 mb-2 rounded-lg">
+                                    <p class="font-bold">{{ ingredient['name'] }}:</p>
+                                    <p>{{ ingredient['description'] }}</p>
                                 </li>
                                 {% endif %}
                                 {% endfor %}
-                                {% endif %}
                             </ul>
-                    </div>
-                </div>
-                <div class="card nutrients-card mt-2">
-                    <div class="card-body">
-                        <h5 class="card-title">
-                            Nutritional Information
-                        </h5>
-                        {% if ingredients_list %}
-                        <table class="nutrition-table">
-                            <tr>
-                                <td>Calories</td>
-                                <td>{{ nutritional_information['energy-kcal_serving'] }}</td>
-                            </tr>
-                            <tr>
-                                <td>Total Fat</td>
-                                <td>{{ nutritional_information['fat_serving'] }}</td>
-                            </tr>
-                            <tr>
-                                <td>Saturated Fat</td>
-                                <td>{{ nutritional_information['saturated-fat_serving'] }}</td>
-                            </tr>
-                            <tr>
-                                <td>Trans Fat</td>
-                                <td>{{ nutritional_information['trans-fat_serving'] }}</td>
-                            </tr>
-                            <tr>
-                                <td>Cholesterol</td>
-                                <td>{{ nutritional_information['cholesterol_serving'] }}</td>
-                            </tr>
-                            <tr>
-                                <td>Sodium</td>
-                                <td>{{ nutritional_information['sodium_serving'] }}</td>
-                            </tr>
-                            <tr>
-                                <td>Total Carbohydrate</td>
-                                <td>{{ nutritional_information['carbohydrates_serving'] }}</td>
-                            </tr>
-                            <tr>
-                                <td>Dietary Fiber</td>
-                                <td>{{ nutritional_information['fiber_serving'] }}</td>
-                            </tr>
-                            <tr>
-                                <td>Total Sugars</td>
-                                <td>{{ nutritional_information['sugars_serving'] }}</td>
-                            </tr>
-                            <tr>
-                                <td>Protein</td>
-                                <td>{{ nutritional_information['proteins_serving'] }}</td>
-                            </tr>
-                            <tr>
-                                <td>Calcium</td>
-                                <td>{{ nutritional_information['calcium_serving'] }}</td>
-                            </tr>
-                            <tr>
-                                <td>Iron</td>
-                                <td>{{ nutritional_information['iron_serving'] }}</td>
-                            </tr>
-                        </table>
-                        {% endif %}
+                            <h5 class="text-xl font-bold mb-2">
+                                Nutriscore
+                            </h5>
+                            {% if ingredients_list %}
+                            {% set most_recent_year = nutriscore.keys() | max %}
+                            {% set most_recent_nutriscore = nutriscore[most_recent_year] %}
+                            {% set grade = most_recent_nutriscore.grade %}
 
-                    </div>
-                </div>
-            </div>
-            <div class="col-12 col-md-6 mx-auto mb-3">
-                <div class="card nutriscore-card">
-                    <div class="card-body">
-                        <h5 class="card-title">
-                            Nutriscore
-                        </h5>
-
-                        {% if ingredients_list %}
-                        {% set most_recent_year = nutriscore.keys() | max %}
-                        {% set most_recent_nutriscore = nutriscore[most_recent_year] %}
-                        {% set grade = most_recent_nutriscore.grade %}
-
-                        <div class="nutriscore-grade">
-                            {% if grade == 'a' %}
-                            <h5 class="text-capitalize">Nutriscore grade {{ grade }}:</h5>
-                            <p>
-                                Indicates the product has high nutritional quality. It typically has low levels of
-                                sugars, saturated fats, and salt, and high levels of fruits, vegetables, fibers, and
-                                proteins.
-                            </p>
-                            {% elif grade == 'b' %}
-                            <h5 class="text-capitalize">Nutriscore grade {{ grade }}:</h5>
-                            <p>
-                                Indicates the product has good nutritional quality, but not as high as grade A.
-                            </p>
-                            {% elif grade == 'c' %}
-                            <h5 class="text-capitalize">Nutriscore grade {{ grade }}:</h5>
-                            <p>
-                                Indicates the product has moderate nutritional quality. It is an average score,
-                                suggesting a balance of beneficial and less beneficial nutrients.
-                            </p>
-                            {% elif grade == 'd' %}
-                            <h5 class="text-capitalize">Nutriscore grade {{ grade }}:</h5>
-                            <p>
-                                Indicates the product has lower nutritional quality. It generally has higher levels of
-                                less beneficial nutrients like sugars, saturated fats, and salt.
-                            </p>
-                            {% elif grade == 'e' %}
-                            <h5 class="text-capitalize">Nutriscore grade {{ grade }}:</h5>
-                            <p>
-                                Indicates the product has the lowest nutritional quality, with high levels of sugars,
-                                saturated fats, and salt.
-                            </p>
-                            {% else %}
-                            <p>
-                                No matching grade.
-                            </p>
+                            <div>
+                                {% if grade == 'a' %}
+                                <h5 class="capitalize">Nutriscore grade {{ grade }}:</h5>
+                                <p>
+                                    Indicates the product has high nutritional quality. It typically has low levels of
+                                    sugars, saturated fats, and salt, and high levels of fruits, vegetables, fibers, and
+                                    proteins.
+                                </p>
+                                {% elif grade == 'b' %}
+                                <h5 class="capitalize">Nutriscore grade {{ grade }}:</h5>
+                                <p>
+                                    Indicates the product has good nutritional quality, but not as high as grade A.
+                                </p>
+                                {% elif grade == 'c' %}
+                                <h5 class="capitalize">Nutriscore grade {{ grade }}:</h5>
+                                <p>
+                                    Indicates the product has moderate nutritional quality. It is an average score,
+                                    suggesting a balance of beneficial and less beneficial nutrients.
+                                </p>
+                                {% elif grade == 'd' %}
+                                <h5 class="capitalize">Nutriscore grade {{ grade }}:</h5>
+                                <p>
+                                    Indicates the product has lower nutritional quality. It generally has higher levels
+                                    of
+                                    less beneficial nutrients like sugars, saturated fats, and salt.
+                                </p>
+                                {% elif grade == 'e' %}
+                                <h5 class="capitalize">Nutriscore grade {{ grade }}:</h5>
+                                <p>
+                                    Indicates the product has the lowest nutritional quality, with high levels of
+                                    sugars,
+                                    saturated fats, and salt.
+                                </p>
+                                {% else %}
+                                <p>
+                                    No matching grade.
+                                </p>
+                                {% endif %}
+                            </div>
                             {% endif %}
                         </div>
-                        {% endif %}
-                    </div>
-                </div>
-                <div class="card ingredient-percentage-card mt-2">
-                    <div class="card-body">
-                        <h5 class="card-title">
-                            Ingredient Percentage
-                        </h5>
-                        {% if ingredients_list %}
-                        {% for info in ingredients_percentage %}
-
-                        {% set vegan = info.get('vegan', 'unknown') %}
-                        {% set vegetarian = info.get('vegetarian', 'unknown') %}
-
-                        {% if vegan == 'yes' %}
-                        {% set vegan_status = 'Vegan' %}
-                        {% else %}
-                        {% set vegan_status = 'Unknown vegan status' %}
-                        {% endif %}
-
-                        {% if vegetarian == 'yes' %}
-                        {% set vegetarian_status = 'Vegetarian' %}
-                        {% else %}
-                        {% set vegetarian_status = 'Unknown vegetarian status' %}
-                        {% endif %}
-
-                        <p class="text-secondary text-capitalize">
-                            <strong>{{ info['text'] }}</strong>
-                            {{ info['percent_estimate'] | round(2) }}%
-                        </p>
-
-                        {% endfor %}
-                        {% endif %}
-
-
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-</div>
+    <!-- Footer -->
+    <footer class="p-4 bg-gray-200 md:p-8 lg:p-10 dark:bg-gray-300">
+        <div class="mx-auto max-w-screen-xl text-center">
+            <div class="flex flex-wrap justify-center items-center mb-6 text-gray-900 dark:text-black">
+                <div class="mr-4 hover:underline md:mr-6">
+                    <p>&copy; 2024 IngredientAdvisor. All rights reserved.</p>
+                </div>
+                <a href="{{ url_for('about') }}" class="mr-4 hover:underline md:mr-6 ">
+                    <p>About</p>
+                </a>
+                <a href="{{ url_for('settings') }}" class="mr-4 hover:underline md:mr-6 ">
+                    <p>Settings</p>
+                </a>
+                <div class="mr-4 hover:underline md:mr-6">
+                    <p>support@ingredientadvisor.com</p>
+                </div>
 
-{% include 'footer.html' %}
+            </div>
+        </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/quagga/0.12.1/quagga.min.js"></script>
-<script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
-    integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
-    crossorigin="anonymous"></script>
+    </footer>
 
-{% endblock %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/quagga/0.12.1/quagga.min.js"></script>
+    <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/popup.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flowbite@2.4.1/dist/flowbite.min.js"></script>
 
+</body>
 
 </html>
