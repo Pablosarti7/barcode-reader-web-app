@@ -153,19 +153,17 @@ def home():
         if 'product' in ingredients:
             # accessing the key called product 
             product_info = ingredients['product']
-            # nutrients data extraction from the api
-            nutrients = product_info.get('nutriments', {})
+
             # nutriscore data extraction from the api
             nutriscore = product_info.get('nutriscore', {})
-            # ingredients percentages extraction from the api
-            ingredients_percentages = product_info.get('ingredients', {})
+
             # original data extraction name and ingredients
             name = product_info.get('product_name', 'Sorry no name was found.')
             ingredients = product_info.get('ingredients_text_en', 'Sorry no ingredients where found.')
 
             
             final_list = clean_ingredients(ingredients)
-            
+
 
             # Ingredients that we in out database go in one list and non existing one ask chat gpt
             openai_list, database_list = [], []
@@ -188,7 +186,7 @@ def home():
                     response_list.append(object)
 
                 add_ingredient(response_list)
-
+            
             complete_list = database_list + response_list
             
             if current_user.is_authenticated:
@@ -202,7 +200,7 @@ def home():
                 db.session.add(new_item)
                 db.session.commit()
 
-            return render_template('index.html', form=form, name=name, ingredients_list=complete_list, nutritional_information=nutrients, nutriscore=nutriscore, ingredients_percentage=ingredients_percentages)
+            return render_template('index.html', form=form, name=name, ingredients_list=complete_list, nutriscore=nutriscore, logged_in=current_user.is_authenticated)
         else:
             flash('Sorry product key not found in data.')
             return redirect(url_for('home'))
@@ -273,7 +271,7 @@ def login():
             return redirect(url_for('login'))
         else:
             login_user(user)
-            return redirect(url_for('settings'))
+            return redirect(url_for('home'))
 
     return render_template('login.html', form=form, logged_in=current_user.is_authenticated)
 
@@ -303,7 +301,7 @@ def register():
         db.session.commit()
         login_user(new_user)
 
-        return redirect(url_for("settings"))
+        return redirect(url_for("home"))
 
     return render_template("register.html", form=form, logged_in=current_user.is_authenticated)
 
@@ -316,8 +314,6 @@ def logout():
 
 
 @app.route('/test')
-@login_required
-@admin_only
 def test():
     form = SearchBarcode()
     return render_template('test.html', form=form)
