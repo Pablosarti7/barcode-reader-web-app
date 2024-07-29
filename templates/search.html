@@ -74,8 +74,8 @@
 
     {% include "navigation.html" %}
 
-    <main class="flex-grow">
-        <section class="bg-white dark:bg-gray-900">
+    <main class="flex-grow flex flex-col">
+        <section class="bg-gray-50 dark:bg-gray-900">
             <div class="py-8 px-4 mx-auto max-w-screen-xl text-center lg:py-16 lg:px-12">
                 <!-- Your main content here -->
                 <a href="{{ url_for('home') }}"
@@ -127,8 +127,8 @@
             </div>
         </section>
 
-        <section class="flex flex-col min-h-[50vh]">
-            <div class="mt-5 mb-5">
+        <section class="bg-gray-50 dark:bg-gray-900 flex flex-col min-h-[50vh] flex-grow">
+            <div class="mx-3 mt-5">
                 <div class="flex justify-center">
                     <div class="w-full max-w-4xl mx-auto">
                         <div class="bg-white shadow-md rounded-lg overflow-hidden">
