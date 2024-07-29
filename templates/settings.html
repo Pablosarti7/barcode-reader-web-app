@@ -1,124 +1,125 @@
 <!DOCTYPE html>
 <html lang="en">
 
-{% include "header.html" %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="{{ url_for('static', filename='css/tailwind.css') }}" rel="stylesheet">
+    <title>Settings Page</title>
+</head>
 
-<body>
+<body class="flex flex-col min-h-screen">
 
-    <!--Mobile Navigation-->
-    <nav class="nav d-md-none">
-        <span class="nav-indicator"></span>
-        <a href="{{ url_for('home') }}" class="nav__link">
-            <i class="material-icons nav__icon">dashboard</i>
-            <span class="nav__text">Dashboard</span>
-        </a>
-        <a href="{{ url_for('search') }}" class="nav__link">
-            <i class="material-icons nav__icon">search</i>
-            <span class="nav__text">Search</span>
-        </a>
-        <a class="nav__link nav__link__active" id="startbutton">
-            <i class="material-icons nav__icon">barcode_reader</i>
-            <span class="nav__text">Scanner</span>
-        </a>
-        <a href="{{ url_for('about') }}" class="nav__link">
-            <i class="material-icons nav__icon">info</i>
-            <span class="nav__text">Info</span>
-        </a>
-        <a href="{{ url_for('settings') }}" class="nav__link">
-            <i class="material-icons nav__icon">settings</i>
-            <span class="nav__text">Settings</span>
-        </a>
-    </nav>
+    {% include "navigation.html" %}
 
-    <!--Desktop Navigation-->
-    <nav class="navbar navbar-expand-md navbar-light bg-light">
-        <div class="container">
-            <a class="navbar-brand" href="{{ url_for('home') }}">Ingredient Advisor</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
-                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-                <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('home') }}">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('search') }}">Search</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('about') }}">Info</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('settings') }}">Settings</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
+    <main class="flex-grow items-center flex flex-col">
 
-    <section class="container mt-4">
+        <div class="bg-gray-50 dark:bg-gray-900 flex flex-grow justify-center items-center w-screen">
 
-        <div class="mt-4">
+            <section class="mx-3 w-screen lg:w-1/3">
 
-            {% if not logged_in: %}
-            <a href="{{ url_for('login') }}" class="list-group-item list-group-item-action">Login</a>
-            <a href="{{ url_for('register') }}" class="list-group-item list-group-item-action">Register</a>
-            {% endif %}
+                <div class="bg-white shadow-md rounded p-6">
 
-            {% if logged_in %}
-            {% if subsection == 'profile' %}
+                    {% if not logged_in %}
+                    <a href="{{ url_for('login') }}"
+                        class="block w-full text-center py-2 px-4 mb-4 bg-blue-600 text-white rounded">Login</a>
+                    <a href="{{ url_for('register') }}"
+                        class="block w-full text-center py-2 px-4 bg-blue-600 text-white rounded">Register</a>
+                    {% endif %}
 
-            <div class="list-group">
+                    {% if logged_in %}
+                    {% if subsection == 'profile' %}
 
-                <!-- <a href="#" class="list-group-item list-group-item-action">Edit Profile</a> -->
-                <a href="{{ url_for('logout') }}" class="list-group-item list-group-item-action">Logout</a>
-                <!-- <a href="#" class="list-group-item list-group-item-action">Delete Profile</a> -->
-
-            </div>
-
-            {% elif subsection == 'scan_history' %}
-            <!-- Content for My Scan History -->
-            <div class="list-group">
-                {% for item in scan_history %}
-                <div class="scan-histoty-items">
-                    <div class="card-body">
-
-                        <p>{{item.item_name}}</p>
-                        <p>{{item.item_barcode}}</p>
-
+                    <div class="space-y-4">
+                        <!-- <a href="#" class="block w-full text-center py-2 px-4 bg-blue-500 text-white rounded">Edit Profile</a> -->
+                        <a href="{{ url_for('logout') }}"
+                            class="block w-full text-center py-2 px-4 bg-blue-600 text-white rounded">Logout</a>
+                        <!-- <a href="#" class="block w-full text-center py-2 px-4 bg-blue-500 text-white rounded">Delete Profile</a> -->
                     </div>
+
+                    {% elif subsection == 'scan_history' %}
+                    <!-- Content for My Scan History -->
+                    <div class="space-y-4">
+                        {% for item in scan_history %}
+                        <div class="bg-gray-100 p-4 rounded shadow">
+                            {% if item.item_name|length > 25 %}
+                            <h3 class="text-lg font-bold">{{item.item_name[:25]}}...</h3>
+                            {% else %}
+                            <h3 class="text-lg font-bold">{{item.item_name}}</h3>
+                            {% endif %}
+                            <p class="font-semibold">Code:</p>
+                            
+                            {% set unique_id = loop.index0 %}
+
+                            <!-- Generate a unique identifier for each loop iteration -->
+
+                            <div class="relative mt-2">
+                                <label for="npm-install-copy-button-{{unique_id}}" class="sr-only">Label</label>
+                                <input id="npm-install-copy-button-{{unique_id}}" type="text"
+                                    class="col-span-6 bg-gray-50 border border-gray-300 text-gray-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                    value="{{item.item_barcode}}" disabled readonly>
+                                <button data-copy-to-clipboard-target="npm-install-copy-button-{{unique_id}}"
+                                    data-tooltip-target="tooltip-copy-npm-install-copy-button-{{unique_id}}"
+                                    class="absolute end-2 top-1/2 -translate-y-1/2 text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg p-2 inline-flex items-center justify-center">
+                                    <span id="default-icon-{{unique_id}}">
+                                        <svg class="w-3.5 h-3.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                                            fill="currentColor" viewBox="0 0 18 20">
+                                            <path
+                                                d="M16 1h-3.278A1.992 1.992 0 0 0 11 0H7a1.993 1.993 0 0 0-1.722 1H2a2 2 0 0 0-2 2v15a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2Zm-3 14H5a1 1 0 0 1 0-2h8a1 1 0 0 1 0 2Zm0-4H5a1 1 0 0 1 0-2h8a1 1 0 1 1 0 2Zm0-5H5a1 1 0 0 1 0-2h2V2h4v2h2a1 1 0 1 1 0 2Z" />
+                                        </svg>
+                                    </span>
+                                    <span id="success-icon-{{unique_id}}" class="hidden inline-flex items-center">
+                                        <svg class="w-3.5 h-3.5 text-blue-700 dark:text-blue-500" aria-hidden="true"
+                                            xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 16 12">
+                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                                stroke-width="2" d="M1 5.917 5.724 10.5 15 1.5" />
+                                        </svg>
+                                    </span>
+                                </button>
+                                <div id="tooltip-copy-npm-install-copy-button-{{unique_id}}" role="tooltip"
+                                    class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
+                                    <span id="default-tooltip-message-{{unique_id}}">Copy to clipboard</span>
+                                    <span id="success-tooltip-message-{{unique_id}}" class="hidden">Copied!</span>
+                                    <div class="tooltip-arrow" data-popper-arrow></div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+
+
+                    {% elif subsection == 'support' %}
+                    <!-- Content for Contact Support -->
+                    <div class="space-y-4">
+                        <h3 class="text-center text-lg font-bold">support@ingredientadvisor.com</h3>
+                    </div>
+
+                    {% else %}
+
+                    <div class="space-y-4">
+                        <a href="{{ url_for('settings', section='profile') }}"
+                            class="block w-full text-center py-2 px-4 bg-blue-600 text-white rounded">My Profile</a>
+                        <a href="{{ url_for('settings', section='scan_history') }}"
+                            class="block w-full text-center py-2 px-4 bg-blue-600 text-white rounded">My Scan
+                            History</a>
+                        <a href="{{ url_for('settings', section='support') }}"
+                            class="block w-full text-center py-2 px-4 bg-blue-600 text-white rounded">Contact
+                            Support</a>
+                    </div>
+
+                    {% endif %}
+                    {% endif %}
+
                 </div>
-            </div>
-            {% endfor %}
-            {% elif subsection == 'support' %}
-            <!-- Content for Contact Support -->
-            <div class="list-group">
-
-                <a href="#" class="list-group-item list-group-item-action">support@ingredientadvisor.com</a>
-
-            </div>
-
-            {% else %}
-
-            <div class="list-group">
-                <a href="{{ url_for('settings', section='profile') }}" class="list-group-item list-group-item-action">My
-                    Profile</a>
-                <a href="{{ url_for('settings', section='scan_history') }}"
-                    class="list-group-item list-group-item-action">My Scan History</a>
-                <a href="{{ url_for('settings', section='support') }}"
-                    class="list-group-item list-group-item-action">Contact Support</a>
-            </div>
-
-            {% endif %}
-            {% endif %}
+            </section>
 
         </div>
-    </section>
-    
-</div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/quagga/0.12.1/quagga.min.js"></script>
+    </main>
+
+    {% include 'footer.html' %}
+
+    <script src="https://cdn.jsdelivr.net/npm/flowbite@2.4.1/dist/flowbite.min.js"></script>
 
 </body>
 
