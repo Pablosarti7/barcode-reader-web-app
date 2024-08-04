@@ -10,7 +10,9 @@ module.exports = {
           700: '#1E40AF', // example primary color for dark mode
         },
       },
-
+      spacing: {
+        '600': '600px',
+      }
     },
   },
   variants: {
