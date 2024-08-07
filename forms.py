@@ -33,3 +33,7 @@ class SearchIngredient(FlaskForm):
     ingredient = StringField('Search', validators=[DataRequired()], render_kw={
         "placeholder": "Enter ingredient here"})
     submit = SubmitField('Search')
+
+
+class EditProfile(FlaskForm):
+    name = StringField('Name', validators=[DataRequired()])

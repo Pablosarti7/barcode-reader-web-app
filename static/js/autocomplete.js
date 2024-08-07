@@ -12,7 +12,7 @@ inputElement.addEventListener("keyup", function (event) {
 
     delayTimer = setTimeout(function() {
 
-        fetch(`https://ingredientadvisor.com/search-suggestions?q=${query}`)
+        fetch(`http://127.0.0.1:5000/search-suggestions?q=${query}`)
             .then(response => response.json())
             .then(data => {
 

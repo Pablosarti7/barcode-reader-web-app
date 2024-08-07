@@ -34,6 +34,7 @@
         }
 
         @media (max-width: 768px) {
+
             .nav {
                 position: fixed;
                 bottom: 0;
@@ -65,7 +66,11 @@
             .nav__link .nav__text {
                 display: none;
             }
+        }
 
+        .result-box div {
+            margin-top: 5px;
+            margin-bottom: 5px;
         }
     </style>
 </head>
@@ -75,7 +80,7 @@
     {% include "navigation.html" %}
 
     <main class="flex-grow flex flex-col">
-        <section class="bg-gray-50 dark:bg-gray-900">
+        <section class="bg-gray-50 dark:bg-gray-900 max-h-80">
             <div class="py-8 px-4 mx-auto max-w-screen-xl text-center lg:py-16 lg:px-12">
                 <!-- Your main content here -->
                 <a href="{{ url_for('home') }}"
@@ -113,13 +118,14 @@
                             dark:focus:border-blue-500",
                             id="textbox")
                             }}
-                            <div class="result-box"></div>
+                            
 
                             {{ form.submit(class="text-white absolute end-2.5 bottom-2.5 bg-blue-700 hover:bg-blue-800
                             focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2
                             dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800") }}
                         </div>
                     </form>
+                    <div class="result-box rounded-lg mt-4 bg-gray-100 z-10"></div>
                     <form id="barcodeForm" method="POST" action="/" style="display: none;">
                         <input type="hidden" name="barcode" id="hiddenBarcodeInput">
                     </form>
@@ -127,9 +133,9 @@
             </div>
         </section>
 
-        <section class="bg-gray-50 dark:bg-gray-900 flex flex-col min-h-[50vh] flex-grow">
-            <div class="mx-3 mt-5">
-                <div class="flex justify-center">
+        <section class="bg-gray-50 dark:bg-gray-900 flex flex-col flex-grow">
+            
+                <div class="flex justify-center mt-7 md:mt-24">
                     <div class="w-full max-w-4xl mx-auto">
                         <div class="bg-white shadow-md rounded-lg overflow-hidden">
                             <div class="p-6">
@@ -157,7 +163,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            
         </section>
     </main>
 
