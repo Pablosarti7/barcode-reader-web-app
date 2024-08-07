@@ -1,4 +1,4 @@
-from forms import LoginForm, RegistrationForm, SearchBarcode, SearchIngredient
+from forms import LoginForm, RegistrationForm, SearchBarcode, SearchIngredient, EditProfile
 from utils import autosuggest, clean_ingredients
 from openfoodfacts_api import get_product_info
 from ingredients_api import get_ingredient, add_ingredient
@@ -29,8 +29,8 @@ app.config['REMEMBER_COOKIE_SECURE'] = True
 # Prevents JavaScript access to cookies
 app.config['SESSION_COOKIE_HTTPONLY'] = True
 # OAuth configurations
-app.config['GOOGLE_CLIENT_ID'] = '90106138173-brs9gsgm4pn9s3gtnllri9mtsoemstju.apps.googleusercontent.com'
-app.config['GOOGLE_CLIENT_SECRET'] = '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'
+app.config['GOOGLE_CLIENT_ID'] = os.environ.get('CLIENT_ID')
+app.config['GOOGLE_CLIENT_SECRET'] = os.environ.get('CLIENT_SECRET')
 app.config['GOOGLE_DISCOVERY_URL'] = (
     'https://accounts.google.com/.well-known/openid-configuration'
 )
@@ -78,7 +78,8 @@ class ScanHistory(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     item_name = db.Column(db.String(100), nullable=False)
     item_barcode = db.Column(db.String(100), nullable=True)
-    user = db.relationship('Users', backref=db.backref('scan_history', lazy=True))
+    user = db.relationship(
+        'Users', backref=db.backref('scan_history', lazy=True))
 
 
 def admin_only(f):
@@ -93,7 +94,6 @@ def admin_only(f):
 @app.route('/', methods=['GET', 'POST'])
 def home():
     form = SearchBarcode()
-    
 
     if request.method == 'POST':
         # Check for barcode in the form data
@@ -205,19 +205,42 @@ def about():
     return render_template('about.html', logged_in=current_user.is_authenticated)
 
 
-@app.route('/settings')
+@app.route('/settings', methods=['GET', 'POST'])
 def settings():
     subsection = request.args.get('section', 'main')
-    
+    action = request.form.get('action')
+    users_email = None # why is this bugging me
+    google_account = session.get('_fresh')
+
+    form = EditProfile()
     if current_user.is_authenticated:
         users_name = current_user.name
+        users_email = current_user.email
+        # Get all of the items under current users id
         users_scan_history = ScanHistory.query.filter_by(
             user_id=current_user.id).all()
     else:
         users_name = None
         users_scan_history = None
 
-    return render_template('settings.html', subsection=subsection, logged_in=current_user.is_authenticated, scan_history=users_scan_history, users_name=users_name)
+    if form.validate_on_submit():
+        user = Users.query.filter_by(id=current_user.id).first()
+
+        # If user click on update then perform this action
+        if action == 'update':
+            user.name = form.name.data
+            db.session.commit()
+            return "Account Updated"
+
+        # If user click on delete then perform this action
+        elif action == 'delete':
+            # db.session.delete(id)
+            # db.session.commit()
+            return "Account deleted successfully"
+        else:
+            return "Unknown action", 400
+
+    return render_template('settings.html', subsection=subsection, logged_in=current_user.is_authenticated, scan_history=users_scan_history, users_name=users_name, form=form, users_email=users_email)
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -231,7 +254,6 @@ def login():
 
         # Use ORM method for querying.
         user = Users.query.filter_by(email=email).first()
-        
 
         if not user:
             flash("That email does not exist, please try again.")
@@ -246,13 +268,12 @@ def login():
     return render_template('login.html', form=form, logged_in=current_user.is_authenticated)
 
 
-
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     form = RegistrationForm()
 
     if form.validate_on_submit():
-        
+
         # Same as login but less code.
         if Users.query.filter_by(email=form.email.data).first():
             flash("You've already signed up with that email, log in instead!")
@@ -267,7 +288,7 @@ def register():
             email=form.email.data,
             name=form.name.data,
             password=hash_and_salted_password,
-            )
+        )
 
         db.session.add(new_user)
         db.session.commit()
@@ -289,11 +310,11 @@ def authorize():
     user = Users.query.filter_by(email=email).first()
 
     if not user:
-        user = Users(email=email, 
-                     name=name, 
+        user = Users(email=email,
+                     name=name,
                      password=None,
                      )
-        
+
         db.session.add(user)
         db.session.commit()
 
@@ -320,7 +341,7 @@ def logout():
 
 @app.route('/delete/<int:item_id>')
 def delete(item_id):
-    print(item_id)
+
     item = ScanHistory.query.get_or_404(item_id)
     db.session.delete(item)
     db.session.commit()
