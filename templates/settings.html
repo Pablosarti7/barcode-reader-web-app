@@ -154,12 +154,12 @@
                     <!-- Content for Contact Support -->
                     <div>
                         <h3 class="mb-4 text-lg font-bold">Contact Support:</h3>
-                        <div class="w-full max-w-[16rem]">
+                        <div class="w-full">
                             <div class="relative">
                                 <label for="npm-install-copy-button" class="sr-only">Label</label>
                                 <input id="npm-install-copy-button" type="text"
                                     class="col-span-6 bg-gray-50 border border-gray-300 text-gray-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                    value="support@ingredientadvisor.com" disabled readonly>
+                                    value="111111111111111111111111111111111support@ingredientadvisor.com" disabled readonly>
                                 <button data-copy-to-clipboard-target="npm-install-copy-button"
                                     data-tooltip-target="tooltip-copy-npm-install-copy-button"
                                     class="absolute end-2 top-1/2 -translate-y-1/2 text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg p-2 inline-flex items-center justify-center">
@@ -205,13 +205,12 @@
                                     dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500") }}
                                 </div>
                                 <div class="w-full">
-                                    <label for="brand"
-                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Email</label>
-                                    <input placeholder="Users Email" value="{{users_email}}" type="text" id="disabled-input" aria-label="disabled input" class="bg-gray-100 border border-gray-300
-                                    text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block
-                                    w-full p-2.5 cursor-not-allowed dark:bg-gray-700 dark:border-gray-600
-                                    dark:placeholder-gray-400 dark:text-gray-400 dark:focus:ring-blue-500
-                                    dark:focus:border-blue-500" placeholder="Secret Password" disabled>
+                                    {{ form.email.label(class="block mb-2 text-sm font-medium text-gray-900
+                                    dark:text-white") }}
+                                    {{ form.email(placeholder="Users Email",value=users_email, class="bg-gray-50 border border-gray-300
+                                    text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600
+                                    block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400
+                                    dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500") }}
                                 </div>
                                 <div class="w-full">
                                     <label for="brand"

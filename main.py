@@ -29,8 +29,8 @@ app.config['REMEMBER_COOKIE_SECURE'] = True
 # Prevents JavaScript access to cookies
 app.config['SESSION_COOKIE_HTTPONLY'] = True
 # OAuth configurations
-app.config['GOOGLE_CLIENT_ID'] = os.environ.get('CLIENT_ID')
-app.config['GOOGLE_CLIENT_SECRET'] = os.environ.get('CLIENT_SECRET')
+app.config['GOOGLE_CLIENT_ID'] = '90106138173-brs9gsgm4pn9s3gtnllri9mtsoemstju.apps.googleusercontent.com'
+app.config['GOOGLE_CLIENT_SECRET'] = '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'
 app.config['GOOGLE_DISCOVERY_URL'] = (
     'https://accounts.google.com/.well-known/openid-configuration'
 )
@@ -94,7 +94,7 @@ def admin_only(f):
 @app.route('/', methods=['GET', 'POST'])
 def home():
     form = SearchBarcode()
-
+    
     if request.method == 'POST':
         # Check for barcode in the form data
         barcode = request.form.get('barcode')
@@ -210,7 +210,9 @@ def settings():
     subsection = request.args.get('section', 'main')
     action = request.form.get('action')
     users_email = None # why is this bugging me
-    google_account = session.get('_fresh')
+    
+    google_account = session.get('is_google')
+    
 
     form = EditProfile()
     if current_user.is_authenticated:
@@ -228,9 +230,17 @@ def settings():
 
         # If user click on update then perform this action
         if action == 'update':
-            user.name = form.name.data
-            db.session.commit()
-            return "Account Updated"
+            # the thing is that if you add email to the first one that defeats the purpose of 
+            # checking the user because you are changing the user
+            if google_account:
+                user.name = form.name.data
+                db.session.commit()
+                return "Account Name Updated"
+            else:
+                user.name = form.name.data
+                user.email = form.email.data
+                db.session.commit()
+                return "Account Name and Email Updated"
 
         # If user click on delete then perform this action
         elif action == 'delete':
@@ -301,6 +311,7 @@ def register():
 
 @app.route('/callback')
 def authorize():
+    # print(f"This is the status: {request.args.get('state')}", f"{session.get('_google_authlib_state_')}")
     token = google.authorize_access_token()
     user_info = google.parse_id_token(token, nonce=session['nonce'])
 
@@ -328,6 +339,8 @@ def authorize():
 def googlelogin():
     nonce = secrets.token_urlsafe(16)
     session['nonce'] = nonce
+    session['is_google'] = True
+    
     redirect_uri = url_for('authorize', _external=True)
     return google.authorize_redirect(redirect_uri, nonce=nonce)
 
