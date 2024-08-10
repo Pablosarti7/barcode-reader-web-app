@@ -1,4 +1,5 @@
 import requests
+import os
 
 def get_all_ingredients():
     url = 'https://ingredients-api-t2ja.onrender.com/all'
@@ -30,7 +31,7 @@ def get_ingredient(ingredient):
 def add_ingredient(ingredients):
     add_url = 'https://ingredients-api-t2ja.onrender.com/add'
     headers = {
-        "api-key": "secret_api_key",  # Replace with your actual API key
+        "api-key": os.environ.get("SECRET_API_KEY"),  # Replace with your actual API key
         "Content-Type": "application/json"
     }
 
