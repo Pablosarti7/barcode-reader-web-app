@@ -12,5 +12,5 @@ flask_login==0.6.3
 flask_sqlalchemy
 email_validator
 authlib
-celery==5.4.0
+celery==5.3.0
 redis==5.0.8
