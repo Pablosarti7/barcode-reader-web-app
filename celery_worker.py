@@ -1,4 +1,4 @@
-from celery import Celery
+from celery import Celery # type: ignore
 from ingredients_api import get_all_ingredients, get_ingredient, add_ingredient
 import os
 
