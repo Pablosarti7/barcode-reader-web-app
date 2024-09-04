@@ -1,0 +1,28 @@
+services:
+  - type: web
+    name: flask-app
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn main:app
+    envVars:
+      - key: REDIS_URL
+        fromService:
+          type: redis
+          name: celery-redis
+          property: connectionString
+
+  - type: worker
+    name: celery-worker
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: celery -A celery_worker.celery worker --loglevel=info
+    envVars:
+      - key: REDIS_URL
+        fromService:
+          type: redis
+          name: celery-redis
+          property: connectionString
+
+  - type: redis
+    name: celery-redis
+    ipAllowList: []
