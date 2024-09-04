@@ -2,7 +2,8 @@ from celery import Celery # type: ignore
 from ingredients_api import get_all_ingredients, get_ingredient, add_ingredient
 import os
 
-celery = Celery('tasks', broker=os.environ.get('REDIS_URL', 'redis://localhost:6379'))
+redis_url = os.environ.get('REDIS_URL', 'redis://localhost:6379')
+celery = Celery('tasks', broker=redis_url, backend=redis_url)
 
 @celery.task
 def async_get_all_ingredients():
