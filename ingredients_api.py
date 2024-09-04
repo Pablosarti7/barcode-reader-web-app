@@ -49,4 +49,3 @@ def add_ingredient(ingredients):
         return f'HTTP error occurred: {err}'
     except Exception as err:
         return f'Other error occurred: {err}'
-    

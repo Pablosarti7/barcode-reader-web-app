@@ -4,6 +4,7 @@ from openfoodfacts_api import get_product_info
 from ingredients_api import get_ingredient, add_ingredient
 from openai_api import get_response
 
+from celery_worker import async_get_all_ingredients, async_get_ingredient, async_add_ingredient
 from flask import Flask, render_template, request, jsonify, redirect, url_for, flash, abort, session
 from flask_login import UserMixin, login_user, LoginManager, login_required, current_user, logout_user
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -94,57 +95,35 @@ def admin_only(f):
 @app.route('/', methods=['GET', 'POST'])
 def home():
     form = SearchBarcode()
-    
+
     if request.method == 'POST':
-        # Check for barcode in the form data
-        barcode = request.form.get('barcode')
-
-        if not barcode:
-            # If no barcode is found in the form data, fall back to the SearchBarcode form
-            barcode = form.ingredients.data
-
+        barcode = request.form.get('barcode') or form.ingredients.data
         ingredients = get_product_info(str(barcode))
 
         if 'product' in ingredients:
-            # accessing the key called product
             product_info = ingredients['product']
-
-            # nutriscore data extraction from the api
             nutriscore = product_info.get('nutriscore', {})
-
             name = product_info.get('product_name', 'Sorry no name was found.')
+            ingredients_text = product_info.get('ingredients_text_en', 'Sorry no ingredients were found.')
 
-            ingredients = product_info.get(
-                'ingredients_text_en', 'Sorry no ingredients where found.')
+            final_list = clean_ingredients(ingredients_text)
 
-            final_list = clean_ingredients(ingredients)
+            # Start asynchronous tasks
+            database_tasks = [async_get_ingredient.delay(ingredient) for ingredient in final_list]
+            
+            # Wait for all tasks to complete
+            database_list = [task.get() for task in database_tasks]
+            
+            openai_list = [ingredient for ingredient, result in zip(final_list, database_list) if result is None]
 
-            # Ingredients that we in out database go in one list and non existing one ask chat gpt
-            openai_list, database_list = [], []
-
-            for final_ingredient in final_list:
-                # Get the ingredient from your database
-                single_ingredient = get_ingredient(final_ingredient)
-                # If we get none instead of an object it means we need to search it because is not in the database
-                if single_ingredient != None:
-                    database_list.append(single_ingredient)
-                else:
-                    openai_list.append(final_ingredient)
-
-            response_list = []
-            # If list is not empty proceed (to save some time when the list is empty)
             if openai_list:
                 response = get_response(openai_list)
-                for object in response:
-                    object['name'] = object['name'].title()
-                    response_list.append(object)
-
-                add_ingredient(response_list)
-
-            complete_list = database_list + response_list
+                for obj in response:
+                    obj['name'] = obj['name'].title()
+                database_list.extend(response)
+                async_add_ingredient.delay(response)
 
             if current_user.is_authenticated:
-                # Query to check if the barcode already exists for the user
                 barcode_exists = db.session.query(
                     db.exists().where(
                         ScanHistory.user_id == current_user.id,
@@ -152,19 +131,17 @@ def home():
                     )
                 ).scalar()
 
-                if barcode_exists:
-                    pass
-                else:
+                if not barcode_exists:
                     new_item = ScanHistory(
                         user_id=current_user.id,
                         item_name=name,
                         item_barcode=barcode,
                     )
-
                     db.session.add(new_item)
                     db.session.commit()
 
-            return render_template('index.html', form=form, name=name, ingredients_list=complete_list, nutriscore=nutriscore, logged_in=current_user.is_authenticated)
+            return render_template('index.html', form=form, name=name, ingredients_list=database_list,
+                                   nutriscore=nutriscore, logged_in=current_user.is_authenticated)
         else:
             flash('Sorry product key not found in data.')
             return redirect(url_for('home'))
@@ -183,6 +160,7 @@ def search():
         searched_ingredient = form.ingredient.data
         ingredient_from_db = get_ingredient(searched_ingredient)
         return render_template('search.html', form=form, ingredient_info=ingredient_from_db)
+
 
     return render_template('search.html', form=form, logged_in=current_user.is_authenticated)
 
@@ -209,10 +187,9 @@ def about():
 def settings():
     subsection = request.args.get('section', 'main')
     action = request.form.get('action')
-    users_email = None # why is this bugging me
-    
+    users_email = None  # why is this bugging me
+
     google_account = session.get('is_google')
-    
 
     form = EditProfile()
     if current_user.is_authenticated:
@@ -230,7 +207,7 @@ def settings():
 
         # If user click on update then perform this action
         if action == 'update':
-            # the thing is that if you add email to the first one that defeats the purpose of 
+            # the thing is that if you add email to the first one that defeats the purpose of
             # checking the user because you are changing the user
             if google_account:
                 user.name = form.name.data
@@ -311,7 +288,6 @@ def register():
 
 @app.route('/callback')
 def authorize():
-    # print(f"This is the status: {request.args.get('state')}", f"{session.get('_google_authlib_state_')}")
     token = google.authorize_access_token()
     user_info = google.parse_id_token(token, nonce=session['nonce'])
 
@@ -340,7 +316,7 @@ def googlelogin():
     nonce = secrets.token_urlsafe(16)
     session['nonce'] = nonce
     session['is_google'] = True
-    
+
     redirect_uri = url_for('authorize', _external=True)
     return google.authorize_redirect(redirect_uri, nonce=nonce)
 

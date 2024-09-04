@@ -1,4 +1,4 @@
-from ingredients_api import get_all_ingredients, get_ingredient
+from ingredients_api import get_all_ingredients
 from thefuzz import process
 import re
 
