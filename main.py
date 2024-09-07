@@ -4,13 +4,13 @@ from openfoodfacts_api import get_product_info
 from ingredients_api import get_ingredient, add_ingredient
 from openai_api import get_response
 
-from celery_worker import async_get_all_ingredients, async_get_ingredient, async_add_ingredient
+from celery_worker import async_get_ingredient, async_add_ingredient
 from flask import Flask, render_template, request, jsonify, redirect, url_for, flash, abort, session
 from flask_login import UserMixin, login_user, LoginManager, login_required, current_user, logout_user
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_sqlalchemy import SQLAlchemy
-from flask_caching import Cache
-from authlib.integrations.flask_client import OAuth
+from flask_caching import Cache # type: ignore
+from authlib.integrations.flask_client import OAuth # type: ignore
 import secrets
 
 import os
