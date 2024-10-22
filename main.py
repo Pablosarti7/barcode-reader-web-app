@@ -4,13 +4,12 @@ from openfoodfacts_api import get_product_info
 from ingredients_api import get_ingredient, add_ingredient
 from openai_api import get_response
 
-from celery_worker import async_get_ingredient, async_add_ingredient
 from flask import Flask, render_template, request, jsonify, redirect, url_for, flash, abort, session
 from flask_login import UserMixin, login_user, LoginManager, login_required, current_user, logout_user
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_sqlalchemy import SQLAlchemy
-from flask_caching import Cache # type: ignore
-from authlib.integrations.flask_client import OAuth # type: ignore
+from flask_caching import Cache  # type: ignore
+from authlib.integrations.flask_client import OAuth  # type: ignore
 import secrets
 
 import os
@@ -104,25 +103,27 @@ def home():
             product_info = ingredients['product']
             nutriscore = product_info.get('nutriscore', {})
             name = product_info.get('product_name', 'Sorry no name was found.')
-            ingredients_text = product_info.get('ingredients_text_en', 'Sorry no ingredients were found.')
+            ingredients_text = product_info.get(
+                'ingredients_text_en', 'Sorry no ingredients were found.')
 
             final_list = clean_ingredients(ingredients_text)
 
             # Start asynchronous tasks
-            database_tasks = [async_get_ingredient.delay(ingredient) for ingredient in final_list]
-            
+            database_tasks = [get_ingredient(ingredient) for ingredient in final_list]
+
             # Wait for all tasks to complete
             database_list = [task.get() for task in database_tasks]
-            
-            openai_list = [ingredient for ingredient, result in zip(final_list, database_list) if result is None]
+
+            openai_list = [ingredient for ingredient, result in zip(
+                final_list, database_list) if result is None]
 
             if openai_list:
                 response = get_response(openai_list)
                 for obj in response:
                     obj['name'] = obj['name'].title()
                 database_list.extend(response)
-                async_add_ingredient.delay(response)
-
+                add_ingredient(response)
+            # print(openai_list) # it seems like we are waiting for this one
             if current_user.is_authenticated:
                 barcode_exists = db.session.query(
                     db.exists().where(
@@ -160,7 +161,6 @@ def search():
         searched_ingredient = form.ingredient.data
         ingredient_from_db = get_ingredient(searched_ingredient)
         return render_template('search.html', form=form, ingredient_info=ingredient_from_db)
-
 
     return render_template('search.html', form=form, logged_in=current_user.is_authenticated)
 
