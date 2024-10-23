@@ -10,9 +10,9 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask_sqlalchemy import SQLAlchemy
 from flask_caching import Cache  # type: ignore
 from authlib.integrations.flask_client import OAuth  # type: ignore
-import secrets
 
 import os
+import secrets
 from functools import wraps
 
 
@@ -109,10 +109,11 @@ def home():
             final_list = clean_ingredients(ingredients_text)
 
             # Start asynchronous tasks
-            database_tasks = [get_ingredient(ingredient) for ingredient in final_list]
+            database_tasks = [get_ingredient(ingredient)
+                              for ingredient in final_list]
 
             # Wait for all tasks to complete
-            database_list = [task.get() for task in database_tasks]
+            database_list = [task for task in database_tasks]
 
             openai_list = [ingredient for ingredient, result in zip(
                 final_list, database_list) if result is None]
@@ -288,37 +289,46 @@ def register():
 
 @app.route('/callback')
 def authorize():
-    token = google.authorize_access_token()
-    user_info = google.parse_id_token(token, nonce=session['nonce'])
+    try:
+        token = google.authorize_access_token()
+        user_info = google.parse_id_token(token, nonce=session['nonce'])
 
-    email = user_info['email']
-    name = user_info['name']
+        email = user_info['email']
+        name = user_info['name']
 
-    user = Users.query.filter_by(email=email).first()
 
-    if not user:
-        user = Users(email=email,
-                     name=name,
-                     password=None,
-                     )
+        user = Users.query.filter_by(email=email).first()
 
-        db.session.add(user)
-        db.session.commit()
+        if not user:
+            user = Users(email=email,
+                         name=name,
+                         password=None,
+                         )
+            db.session.add(user)
+            db.session.commit()
 
-    login_user(user)
+        login_user(user)
 
-    session.pop('nonce')  # Remove the nonce after successful use
-    return redirect(url_for('settings'))
+        session.pop('nonce')  # Remove the nonce after successful use
+        return redirect(url_for('settings'))
+    except Exception as e:
+        flash("Authorization failed. Please try again or contact support if the problem persists.")
+        # Redirect to a custom error page
+        return redirect(url_for('error_page'))
 
 
 @app.route('/google/login')
 def googlelogin():
-    nonce = secrets.token_urlsafe(16)
-    session['nonce'] = nonce
-    session['is_google'] = True
+    try:
+        nonce = secrets.token_urlsafe(16)
+        session['nonce'] = nonce
+        session['is_google'] = True
 
-    redirect_uri = url_for('authorize', _external=True)
-    return google.authorize_redirect(redirect_uri, nonce=nonce)
+        redirect_uri = url_for('authorize', _external=True)
+        return google.authorize_redirect(redirect_uri, nonce=nonce)
+    except Exception as e:
+        flash("Failed to initiate Google login. Please try again later.")
+        return redirect(url_for('error_page'))
 
 
 @app.route('/logout')
