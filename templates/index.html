@@ -43,6 +43,8 @@
 
     <section class="bg-gray-50 dark:bg-gray-900">
         <div class="py-8 px-4 mx-auto max-w-screen-xl text-center lg:py-16 lg:px-12">
+            <!-- Mobile Try Button -->
+            <div class="block lg:hidden">
             <a href="#" id="startbutton"
                 class="inline-flex justify-between items-center py-1 px-1 pr-4 mb-7 text-sm text-gray-700 bg-gray-100 rounded-full dark:bg-gray-300 dark:text-black hover:bg-gray-200"
                 role="alert">
@@ -53,7 +55,8 @@
                         d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
                         clip-rule="evenodd"></path>
                 </svg>
-            </a>
+                </a>
+            </div>
             <h1
                 class="mb-4 text-4xl font-extrabold tracking-tight leading-none text-gray-900 md:text-5xl lg:text-6xl dark:text-black">
                 Learn about food ingredients.</h1>
@@ -122,7 +125,7 @@
     <!-- Benefits Section -->
     <section class="bg-gray-50 dark:bg-gray-900">
         <div class="py-8 px-4 mx-auto max-w-screen-xl sm:py-16 lg:px-6">
-            <div class="max-w-screen-md mb-8 lg:mb-16">
+            <div class="mb-8 lg:mb-16 flex justify-center">
                 <h2 class="mb-4 text-4xl tracking-tight font-extrabold text-gray-900 dark:text-black">Benefits</h2>
             </div>
             <div class="space-y-8 md:grid md:grid-cols-2 lg:grid-cols-3 md:gap-12 md:space-y-0">
@@ -170,13 +173,15 @@
     </section>
 
     <!-- How it Works Section -->
-    <section class="bg-gray-50 dark:bg-gray-900">
-        <div class="py-12 px-4 mx-auto max-w-screen-xl sm:py-20 lg:px-6">
-            <div class="max-w-screen-md mb-8 lg:mb-16">
-                <h2 class="mb-4 text-4xl tracking-tight font-extrabold text-gray-900 dark:text-black">How It Works</h2>
+    <section class="bg-gray-50 dark:bg-gray-900 w-full flex justify-center">
 
+        <div class="py-12 px-4 mx-auto max-w-screen-xl sm:py-20 lg:px-6">
+            <div class="mb-8 lg:mb-16 flex justify-center">
+                <h2 class="mb-4 text-4xl tracking-tight font-extrabold text-gray-900 dark:text-black">How It Works</h2>
             </div>
-            <div class="space-y-8 md:grid md:grid-cols-2 lg:grid-cols-2 md:gap-12 md:space-y-0">
+
+            <div class="space-y-8 flex flex-col justify-center md:w-600 w-full">
+
                 <div>
                     <div
                         class="flex justify-center items-center mb-4 w-10 h-10 rounded-full bg-blue-200 lg:h-12 lg:w-12 dark:bg-primary-900">
@@ -192,6 +197,7 @@
                     <p class="text-gray-500 dark:text-black">Scan the food item or type it in the search bar to get
                         detailed insights into thousands of food ingredients.</p>
                 </div>
+
                 <div>
                     <div
                         class="flex justify-center items-center mb-4 w-10 h-10 rounded-full bg-blue-200 lg:h-12 lg:w-12 dark:bg-primary-900">
@@ -204,8 +210,11 @@
                     <h3 class="mb-2 text-xl font-bold dark:text-black">Learn about each ingredient</h3>
                     <p class="text-gray-500 dark:text-black">Get the information you need about each ingredient and the best part is that you get to decide if its really for you or not.</p>
                 </div>
+
             </div>
+
         </div>
+
     </section>
 
     <section class="bg-gradient-to-r from-sky-200 ... dark:bg-gray-900">
@@ -217,9 +226,9 @@
                     for each ingredient.</p>
 
                 <button data-modal-target="large-modal" data-modal-toggle="large-modal"
-                    class="mx-auto block w-full md:w-auto text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                    class="mx-auto block w-full md:w-auto text-white bg-blue-500 hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                     type="button">
-                    Try it for free
+                    Open Ingredients
                 </button>
 
             </div>

@@ -83,18 +83,20 @@
         <section class="bg-gray-50 dark:bg-gray-900 max-h-80">
             <div class="py-8 px-4 mx-auto max-w-screen-xl text-center lg:py-16 lg:px-12">
                 <!-- Your main content here -->
-                <a href="{{ url_for('home') }}"
-                    class="inline-flex justify-between items-center py-1 px-1 pr-4 mb-7 text-sm text-gray-700 bg-gray-100 rounded-full dark:bg-gray-300 dark:text-black hover:bg-gray-200"
-                    role="alert">
-                    <span class="text-xs bg-blue-600 rounded-full text-white px-4 py-1.5 mr-3">Try</span> <span
-                        class="text-sm font-medium">Scanning with your mobile device.</span>
-                    <svg class="ml-2 w-5 h-5" fill="currentColor" viewBox="0 0 20 20"
-                        xmlns="http://www.w3.org/2000/svg">
-                        <path fill-rule="evenodd"
-                            d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                            clip-rule="evenodd"></path>
-                    </svg>
-                </a>
+                <div class="lg:hidden">
+                    <a href="{{ url_for('home') }}"
+                        class="inline-flex justify-between items-center py-1 px-1 pr-4 mb-7 text-sm text-gray-700 bg-gray-100 rounded-full dark:bg-gray-300 dark:text-black hover:bg-gray-200"
+                        role="alert">
+                        <span class="text-xs bg-blue-600 rounded-full text-white px-4 py-1.5 mr-3">Try</span> <span
+                            class="text-sm font-medium">Scanning with your mobile device.</span>
+                        <svg class="ml-2 w-5 h-5" fill="currentColor" viewBox="0 0 20 20"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd"
+                                d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                                clip-rule="evenodd"></path>
+                        </svg>
+                    </a>
+                </div>
                 <h1
                     class="mb-4 text-4xl font-extrabold tracking-tight leading-none text-gray-900 md:text-5xl lg:text-6xl dark:text-black">
                     Search specific ingredients.</h1>
@@ -118,7 +120,7 @@
                             dark:focus:border-blue-500",
                             id="textbox")
                             }}
-                            
+
 
                             {{ form.submit(class="text-white absolute end-2.5 bottom-2.5 bg-blue-700 hover:bg-blue-800
                             focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2
@@ -134,36 +136,59 @@
         </section>
 
         <section class="bg-gray-50 dark:bg-gray-900 flex flex-col flex-grow">
-            
-                <div class="flex justify-center mt-7 md:mt-24">
-                    <div class="w-full max-w-4xl mx-auto mb-8">
-                        <div class="bg-white shadow-md rounded-lg overflow-hidden">
-                            <div class="p-6">
-                                <h5 class="mt-2 text-xl font-semibold">Ingredient Information</h5>
-                                <p class="mt-4">Get specific ingredient information.</p>
-                                <div class="bg-gray-100 p-4 mt-6 rounded-lg">
-                                    {% if ingredient_info %}
-                                    <div class="mb-3">
-                                        <h6 class="font-semibold">Name</h6>
-                                        <p>{{ingredient_info['name']}}</p>
-                                    </div>
-                                    <div class="mb-3">
-                                        <h6 class="font-semibold">Effects</h6>
-                                        <p>{{ingredient_info['description']}}</p>
-                                    </div>
-                                    <div>
-                                        <h6 class="font-semibold">Rating</h6>
-                                        <p>{{ingredient_info['rating']}}</p>
-                                    </div>
-                                    {% else %}
-                                    <p>Your ingredient information will appear here.</p>
-                                    {% endif %}
-                                </div>
+
+            <div class="flex justify-center">
+                <div class="w-full max-w-4xl mx-auto mb-8">
+                    <div class="overflow-hidden">
+                        <div class="p-6">
+                            
+                            {% if ingredient_info %}
+                            <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+                                <table class="w-full text-sm text-left">
+                                    <thead class="text-white bg-blue-600">
+                                        <tr>
+                                            <th scope="col" class="px-6 py-3">Property</th>
+                                            <th scope="col" class="px-6 py-3">Details</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr class="bg-white border-b hover:bg-gray-50">
+                                            <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                                                Name
+                                            </th>
+                                            <td class="px-6 py-4">
+                                                {{ingredient_info['name']}}
+                                            </td>
+                                        </tr>
+                                        <tr class="bg-white border-b hover:bg-gray-50">
+                                            <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                                                Effects
+                                            </th>
+                                            <td class="px-6 py-4">
+                                                {{ingredient_info['description']}}
+                                            </td>
+                                        </tr>
+                                        <tr class="bg-white hover:bg-gray-50">
+                                            <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                                                Rating
+                                            </th>
+                                            <td class="px-6 py-4">
+                                                {{ingredient_info['rating']}}
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
                             </div>
+                            {% else %}
+                            <div class="text-center p-6 bg-gray-50 rounded-lg border border-gray-200">
+                                <p class="text-gray-600">Your ingredient information will appear here.</p>
+                            </div>
+                            {% endif %}
                         </div>
                     </div>
                 </div>
-            
+            </div>
+
         </section>
     </main>
 

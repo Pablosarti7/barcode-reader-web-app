@@ -14,29 +14,27 @@
 
     <div class="flex justify-center flex-grow">
         <div class="flex container py-6 px-4 mx-auto max-w-screen-xl">
-            {% include "sidenavbar.html" %}
+            {% if logged_in %}
+            <div class="pt-10">
+                {% include "sidenavbar.html" %}
+            </div>
+            {% endif %}
             <!-- Main content -->
             <main class="flex-1 p-4 md:p-10">
                 <div class="max-w-7xl mx-auto">
                     {% if not logged_in %}
-                    <div class="bg-white dark:bg-gray-800 overflow-hidden shadow rounded-lg">
+                    <div class="bg-white dark:bg-gray-800 overflow-hidden shadow">
                         <div class="px-4 py-5 sm:p-6">
-                            <h2 class="text-lg font-medium text-gray-900 dark:text-white mb-4">Login or Register</h2>
+                            <h2 class="text-lg font-bold text-gray-900 dark:text-white mb-4">Just for fun</h2>
                             <div class="space-y-4">
-                                <a href="{{ url_for('login') }}"
-                                    class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                                    Login
-                                </a>
-                                <a href="{{ url_for('register') }}"
-                                    class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                                    Register
-                                </a>
+                                <p>This is a simple project that I made to learn more about Flask and Python. I just like to code and learn new things.</p>
+                                <p>If you have any suggestions or feedback, please let me know.</p>
                             </div>
                         </div>
                     </div>
                     {% endif %}
                     {% if logged_in %}
-                    <div class="bg-white dark:bg-gray-800 overflow-hidden shadow rounded-lg">
+                    <div class="bg-white dark:bg-gray-800 overflow-hidden shadow">
                         <div class="px-4 py-5 sm:p-6">
                             {% if subsection == 'profile' %}
                             <h2 class="text-lg font-medium text-gray-900 dark:text-white mb-4">Your account</h2>
@@ -44,18 +42,9 @@
                                 store all of your favorite foods information and access it when ever you need it.
                                 We will be adding more features in the future and we are open for suggestions, just send
                                 us an email @ support@ingredientadvisor.com.</p>
-                            <h2 class="text-lg font-medium text-gray-900 dark:text-white mb-4">My Profile</h2>
 
-                            <div class="space-y-4">
-                                <a href="{{ url_for('settings', section='edit') }}" class="block w-1/3 text-white bg-blue-600 hover:bg-blue-700 focus:ring-4
-                            focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center
-                            dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-primary-800">Edit Profile</a>
-
-
-                            </div>
                             {% elif subsection == 'scan_history' %}
                             <h2 class="text-lg font-medium text-gray-900 dark:text-white mb-4">My Scan History</h2>
-                            <h3 class="mb-4 text-lg font-bold">Ingredients History:</h3>
                             <div class="space-y-4 overflow-y-auto h-96 md:h-600">
                                 {% for item in scan_history %}
                                 <div class="bg-gray-100 p-4 rounded shadow">
@@ -72,7 +61,6 @@
                                     {% else %}
                                     <h3 class="text-lg font-bold">{{item.item_name}}</h3>
                                     {% endif %}
-                                    <p class="font-semibold">Code:</p>
                                     {% set unique_id = loop.index0 %}
                                     <div class="relative mt-2">
                                         <label for="npm-install-copy-button-{{unique_id}}" class="sr-only">Label</label>
