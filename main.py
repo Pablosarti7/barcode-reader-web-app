@@ -1,16 +1,21 @@
-from forms import LoginForm, RegistrationForm, SearchBarcode, SearchIngredient, EditProfile
+#internal imports
+from forms import LoginForm, RegistrationForm, SearchBarcode, SearchIngredient, EditProfile, ResetPasswordRequestForm, ResetPasswordForm
 from utils import autosuggest, clean_ingredients
 from openfoodfacts_api import get_product_info
 from ingredients_api import get_ingredient, add_ingredient
 from openai_api import get_response
 
+# external imports
 from flask import Flask, render_template, request, jsonify, redirect, url_for, flash, abort, session
 from flask_login import UserMixin, login_user, LoginManager, login_required, current_user, logout_user
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_sqlalchemy import SQLAlchemy
 from flask_caching import Cache  # type: ignore
 from authlib.integrations.flask_client import OAuth  # type: ignore
+from itsdangerous import URLSafeTimedSerializer
+from flask_mail import Mail, Message
 
+# standard python module
 import os
 import secrets
 from functools import wraps
@@ -35,6 +40,14 @@ app.config['GOOGLE_DISCOVERY_URL'] = (
     'https://accounts.google.com/.well-known/openid-configuration'
 )
 
+
+app.config['MAIL_SERVER'] = 'smtp.gmail.com'
+app.config['MAIL_PORT'] = 587
+app.config['MAIL_USE_TLS'] = True
+app.config['MAIL_USERNAME'] = os.environ.get("G_EMAIL")
+app.config['MAIL_PASSWORD'] = os.environ.get("G_PASSWORD")
+
+mail = Mail(app)
 
 db = SQLAlchemy(app)
 
@@ -81,6 +94,8 @@ class ScanHistory(db.Model):
     user = db.relationship(
         'Users', backref=db.backref('scan_history', lazy=True))
 
+    
+s = URLSafeTimedSerializer(app.secret_key)
 
 def admin_only(f):
     @wraps(f)
@@ -254,6 +269,54 @@ def login():
             return redirect(url_for('settings'))
 
     return render_template('login.html', form=form, logged_in=current_user.is_authenticated)
+
+
+@app.route('/reset_password_request', methods=['GET', 'POST'])
+def reset_password_request():
+    
+    form = ResetPasswordRequestForm()
+    
+    if form.validate_on_submit():
+        
+        user = Users.query.filter_by(email=form.email.data).first()
+        
+        if user:
+            token = s.dumps(user.email, salt='password-reset-salt')
+            
+            msg = Message('Password Reset Request',
+                        sender=os.environ.get("G_EMAIL"),
+                        recipients=[user.email])
+            msg.body = f"Click the link below to reset your password:\n\n{url_for('reset_password', token=token, _external=True)}"
+            mail.send(msg)
+
+            # Send email to user with reset link, e.g., url_for('reset_password', token=token, _external=True)
+        flash("Check your email for the instructions to reset your password.")
+        return redirect(url_for('login'))
+    return render_template('reset_password_request.html', form=form)
+
+
+@app.route('/reset_password/<token>', methods=['GET', 'POST'])
+def reset_password(token):
+    try:
+        email = s.loads(token, salt='password-reset-salt', max_age=1800)  # Link valid for 1 hour
+    except:
+        flash("The reset link is invalid or has expired.")
+        return redirect(url_for('reset_password_request'))
+
+    form = ResetPasswordForm()
+    if form.validate_on_submit():
+        user = Users.query.filter_by(email=email).first()
+        if user:
+            new_hashed_password = generate_password_hash(
+                form.password.data,
+                method='pbkdf2:sha256',
+                salt_length=8
+            )
+            user.password = new_hashed_password
+            db.session.commit()
+            flash("Your password has been updated.")
+            return redirect(url_for('login'))
+    return render_template('reset_password.html', form=form)
 
 
 @app.route('/register', methods=['GET', 'POST'])

@@ -15,3 +15,5 @@ authlib
 celery==5.2.6
 redis==4.2.2
 kombu==5.2.4
+flask_mail==0.10.0
+itsdangerous==2.2.0
