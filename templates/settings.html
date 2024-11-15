@@ -27,6 +27,15 @@
                         <div class="px-4 py-5 sm:p-6">
                             <h2 class="text-lg font-bold text-gray-900 dark:text-white mb-4">Just for fun</h2>
                             <div class="space-y-4">
+                                {% with messages = get_flashed_messages() %}
+                                {% if messages %}
+                                {% for message in messages %}
+                                {{ message }}
+                                {% endfor %}
+                                {% else %}
+                                Sign in to your account
+                                {% endif %}
+                                {% endwith %}
                                 <p>This is a simple project that I made to learn more about Flask and Python. I just like to code and learn new things.</p>
                                 <p>If you have any suggestions or feedback, please let me know.</p>
                             </div>

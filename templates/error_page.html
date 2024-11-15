@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Error - Page Not Found</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f8f9fa;
+            color: #333;
+            margin-top: 10%;
+        }
+        h1 {
+            font-size: 3em;
+            color: #d9534f;
+        }
+        p {
+            font-size: 1.2em;
+        }
+        a {
+            text-decoration: none;
+            color: #0275d8;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <h1>Oops!</h1>
+    <p>Something went wrong or the page you are looking for doesn't exist.</p>
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    {% for message in messages %}
+    {{ message }}
+    {% endfor %}
+    {% else %}
+    Create an account
+    {% endif %}
+    {% endwith %}
+    <p><a href="/">Go back to the homepage</a></p>
+</body>
+</html>

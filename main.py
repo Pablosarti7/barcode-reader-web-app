@@ -40,7 +40,7 @@ app.config['GOOGLE_DISCOVERY_URL'] = (
     'https://accounts.google.com/.well-known/openid-configuration'
 )
 
-
+# Mail SMTP configuration 
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'
 app.config['MAIL_PORT'] = 587
 app.config['MAIL_USE_TLS'] = True
@@ -51,6 +51,7 @@ mail = Mail(app)
 
 db = SQLAlchemy(app)
 
+# Initialize flask-migrate when needed
 
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -81,6 +82,7 @@ class Users(db.Model, UserMixin):
     name = db.Column(db.String(100))
     email = db.Column(db.String(100), unique=True)
     password = db.Column(db.String(100))
+    email_confirmed = db.Column(db.Boolean, default=False)
 
     def __repr__(self):
         return f'<User {self.email}>'
@@ -96,6 +98,7 @@ class ScanHistory(db.Model):
 
     
 s = URLSafeTimedSerializer(app.secret_key)
+
 
 def admin_only(f):
     @wraps(f)
@@ -201,13 +204,19 @@ def about():
 
 @app.route('/settings', methods=['GET', 'POST'])
 def settings():
+    if current_user.is_authenticated:
+        if not current_user.email_confirmed:
+            flash('Please confirm your email address to access settings.', 'warning')
+            return redirect(url_for('unconfirmed'))
+
     subsection = request.args.get('section', 'main')
     action = request.form.get('action')
-    users_email = None  # why is this bugging me
+    users_email = None  # why is this bugging
 
     google_account = session.get('is_google')
 
     form = EditProfile()
+
     if current_user.is_authenticated:
         users_name = current_user.name
         users_email = current_user.email
@@ -245,11 +254,18 @@ def settings():
 
     return render_template('settings.html', subsection=subsection, logged_in=current_user.is_authenticated, scan_history=users_scan_history, users_name=users_name, form=form, users_email=users_email)
 
+@app.route('/unconfirmed')
+def unconfirmed():
+    if current_user.is_authenticated and current_user.email_confirmed:
+        return redirect(url_for('settings'))
+
+    flash('Please confirm your account!', 'warning')
+    return render_template('unconfirmed.html')
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     form = LoginForm()
-
+    
     if form.validate_on_submit():
 
         email = form.email.data
@@ -323,9 +339,13 @@ def reset_password(token):
 def register():
     form = RegistrationForm()
 
-    if form.validate_on_submit():
+    # helper function to send email
+    def send_email(to, subject, body):
+        msg = Message(subject, recipients=[to])
+        msg.body = body
+        mail.send(msg)
 
-        # Same as login but less code.
+    if form.validate_on_submit():
         if Users.query.filter_by(email=form.email.data).first():
             flash("You've already signed up with that email, log in instead!")
             return redirect(url_for('login'))
@@ -339,15 +359,50 @@ def register():
             email=form.email.data,
             name=form.name.data,
             password=hash_and_salted_password,
+            email_confirmed=False  # Add a field in your database for email confirmation status
         )
 
         db.session.add(new_user)
         db.session.commit()
-        login_user(new_user)
 
-        return redirect(url_for("settings"))
+        # Generate confirmation token
+        token = s.dumps(new_user.email, salt='email-confirmation')
+
+        # Send confirmation email
+        confirm_url = url_for('confirm_email', token=token, _external=True)
+        subject = "Please confirm your email"
+        body = f"Welcome! Please confirm your email by clicking on the link: {confirm_url}"
+        send_email(new_user.email, subject, body)
+
+        flash('A confirmation email has been sent to your email address. Please confirm your email to complete registration.', 'info')
+        return redirect(url_for('login'))
 
     return render_template("register.html", form=form, logged_in=current_user.is_authenticated)
+
+
+@app.route('/confirm/<token>')
+def confirm_email(token):
+    try:
+        # Verify the token within 30 mins (seconds)
+        email = s.loads(token, salt='email-confirmation', max_age=1800)
+    except Exception:
+        flash('The confirmation link is invalid or has expired.', 'danger')
+        return redirect(url_for('register'))
+    
+    user = Users.query.filter_by(email=email).first()
+    if user is None:
+        flash('Invalid confirmation request.', 'danger')
+        return redirect(url_for('register'))
+
+    if user.email_confirmed:
+        flash('Account already confirmed. Please log in.', 'success')
+    else:
+        user.email_confirmed = True
+        db.session.commit()
+        flash('You have confirmed your email. Thanks!', 'success')
+
+    return redirect(url_for('login'))
+
 
 
 @app.route('/callback')
@@ -377,7 +432,7 @@ def authorize():
     except Exception as e:
         flash("Authorization failed. Please try again or contact support if the problem persists.")
         # Redirect to a custom error page
-        return redirect(url_for('error_page'))
+        return render_template('error_page')
 
 
 @app.route('/google/login')
@@ -391,7 +446,7 @@ def googlelogin():
         return google.authorize_redirect(redirect_uri, nonce=nonce)
     except Exception as e:
         flash("Failed to initiate Google login. Please try again later.")
-        return redirect(url_for('error_page'))
+        return render_template('error_page')
 
 
 @app.route('/logout')
