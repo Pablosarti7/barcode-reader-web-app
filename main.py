@@ -142,7 +142,7 @@ def home():
                     obj['name'] = obj['name'].title()
                 database_list.extend(response)
                 add_ingredient(response)
-            # print(openai_list) # it seems like we are waiting for this one
+            
             if current_user.is_authenticated:
                 barcode_exists = db.session.query(
                     db.exists().where(
@@ -407,13 +407,14 @@ def confirm_email(token):
 
 @app.route('/callback')
 def authorize():
+    
     try:
         token = google.authorize_access_token()
+        
         user_info = google.parse_id_token(token, nonce=session['nonce'])
 
         email = user_info['email']
         name = user_info['name']
-
 
         user = Users.query.filter_by(email=email).first()
 
@@ -437,11 +438,12 @@ def authorize():
 
 @app.route('/google/login')
 def googlelogin():
+    
     try:
         nonce = secrets.token_urlsafe(16)
         session['nonce'] = nonce
         session['is_google'] = True
-
+        
         redirect_uri = url_for('authorize', _external=True)
         return google.authorize_redirect(redirect_uri, nonce=nonce)
     except Exception as e:
