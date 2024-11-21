@@ -1,6 +1,7 @@
 from ingredients_api import get_all_ingredients
 from thefuzz import process
 import re
+import json
 
 
 def autosuggest(prefix):
@@ -38,4 +39,8 @@ def clean_ingredients(input_string):
         item for item in clean_ingredients if '%' not in item and 'contains' not in item]
 
     return filtered_list
+
+# Simple function to create a dictionary structure
+def create_structure(name, ingredients):
+    return json.dumps({"name": name, "ingredients": ingredients})
 

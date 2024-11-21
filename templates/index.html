@@ -290,15 +290,23 @@
                                 {% endif %}
                                 {% for ingredient in ingredients_list %}
                                 {% if ingredient['rating'] == "healthy" %}
+                                {% if ingredient['name'] %}
                                 <li class="bg-green-200 p-2 mb-2 rounded-lg">
+                                    
                                     <p class="font-bold">{{ ingredient['name'] }}:</p>
                                     <p>{{ ingredient['description'] }}</p>
+                                
                                 </li>
+                                {% endif %}
                                 {% else %}
+                                {% if ingredient['name'] %}
                                 <li class="bg-red-200 p-2 mb-2 rounded-lg">
+                                    
                                     <p class="font-bold">{{ ingredient['name'] }}:</p>
                                     <p>{{ ingredient['description'] }}</p>
+                                
                                 </li>
+                                {% endif %}
                                 {% endif %}
                                 {% endfor %}
                             </ul>

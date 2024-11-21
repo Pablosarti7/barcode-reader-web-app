@@ -26,7 +26,7 @@ def get_ingredient(ingredient):
     if 'ingredient' in data:
         return data['ingredient'][0]
     else:
-        return None
+        return None # None why are we returning this, is this the best way to handle this
     
 def add_ingredient(ingredients):
     add_url = 'https://ingredients-api-t2ja.onrender.com/add'

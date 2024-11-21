@@ -1,9 +1,10 @@
 #internal imports
 from forms import LoginForm, RegistrationForm, SearchBarcode, SearchIngredient, EditProfile, ResetPasswordRequestForm, ResetPasswordForm
-from utils import autosuggest, clean_ingredients
+from utils import autosuggest, clean_ingredients, create_structure
 from openfoodfacts_api import get_product_info
 from ingredients_api import get_ingredient, add_ingredient
 from openai_api import get_response
+from products_api import get_all_products, add_product
 
 # external imports
 from flask import Flask, render_template, request, jsonify, redirect, url_for, flash, abort, session
@@ -115,24 +116,34 @@ def home():
 
     if request.method == 'POST':
         barcode = request.form.get('barcode') or form.ingredients.data
+        # Send the barcode to the OpenFoodFacts API
         ingredients = get_product_info(str(barcode))
 
+        # If there is a record for the barcode proceed
         if 'product' in ingredients:
+            # Access the product key in ingredients to get the data needed
             product_info = ingredients['product']
+            # Get necessary data
             nutriscore = product_info.get('nutriscore', {})
+            
             name = product_info.get('product_name', 'Sorry no name was found.')
             ingredients_text = product_info.get(
                 'ingredients_text_en', 'Sorry no ingredients were found.')
-
+            
             final_list = clean_ingredients(ingredients_text)
+            ingredients_string = ", ".join(final_list)
 
-            # Start asynchronous tasks
+            # Collect the name/ingredients and convert to json structure for the DB
+            json_product = create_structure(name, ingredients_string)
+            
+            # If the product doesn't exist in the DB add it
+            add_product(json_product)
+            
             database_tasks = [get_ingredient(ingredient)
                               for ingredient in final_list]
-
-            # Wait for all tasks to complete
+            
             database_list = [task for task in database_tasks]
-
+            
             openai_list = [ingredient for ingredient, result in zip(
                 final_list, database_list) if result is None]
 
@@ -143,6 +154,7 @@ def home():
                 database_list.extend(response)
                 add_ingredient(response)
             
+            # Only if the user is logged in save the product barcode in their account
             if current_user.is_authenticated:
                 barcode_exists = db.session.query(
                     db.exists().where(
