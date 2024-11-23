@@ -1,12 +1,9 @@
 from openai import OpenAI
 import os
 import json
-import pprint
 
 
-client = OpenAI(
-    api_key=os.environ.get('API_KEY'),
-)
+client = OpenAI(api_key=os.environ.get('API_KEY'))
 
 
 def get_response(list_of_ingredients):
@@ -45,7 +42,7 @@ def get_response(list_of_ingredients):
     ]
 
     completion = client.chat.completions.create(
-        model="gpt-3.5-turbo-1106",
+        model="GPT-4o mini",
         temperature=0.1,
         tools=tools,
         tool_choice={"type": "function",

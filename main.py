@@ -3,8 +3,8 @@ from forms import LoginForm, RegistrationForm, SearchBarcode, SearchIngredient, 
 from utils import autosuggest, clean_ingredients, create_structure
 from openfoodfacts_api import get_product_info
 from ingredients_api import get_ingredient, add_ingredient
-from openai_api import get_response
 from products_api import get_all_products, add_product
+from openai_sdk import jsonFormater
 
 # external imports
 from flask import Flask, render_template, request, jsonify, redirect, url_for, flash, abort, session
@@ -125,7 +125,7 @@ def home():
             product_info = ingredients['product']
             # Get necessary data
             nutriscore = product_info.get('nutriscore', {})
-            
+
             name = product_info.get('product_name', 'Sorry no name was found.')
             ingredients_text = product_info.get(
                 'ingredients_text_en', 'Sorry no ingredients were found.')
@@ -137,18 +137,24 @@ def home():
             json_product = create_structure(name, ingredients_string)
             
             # If the product doesn't exist in the DB add it
+            #TODO Are we missing anything
+            #TODO Improve accuracy of results
             add_product(json_product)
             
             database_tasks = [get_ingredient(ingredient)
                               for ingredient in final_list]
-            
+            print(f"Tasks: {database_tasks}")
+            # i think the code below is not needed
             database_list = [task for task in database_tasks]
-            
+            print(f"Database list: {database_list}")
+
             openai_list = [ingredient for ingredient, result in zip(
                 final_list, database_list) if result is None]
-
+            print(f"OpenAI: {openai_list}")
+            
             if openai_list:
-                response = get_response(openai_list)
+                response = jsonFormater(openai_list)
+                print(f"Response: {response}")
                 for obj in response:
                     obj['name'] = obj['name'].title()
                 database_list.extend(response)
