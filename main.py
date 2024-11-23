@@ -141,15 +141,18 @@ def home():
             #TODO Improve accuracy of results
             add_product(json_product)
             
-            database_tasks = [get_ingredient(ingredient)
-                              for ingredient in final_list]
+            #####
+
+            print(f"Clean list: {final_list}")
+            # will return none if no ingredients is in db
+            # why is red not on the db when we are literally there
+            # the problem is in the ingredients clean up, there is a space left 'salt', 'red ', 'natural flavor', 'blue '
+            database_tasks = [get_ingredient(ingredient) for ingredient in final_list]
+            
             print(f"Tasks: {database_tasks}")
             # i think the code below is not needed
-            database_list = [task for task in database_tasks]
-            print(f"Database list: {database_list}")
 
-            openai_list = [ingredient for ingredient, result in zip(
-                final_list, database_list) if result is None]
+            openai_list = [ingredient for ingredient, result in zip(final_list, database_tasks) if result is None]
             print(f"OpenAI: {openai_list}")
             
             if openai_list:
@@ -157,8 +160,10 @@ def home():
                 print(f"Response: {response}")
                 for obj in response:
                     obj['name'] = obj['name'].title()
-                database_list.extend(response)
+                database_tasks.extend(response)
                 add_ingredient(response)
+
+            #####
             
             # Only if the user is logged in save the product barcode in their account
             if current_user.is_authenticated:
@@ -178,7 +183,7 @@ def home():
                     db.session.add(new_item)
                     db.session.commit()
 
-            return render_template('index.html', form=form, name=name, ingredients_list=database_list,
+            return render_template('index.html', form=form, name=name, ingredients_list=database_tasks,
                                    nutriscore=nutriscore, logged_in=current_user.is_authenticated)
         else:
             flash('Sorry product key not found in data.')
