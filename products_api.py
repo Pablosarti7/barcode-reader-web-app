@@ -1,4 +1,5 @@
 import requests
+import os
 
 def get_all_products():
     url = "https://food-products-api-production.up.railway.app/all-products"
@@ -36,12 +37,13 @@ def get_all_products():
         return {"error": "Invalid response format. Unable to parse JSON."}
 
 
-    
+PRODUCTS_API_KEY = os.environ.get('PRODUCTS_API_KEY')
 
 def add_product(products):
     add_url = 'https://food-products-api-production.up.railway.app/add-product'
     headers = {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        "X-API-Key": PRODUCTS_API_KEY
     }
 
     try:

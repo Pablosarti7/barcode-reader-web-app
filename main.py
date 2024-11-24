@@ -130,6 +130,9 @@ def home():
             ingredients_text = product_info.get(
                 'ingredients_text_en', 'Sorry no ingredients were found.')
             
+            #####
+
+            print(ingredients_text)
             final_list = clean_ingredients(ingredients_text)
             ingredients_string = ", ".join(final_list)
 
@@ -149,7 +152,7 @@ def home():
             # the problem is in the ingredients clean up, there is a space left 'salt', 'red ', 'natural flavor', 'blue '
             database_tasks = [get_ingredient(ingredient) for ingredient in final_list]
             
-            print(f"Tasks: {database_tasks}")
+            
             # i think the code below is not needed
 
             openai_list = [ingredient for ingredient, result in zip(final_list, database_tasks) if result is None]

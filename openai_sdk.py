@@ -7,7 +7,7 @@ import json
 openai = OpenAI(api_key=os.environ.get('API_KEY'))
 
 class Ingredient(BaseModel):
-    name: str
+    name: str = Field(description="Please don't format this field")
     description: str = Field(description="Small description of the ingredient eg. synthetic dye derived from petroleum or artificial sweetener gut disruptor and may act as a endocrine disruptor.")
     rating: str = Field(description="Either 'Healthy' or 'Unhealthy' rating based on clean eating like avoiding processed foods, hormone disrupting ingredients, and gut disrupting ingredients.")
 

@@ -23,7 +23,7 @@ def clean_ingredient(ingredient):
     # Trim whitespace
     ingredient = ingredient.strip()
     # Remove trailing special characters
-    ingredient = re.sub(r'[()\[\]0-9]', '', ingredient)
+    ingredient = re.sub(r'[()\[\]]', '', ingredient)
 
     return ingredient.lower()
 
