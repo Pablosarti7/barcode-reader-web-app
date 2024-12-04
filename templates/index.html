@@ -288,7 +288,9 @@
                                     window.ingredientsListPresent = true;
                                 </script>
                                 {% endif %}
+
                                 {% for ingredient in ingredients_list %}
+                                <!-- Healthy rating will show green background -->
                                 {% if ingredient['rating'] == "healthy" %}
                                 {% if ingredient['name'] %}
                                 <li class="bg-green-200 p-2 mb-2 rounded-lg">
@@ -298,6 +300,17 @@
                                 
                                 </li>
                                 {% endif %}
+                                <!-- Neutral rating will show yellow background -->
+                                {% elif ingredient['rating'] == "neutral" %}
+                                {% if ingredient['name'] %}
+                                <li class="bg-yellow-200 p-2 mb-2 rounded-lg">
+                                    
+                                    <p class="font-bold">{{ ingredient['name'] }}:</p>
+                                    <p>{{ ingredient['description'] }}</p>
+                                
+                                </li>
+                                {% endif %}
+                                <!-- Anything else besides healthy rating will show yellow background -->
                                 {% else %}
                                 {% if ingredient['name'] %}
                                 <li class="bg-red-200 p-2 mb-2 rounded-lg">
@@ -308,8 +321,10 @@
                                 </li>
                                 {% endif %}
                                 {% endif %}
+
                                 {% endfor %}
                             </ul>
+
                             <h5 class="text-xl font-bold mb-2">
                                 Nutriscore
                             </h5>

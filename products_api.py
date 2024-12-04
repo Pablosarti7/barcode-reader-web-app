@@ -45,7 +45,7 @@ def add_product(products):
         "Content-Type": "application/json",
         "X-API-Key": PRODUCTS_API_KEY
     }
-
+    
     try:
         # Perform the POST request
         response = requests.post(add_url, headers=headers, data=products)
@@ -80,3 +80,42 @@ def add_product(products):
     # Handle any other requests-related errors
     except requests.exceptions.RequestException as req_err:
         return {"error": f"An error occurred while making the request: {req_err}"}
+
+
+# New function to get a specific ingredient
+def get_specific_ingredient(product_name):
+    ingredient_url = f"https://food-products-api-production.up.railway.app/product/{product_name}"
+
+    try:
+        # Perform the GET request
+        response = requests.get(ingredient_url)
+        
+        # Raise an error for bad status codes
+        response.raise_for_status()  # This will raise an HTTPError for non-200 responses
+
+        # Attempt to parse the response JSON
+        data = response.json()
+        list_of_ingredients = data['ingredients'].split(', ')
+
+        return True, list_of_ingredients
+    
+    # Handle connection errors
+    except requests.exceptions.ConnectionError:
+        return False, {"error": "Failed to connect to the server. Please check your network."}
+
+    # Handle timeout errors
+    except requests.exceptions.Timeout:
+        return False, {"error": "The request timed out. Please try again later."}
+
+    # Handle non-200 status codes
+    except requests.exceptions.HTTPError as http_err:
+        return False, {"error": f"HTTP error occurred: {http_err}"}
+
+    # Handle any other requests-related errors
+    except requests.exceptions.RequestException as req_err:
+        return False, {"error": f"An error occurred while making the request: {req_err}"}
+
+    # Handle invalid JSON in the response
+    except ValueError:
+        return False, {"error": "Invalid response format. Unable to parse JSON."}
+

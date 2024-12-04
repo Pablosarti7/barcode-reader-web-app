@@ -1,10 +1,10 @@
 #internal imports
 from forms import LoginForm, RegistrationForm, SearchBarcode, SearchIngredient, EditProfile, ResetPasswordRequestForm, ResetPasswordForm
-from utils import autosuggest, clean_ingredients, create_structure
+from utils import autosuggest, create_structure
 from openfoodfacts_api import get_product_info
 from ingredients_api import get_ingredient, add_ingredient
-from products_api import get_all_products, add_product
-from openai_sdk import jsonFormater
+from products_api import add_product, get_specific_ingredient
+from openai_sdk import json_formatter
 
 # external imports
 from flask import Flask, render_template, request, jsonify, redirect, url_for, flash, abort, session
@@ -20,6 +20,7 @@ from flask_mail import Mail, Message
 import os
 import secrets
 from functools import wraps
+
 
 
 app = Flask(__name__)
@@ -132,39 +133,35 @@ def home():
             
             #####
 
-            print(ingredients_text)
-            final_list = clean_ingredients(ingredients_text)
-            ingredients_string = ", ".join(final_list)
+            boolean, product_data = get_specific_ingredient(name)
+            
+            if boolean:
+                print("In DB")
+                database_tasks = [get_ingredient(ingredient) for ingredient in product_data]
+                
+            else:
+                print("Not in DB")
+                list_of_objects = json_formatter(ingredients_text)
 
-            # Collect the name/ingredients and convert to json structure for the DB
-            json_product = create_structure(name, ingredients_string)
-            
-            # If the product doesn't exist in the DB add it
-            #TODO Are we missing anything
-            #TODO Improve accuracy of results
-            add_product(json_product)
-            
-            #####
-
-            print(f"Clean list: {final_list}")
-            # will return none if no ingredients is in db
-            # why is red not on the db when we are literally there
-            # the problem is in the ingredients clean up, there is a space left 'salt', 'red ', 'natural flavor', 'blue '
-            database_tasks = [get_ingredient(ingredient) for ingredient in final_list]
-            
-            
-            # i think the code below is not needed
-
-            openai_list = [ingredient for ingredient, result in zip(final_list, database_tasks) if result is None]
-            print(f"OpenAI: {openai_list}")
-            
-            if openai_list:
-                response = jsonFormater(openai_list)
-                print(f"Response: {response}")
-                for obj in response:
+                for obj in list_of_objects:
                     obj['name'] = obj['name'].title()
-                database_tasks.extend(response)
-                add_ingredient(response)
+                
+                add_ingredient(list_of_objects)
+                
+                # adding the product to the product DB
+                list_of_ingredients = [item['name'] for item in list_of_objects]
+                
+                ingredients_string = ", ".join(list_of_ingredients)
+                json_product = create_structure(name, ingredients_string)
+
+                add_product(json_product)
+                database_tasks = [get_ingredient(ingredient) for ingredient in list_of_ingredients]
+                print(database_tasks)
+
+            # searching the ingredients DB for the products 
+            
+            
+            # openai_list = [ingredient for ingredient, result in zip(final_list, database_tasks) if result is None]
 
             #####
             

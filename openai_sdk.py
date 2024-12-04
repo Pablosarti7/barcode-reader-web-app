@@ -3,26 +3,26 @@ import os
 from pydantic import BaseModel, Field
 from typing import List
 import json
+from pprint import pprint
 
 openai = OpenAI(api_key=os.environ.get('API_KEY'))
 
 class Ingredient(BaseModel):
-    name: str = Field(description="Please don't format this field")
-    description: str = Field(description="Small description of the ingredient eg. synthetic dye derived from petroleum or artificial sweetener gut disruptor and may act as a endocrine disruptor.")
-    rating: str = Field(description="Either 'Healthy' or 'Unhealthy' rating based on clean eating like avoiding processed foods, hormone disrupting ingredients, and gut disrupting ingredients.")
+    name: str = Field(description="This is the name of the ingredient.")
+    description: str = Field(description="Small description of the ingredient, e.g., synthetic dye derived from petroleum or artificial sweetener gut disruptor and may act as an endocrine disruptor.")
+    rating: str = Field(description="Either 'healthy', 'neutral', or 'unhealthy' rating based on clean eating like avoiding processed foods, hormone-disrupting ingredients, and gut-disrupting ingredients.")
 
 class SetIngredientsRequest(BaseModel):
-    ingredients: List[Ingredient]
+    ingredients: List[Ingredient] = Field(description="A list of ingredients, each represented with name, description, and rating.")
 
-def jsonFormater(list_of_ingredients):
-
+def json_formatter(ingredients_string):
     # Making the completion call
     completion = openai.beta.chat.completions.parse(
         model="gpt-4o-mini-2024-07-18",
         messages=[
             {"role": "system", "content": "Act like you are Bobby Parrish."},
-            {"role": "user", "content": f"Please analyze each ingredient in this list individually {list_of_ingredients}."}
-            ],
+            {"role": "user", "content": f"Please only analyze the ingredients and return a JSON list with each ingredient's details (name, description, and rating). Ingredients: {ingredients_string}"}
+        ],
         response_format=SetIngredientsRequest
     )
 
@@ -34,13 +34,10 @@ def jsonFormater(list_of_ingredients):
     else:
         # Directly parse the JSON content without re-encoding it
         data = json.loads(output_text.content)
-        
+
         # Access the list of dictionaries
         ingredients_list = data["ingredients"]
 
         # Print the result
         return ingredients_list
-
-
-
 
