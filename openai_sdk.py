@@ -3,7 +3,6 @@ import os
 from pydantic import BaseModel, Field
 from typing import List
 import json
-from pprint import pprint
 
 openai = OpenAI(api_key=os.environ.get('API_KEY'))
 

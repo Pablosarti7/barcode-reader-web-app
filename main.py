@@ -54,7 +54,6 @@ mail = Mail(app)
 db = SQLAlchemy(app)
 
 # Initialize flask-migrate when needed
-
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'login'
@@ -131,16 +130,15 @@ def home():
             ingredients_text = product_info.get(
                 'ingredients_text_en', 'Sorry no ingredients were found.')
             
-            #####
 
             boolean, product_data = get_specific_ingredient(name)
             
             if boolean:
-                print("In DB")
+                
                 database_tasks = [get_ingredient(ingredient) for ingredient in product_data]
                 
             else:
-                print("Not in DB")
+                
                 list_of_objects = json_formatter(ingredients_text)
 
                 for obj in list_of_objects:
@@ -155,15 +153,8 @@ def home():
                 json_product = create_structure(name, ingredients_string)
 
                 add_product(json_product)
-                database_tasks = [get_ingredient(ingredient) for ingredient in list_of_ingredients]
-                print(database_tasks)
+                database_tasks = [get_ingredient(ingredient) for ingredient in list_of_ingredients]       
 
-            # searching the ingredients DB for the products 
-            
-            
-            # openai_list = [ingredient for ingredient, result in zip(final_list, database_tasks) if result is None]
-
-            #####
             
             # Only if the user is logged in save the product barcode in their account
             if current_user.is_authenticated:
@@ -207,8 +198,6 @@ def search():
     return render_template('search.html', form=form, logged_in=current_user.is_authenticated)
 
 # talking to the javascript code sending requests to this url
-
-
 @app.route('/search-suggestions')
 @cache.cached(timeout=50, query_string=True)
 def search_suggestions():
