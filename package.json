@@ -8,7 +8,7 @@
     "build:css": "npx tailwindcss build src/tailwind.css -o static/css/tailwind.css",
     "watch:css": "tailwindcss -i src/tailwind.css -o static/css/tailwind --watch",
     "build": "pip install -r requirements.txt",
-    "start": "python app.py"
+    "start": "python main.py"
   },
   "keywords": [],
   "author": "",
