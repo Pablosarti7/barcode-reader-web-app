@@ -6,8 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build:css": "npx tailwindcss build src/tailwind.css -o static/css/tailwind.css",
-    "watch:css": "tailwindcss -i src/tailwind.css -o static/css/tailwind --watch",
-    "start": "gunicorn main:app"
+    "watch:css": "tailwindcss -i src/tailwind.css -o static/css/tailwind --watch"
   },
   "keywords": [],
   "author": "",
