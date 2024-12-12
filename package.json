@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build:css": "npx tailwindcss build src/tailwind.css -o static/css/tailwind.css",
     "watch:css": "tailwindcss -i src/tailwind.css -o static/css/tailwind --watch",
-    "start": "gunicorn main:app -t 0 --keep-alive 0"
+    "start": "gunicorn main:app"
   },
   "keywords": [],
   "author": "",
