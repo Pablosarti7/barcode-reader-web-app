@@ -6,7 +6,7 @@
   "scripts": {
     "build:css": "npx tailwindcss build src/tailwind.css -o static/css/tailwind.css",
     "build": "pip install -r requirements.txt && npm install && npm run build:css",
-    "start": "python main.py"
+    "start": "gunicorn main:app --bind 0.0.0.0:$PORT"
   },
   "dependencies": {
     "flowbite": "^2.4.1",
