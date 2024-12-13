@@ -1,19 +1,19 @@
 {
   "name": "barcode-reader-web-app",
   "version": "1.0.0",
-  "description": "",
+  "description": "Barcode reader app with TailwindCSS and Flask",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "build:css": "npx tailwindcss build src/tailwind.css -o static/css/tailwind.css",
-    "build": "pip install -r requirements.txt && npm run build:css",
-    "start": "python main.py"
+    "build": "pip install -r requirements.txt && npm install && npm run build:css",
+    "start": "gunicorn main:app --bind 0.0.0.0:$PORT"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "dependencies": {
     "flowbite": "^2.4.1",
     "tailwindcss": "^3.4.6"
+  },
+  "engines": {
+    "node": ">=14",
+    "npm": ">=6"
   }
 }
