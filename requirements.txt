@@ -3,7 +3,7 @@ Werkzeug==2.2.3
 Flask-WTF==1.1.1
 WTForms== 3.0.1
 openai==1.55.0
-gunicorn==20.1.0
+gunicorn==23.0.0
 psycopg2==2.9.9
 requests==2.31.0
 thefuzz==0.20.0
