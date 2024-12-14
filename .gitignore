@@ -180,3 +180,7 @@ pyrightconfig.json
 # End of https://www.toptal.com/developers/gitignore/api/python
 
 test_flask_app.py
+
+# Node stuff
+
+node_modules/
