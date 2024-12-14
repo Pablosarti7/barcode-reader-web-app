@@ -1,2 +1,12 @@
+[phases.setup]
+runtime = ["python", "nodejs"]
+
+[phases.build]
+commands = [
+    "pip install -r requirements.txt",
+    "npm install",
+    "npm run build:css"
+]
+
 [start]
 cmd = "gunicorn main:app"
