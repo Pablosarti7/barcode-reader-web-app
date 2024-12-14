@@ -2,7 +2,7 @@ import requests
 import os
 
 def get_all_ingredients():
-    url = 'https://ingredients-api-t2ja.onrender.com/all'
+    url = 'https://food-ingredients-api-production.up.railway.app/all'
 
     response = requests.get(url)
 
@@ -16,7 +16,7 @@ def get_all_ingredients():
     return possible_words_list
 
 def get_ingredient(ingredient):
-    url = 'https://ingredients-api-t2ja.onrender.com/ingredients'
+    url = 'https://food-ingredients-api-production.up.railway.app/ingredients'
     parameters = {'name': ingredient}
 
     response = requests.get(url, params=parameters)
@@ -29,7 +29,7 @@ def get_ingredient(ingredient):
         return None # We are returning none because that way we can 
     
 def add_ingredient(ingredients):
-    add_url = 'https://ingredients-api-t2ja.onrender.com/add'
+    add_url = 'https://food-ingredients-api-production.up.railway.app/add'
     headers = {
         "api-key": os.environ.get("SECRET_API_KEY"),  # Replace with your actual API key
         "Content-Type": "application/json"
