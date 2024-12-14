@@ -13,4 +13,4 @@ commands = [
 ]
 
 [start]
-cmd = "gunicorn main:app"
+cmd = "python3 -m gunicorn main:app"
