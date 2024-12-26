@@ -61,7 +61,7 @@
                 class="mb-4 text-4xl font-extrabold tracking-tight leading-none text-gray-900 md:text-5xl lg:text-6xl dark:text-black">
                 Learn about food ingredients with AI.</h1>
             <p class="mb-8 text-lg font-normal text-gray-500 lg:text-xl sm:px-16 xl:px-48 dark:text-black">
-                Make better decisions with AI instant ingredient analysis.
+                Empower your choices with AI-based ingredient insights.
             </p>
             <div class="flex flex-col mb-8 mt-8 sm:justify-center lg:content-center max-w-screen-md mx-auto">
                 <form id="myForm" method="POST">
@@ -185,24 +185,32 @@
 
             <div class="space-y-8 flex flex-col justify-center md:w-700 w-full">
 
-                <div>
-                    <div
-                        class="flex justify-center items-center mb-4 w-10 h-10 rounded-full bg-blue-200 lg:h-12 lg:w-12 dark:bg-primary-900">
+                <div class="flex flex-col sm:flex-row sm:space-x-4">
+                    <div class="flex-none sm:flex-1 p-4">
+                      <div class="flex justify-center items-center mb-4 w-10 h-10 rounded-full bg-blue-200 lg:h-12 lg:w-12 dark:bg-primary-900">
                         <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
-                            xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-                            <path stroke="currentColor" stroke-linejoin="round" stroke-width="2"
-                                d="M4 4h6v6H4V4Zm10 10h6v6h-6v-6Zm0-10h6v6h-6V4Zm-4 10h.01v.01H10V14Zm0 4h.01v.01H10V18Zm-3 2h.01v.01H7V20Zm0-4h.01v.01H7V16Zm-3 2h.01v.01H4V18Zm0-4h.01v.01H4V14Z" />
-                            <path stroke="currentColor" stroke-linejoin="round" stroke-width="2"
-                                d="M7 7h.01v.01H7V7Zm10 10h.01v.01H17V17Z" />
+                          xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                          <path stroke="currentColor" stroke-linejoin="round" stroke-width="2"
+                            d="M4 4h6v6H4V4Zm10 10h6v6h-6v-6Zm0-10h6v6h-6V4Zm-4 10h.01v.01H10V14Zm0 4h.01v.01H10V18Zm-3 2h.01v.01H7V20Zm0-4h.01v.01H7V16Zm-3 2h.01v.01H4V18Zm0-4h.01v.01H4V14Z" />
+                          <path stroke="currentColor" stroke-linejoin="round" stroke-width="2"
+                            d="M7 7h.01v.01H7V7Zm10 10h.01v.01H17V17Z" />
                         </svg>
-                    </div>
-                    <h3 class="mb-2 text-xl font-bold dark:text-black">Scan or Type</h3>
-                    <p class="text-gray-500 dark:text-black">
+                      </div>
+                      <h3 class="mb-2 text-xl font-bold dark:text-black">Scan or Type</h3>
+                      <p class="text-gray-500 dark:text-black">
                         Use your phone to scan a food item's barcode or simply type its barcode.
-                    </p>
-                </div>
+                      </p>
+                    </div>
+                    <div class="flex-none sm:flex-1 p-4">
+                      <img src="/static/assets/food-scanner.png" alt="Food Scanner">
+                    </div>
+                  </div>                  
 
-                <div>
+                <div class="flex flex-col sm:flex-row sm:space-x-4">
+                    <div class="flex-none sm:flex-1 p-4">
+                        <img src="/static/assets/food-information.png" alt="">
+                    </div>
+                    <div class="flex-none sm:flex-1 p-4">
                     <div
                         class="flex justify-center items-center mb-4 w-10 h-10 rounded-full bg-blue-200 lg:h-12 lg:w-12 dark:bg-primary-900">
                         <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
@@ -222,6 +230,7 @@
                         
                         No jargon, just clear, simple guidance you can trust.
                     </p>
+                    </div>
                 </div>
 
             </div>

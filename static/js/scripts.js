@@ -126,7 +126,7 @@ document.getElementById('startbutton').addEventListener('click', function() {
     referenceRect.style.border = '3px solid red';
     referenceRect.style.width = '80%';
     referenceRect.style.height = '50%';
-    referenceRect.style.zIndex = '1000';
+    referenceRect.style.zIndex = '1000';                                                                                                                        
     scannerContainer.appendChild(referenceRect);
 
     // Add touch-to-focus functionality
@@ -136,7 +136,12 @@ document.getElementById('startbutton').addEventListener('click', function() {
             var capabilities = videoTrack.getCapabilities();
             if (capabilities.focusMode) {
                 videoTrack.applyConstraints({
-                    advanced: [{ focusMode: 'auto', pointsOfInterest: [{ x: event.offsetX / scannerContainer.clientWidth, y: event.offsetY / scannerContainer.clientHeight }] }]
+                    advanced: [{ focusMode: 'auto', 
+                        pointsOfInterest: [{ 
+                            x: event.offsetX / scannerContainer.clientWidth, 
+                            y: event.offsetY / scannerContainer.clientHeight 
+                        }] 
+                    }]
                 });
             }
         }

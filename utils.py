@@ -22,6 +22,14 @@ def create_structure(name: str, ingredients: str):
     return json.dumps({"name": name, "ingredients": ingredients})
 
 
+def split_string_advanced(input_string):
+    # Match items with optional parentheses that might contain commas
+    pattern = r'([^,(]+(?:\([^)]*\))?[^,]*)'
+    matches = re.findall(pattern, input_string)
+    # Clean up any leading/trailing spaces
+    return [match.strip() for match in matches if match.strip()]
+
+
 # def clean_ingredient(ingredient):
 #     # Remove parentheses and their contents
 #     ingredient = re.sub(r'\(.*?\)', '', ingredient)

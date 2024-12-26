@@ -1,5 +1,6 @@
 import requests
 import os
+from utils import split_string_advanced
 
 def get_all_products():
     url = "https://food-products-api-production.up.railway.app/all-products"
@@ -95,8 +96,10 @@ def get_specific_ingredient(product_name):
 
         # Attempt to parse the response JSON
         data = response.json()
-        list_of_ingredients = data['ingredients'].split(', ')
-
+        
+        string_from_data = data['ingredients']
+        list_of_ingredients = split_string_advanced(string_from_data)
+        
         return True, list_of_ingredients
     
     # Handle connection errors

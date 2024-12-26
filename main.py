@@ -16,7 +16,7 @@ from authlib.integrations.flask_client import OAuth  # type: ignore
 from itsdangerous import URLSafeTimedSerializer
 from flask_mail import Mail, Message
 
-# standard python module
+# standard python module imports
 import os
 import secrets
 from functools import wraps
@@ -130,7 +130,7 @@ def home():
             ingredients_text = product_info.get(
                 'ingredients_text_en', 'Sorry no ingredients were found.')
             
-
+            
             boolean, product_data = get_specific_ingredient(name)
             
             if boolean:
@@ -150,6 +150,7 @@ def home():
                 list_of_ingredients = [item['name'] for item in list_of_objects]
                 
                 ingredients_string = ", ".join(list_of_ingredients)
+                
                 json_product = create_structure(name, ingredients_string)
 
                 add_product(json_product)
@@ -494,5 +495,5 @@ def internal_server_error(e):
     return render_template('500.html'), 500
 
 
-if __name__ == "__main__":
-    print("This script should be run with a WSGI server like Gunicorn.")
+# if __name__ == "__main__":
+#     app.run(debug=True)

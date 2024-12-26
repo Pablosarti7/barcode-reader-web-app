@@ -18,7 +18,7 @@ def get_all_ingredients():
 def get_ingredient(ingredient):
     url = 'https://food-ingredients-api-production.up.railway.app/ingredients'
     parameters = {'name': ingredient}
-
+    
     response = requests.get(url, params=parameters)
 
     data = response.json()
@@ -26,7 +26,7 @@ def get_ingredient(ingredient):
     if 'ingredient' in data:
         return data['ingredient'][0]
     else:
-        return None # We are returning none because that way we can 
+        return None
     
 def add_ingredient(ingredients):
     add_url = 'https://food-ingredients-api-production.up.railway.app/add'
@@ -38,9 +38,9 @@ def add_ingredient(ingredients):
     # If a single ingredient is passed, wrap it in a list
     if isinstance(ingredients, dict):
         ingredients = [ingredients]
-
+    
     response = requests.post(add_url, headers=headers, json=ingredients)
-
+    
     # Error handling
     try:
         response.raise_for_status()
