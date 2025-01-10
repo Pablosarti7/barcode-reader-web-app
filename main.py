@@ -5,6 +5,7 @@ from openfoodfacts_api import get_product_info
 from ingredients_api import get_ingredient, add_ingredient
 from products_api import add_product, get_specific_ingredient
 from openai_sdk import json_formatter
+from openai_structure_data import product_info_json
 
 # external imports
 from flask import Flask, render_template, request, jsonify, redirect, url_for, flash, abort, session
@@ -152,8 +153,13 @@ def home():
                 ingredients_string = ", ".join(list_of_ingredients)
                 
                 json_product = create_structure(name, ingredients_string)
+                
+                
+                product_information_json = product_info_json(json_product)
+                
+                
+                add_product(product_information_json)
 
-                add_product(json_product)
                 database_tasks = [get_ingredient(ingredient) for ingredient in list_of_ingredients]       
 
             
@@ -495,5 +501,5 @@ def internal_server_error(e):
     return render_template('500.html'), 500
 
 
-# if __name__ == "__main__":
-#     app.run(debug=True)
+if __name__ == "__main__":
+    app.run(debug=True)

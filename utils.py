@@ -19,7 +19,7 @@ def autosuggest(prefix):
 
 # Simple function to create a dictionary structure
 def create_structure(name: str, ingredients: str):
-    return json.dumps({"name": name, "ingredients": ingredients})
+    return {"name": name, "ingredients": ingredients}
 
 
 def split_string_advanced(input_string):
