@@ -3,7 +3,7 @@ import os
 from utils import split_string_advanced
 
 def get_all_products():
-    url = "https://food-products-api-production.up.railway.app/all-products"
+    url = "https://food-products-api-production-8b0b.up.railway.app/all-products"
 
     try:
         # Perform the GET request
@@ -41,7 +41,7 @@ def get_all_products():
 PRODUCTS_API_KEY = os.environ.get('PRODUCTS_API_KEY')
 
 def add_product(products):
-    add_url = 'https://food-products-api-production.up.railway.app/add-product'
+    add_url = 'https://food-products-api-production-8b0b.up.railway.app/add-product'
     headers = {
         "Content-Type": "application/json",
         "X-API-Key": PRODUCTS_API_KEY
@@ -85,7 +85,7 @@ def add_product(products):
 
 # New function to get a specific ingredient
 def get_specific_ingredient(product_name):
-    ingredient_url = f"https://food-products-api-production.up.railway.app/product/{product_name}"
+    ingredient_url = f"https://food-products-api-production-8b0b.up.railway.app/product/{product_name}"
 
     try:
         # Perform the GET request
