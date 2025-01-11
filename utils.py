@@ -29,26 +29,3 @@ def split_string_advanced(input_string):
     # Clean up any leading/trailing spaces
     return [match.strip() for match in matches if match.strip()]
 
-
-# def clean_ingredient(ingredient):
-#     # Remove parentheses and their contents
-#     ingredient = re.sub(r'\(.*?\)', '', ingredient)
-#     # Trim whitespace
-#     ingredient = ingredient.strip()
-#     # Remove trailing special characters
-#     ingredient = re.sub(r'[()\[\]]', '', ingredient)
-
-#     return ingredient.lower()
-
-
-# def clean_ingredients(input_string):
-#     # Splitting the words by the chosen characters
-#     split_string = re.split(',|\.|:', input_string)
-#     # Clean each ingredient
-#     clean_ingredients = [clean_ingredient(
-#         ingredient) for ingredient in split_string if ingredient]
-#     # Getting rid of the list item with % signs
-#     filtered_list = [
-#         item for item in clean_ingredients if '%' not in item and 'contains' not in item]
-
-#     return filtered_list

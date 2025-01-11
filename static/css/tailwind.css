@@ -1578,6 +1578,11 @@ input[type="range"]::-ms-fill-lower {
   background-color: rgb(249 250 251 / var(--tw-bg-opacity));
 }
 
+.bg-gray-500 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(107 114 128 / var(--tw-bg-opacity));
+}
+
 .bg-gray-600 {
   --tw-bg-opacity: 1;
   background-color: rgb(75 85 99 / var(--tw-bg-opacity));
@@ -2353,10 +2358,6 @@ input[type="range"]::-ms-fill-lower {
 
   .sm\:flex-row {
     flex-direction: row;
-  }
-
-  .sm\:flex-col {
-    flex-direction: column;
   }
 
   .sm\:justify-center {

@@ -32,7 +32,7 @@
 
 
                     </h1>
-                    <form class="space-y-4 md:space-y-6" method="POST" action="{{ url_for('register') }}">
+                    <!-- <form class="space-y-4 md:space-y-6" method="POST" action="{{ url_for('register') }}">
                         {{ form.hidden_tag() }}
                         <div>
                             {{ form.name.label(class="block mb-2 text-sm font-medium text-gray-900 dark:text-white") }}
@@ -88,7 +88,7 @@
                         </p>
                     </form>
 
-                    <p class="text-center">or</p>
+                    <p class="text-center">or</p> -->
 
 
                     <a href="{{ url_for('googlelogin') }}"
@@ -101,6 +101,11 @@
                         </svg>
                         <span>Continue with Google</span>
                     </a>
+                    <p class="text-sm font-light text-gray-500 dark:text-gray-400">
+                        Already have an account? <a href="{{ url_for('login') }}"
+                            class="font-medium text-primary-600 hover:underline dark:text-primary-500">Login
+                            here</a>
+                    </p>
 
                 </div>
             </div>
