@@ -8,10 +8,11 @@
     <title>Settings Page</title>
 </head>
 
-<body class="bg-gray-50 dark:bg-gray-900 h-screen flex flex-col">
+<body class="bg-gray-100 dark:bg-gray-900 h-screen flex flex-col">
     {% include "navigation.html" %}
+    {% if logged_in %}
     {% include "mobilesidenavbar.html" %}
-
+    {% endif %}
     <div class="flex justify-center flex-grow">
         <div class="flex container py-6 px-4 mx-auto max-w-screen-xl">
             {% if logged_in %}
@@ -50,7 +51,7 @@
                             <p class="text-gray-600 dark:text-gray-300 mb-4">This is your personal account where you can
                                 store all of your favorite foods information and access it when ever you need it.
                                 We will be adding more features in the future and we are open for suggestions, just send
-                                us an email @ support@ingredientadvisor.com.</p>
+                                us an email at support@ingredientadvisor.com.</p>
 
                             {% elif subsection == 'scan_history' %}
                             <h2 class="text-lg font-medium text-gray-900 dark:text-white mb-4">My Scan History</h2>
@@ -201,7 +202,7 @@
                                             dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500")
                                             }}
                                         </div>
-                                        <div class="w-full">
+                                        <!-- <div class="w-full">
                                             {{ form.email.label(class="block mb-2 text-sm font-medium text-gray-900
                                             dark:text-white") }}
                                             {{ form.email(placeholder="Users Email",value=users_email, class="bg-gray-50
@@ -212,6 +213,17 @@
                                             dark:placeholder-gray-400
                                             dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500")
                                             }}
+                                        </div> -->
+                                        <div class="w-full">
+                                            <label for="brand"
+                                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Email</label>
+                                            <input type="text" id="disabled-input" aria-label="disabled input" class="bg-gray-50
+                                            border border-gray-300
+                                            text-gray-900 text-sm rounded-lg focus:ring-primary-600
+                                            focus:border-primary-600
+                                            block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600
+                                            dark:placeholder-gray-400
+                                            dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Secret Email" disabled>
                                         </div>
                                         <div class="w-full">
                                             <label for="brand"

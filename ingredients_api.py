@@ -7,13 +7,8 @@ def get_all_ingredients():
     response = requests.get(url)
 
     data = response.json()
-    
-    possible_words_list = []
-    
-    for item in data['ingredients']:
-        possible_words_list.append(item['name'].lower())
 
-    return possible_words_list
+    return data
 
 def get_ingredient(ingredient):
     url = 'https://food-ingredients-api-production.up.railway.app/ingredients'

@@ -37,24 +37,25 @@
     </style>
 </head>
 
-<body class="bg-white text-black">
-    
+<body class="bg-gray-100 text-black">
+
     {% include "navigation.html" %}
 
-    <section class="bg-gray-50 dark:bg-gray-900">
-        <div class="py-8 px-4 mx-auto max-w-screen-xl text-center lg:py-16 lg:px-12">
+    <section class="bg-gray-100 dark:bg-gray-900">
+        <div class="py-8 px-4 mx-auto max-w-screen-xl text-center lg:py-28 lg:px-12">
             <!-- Mobile Try Button -->
             <div class="block lg:hidden">
-            <a href="#" id="startbutton"
-                class="inline-flex justify-between items-center py-1 px-1 pr-4 mb-7 text-sm text-gray-700 bg-gray-100 rounded-full dark:bg-gray-300 dark:text-black hover:bg-gray-200"
-                role="alert">
-                <span class="text-xs bg-blue-600 rounded-full text-white px-4 py-1.5 mr-3">Try</span> <span
-                    class="text-sm font-medium">Scanning with your mobile device.</span>
-                <svg class="ml-2 w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                    <path fill-rule="evenodd"
-                        d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                        clip-rule="evenodd"></path>
-                </svg>
+                <a href="#" id="startbutton"
+                    class="inline-flex justify-between items-center py-1 px-1 pr-4 mb-7 text-sm text-gray-700 bg-gray-200 rounded-full dark:bg-gray-200 dark:text-black hover:bg-gray-200"
+                    role="alert">
+                    <span class="text-xs bg-blue-600 rounded-full text-white px-4 py-1.5 mr-3">Try</span> <span
+                        class="text-sm font-medium">Scanning with your mobile device.</span>
+                    <svg class="ml-2 w-5 h-5" fill="currentColor" viewBox="0 0 20 20"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd"
+                            d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                            clip-rule="evenodd"></path>
+                    </svg>
                 </a>
             </div>
             <h1
@@ -77,7 +78,7 @@
                         </div>
                         {{ form.hidden_tag() }}
                         {{ form.ingredients(class="block w-full p-4 ps-10 text-sm text-gray-900 border border-gray-300
-                        rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-300
+                        rounded-lg bg-gray-200 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-200
                         dark:placeholder-gray-400 dark:text-black dark:focus:ring-blue-500 dark:focus:border-blue-500")
                         }}
                         {{ form.submit(class="text-white absolute end-2.5 bottom-2.5 bg-blue-700 hover:bg-blue-800
@@ -97,7 +98,7 @@
         class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
         <div class="relative p-4 w-full max-w-2xl max-h-full">
             <!-- Modal content -->
-            <div class="relative bg-white rounded-lg shadow dark:bg-gray-300">
+            <div class="relative bg-gray-200 rounded-lg shadow dark:bg-gray-200">
                 <!-- Modal header -->
                 <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
                     <h3 class="text-xl font-semibold text-gray-900 dark:text-black">
@@ -121,10 +122,10 @@
             </div>
         </div>
     </div>
-    
+
     <!-- Benefits Section -->
-    <section class="bg-gray-50 dark:bg-gray-900">
-        <div class="py-8 px-4 mx-auto max-w-screen-xl sm:py-16 lg:px-6">
+    <section class="bg-gray-200 dark:bg-gray-900">
+        <div class="py-8 px-4 mx-auto max-w-screen-xl lg:py-28 lg:px-6">
             <div class="mb-8 lg:mb-16 flex justify-center">
                 <h2 class="mb-4 text-4xl tracking-tight font-extrabold text-gray-900 dark:text-black">Benefits</h2>
             </div>
@@ -141,7 +142,9 @@
                         </svg>
                     </div>
                     <h3 class="mb-2 text-xl font-bold dark:text-black">Informed Eating</h3>
-                    <p class="text-gray-500 dark:text-black">Leverage the power of AI to decode your food. Modern foods often contain processed ingredients that are hard to understand. Use AI to instantly analyze each ingredient and provides insights, helping you make smarter choices.
+                    <p class="text-gray-500 dark:text-black">Leverage the power of AI to decode your food. Modern foods
+                        often contain processed ingredients that are hard to understand. Use AI to instantly analyze
+                        each ingredient and provides insights, helping you make smarter choices.
                     </p>
                 </div>
                 <div>
@@ -154,8 +157,10 @@
                             </path>
                         </svg>
                     </div>
-                    <h3 class="mb-2 text-xl font-bold dark:text-black">Healthier Choices</h3> 
-                    <p class="text-gray-500 dark:text-black">Using AI, our tool evaluates ingredients to identify and suggest healthier alternatives for you. No need to google or sift through articles—its time for AI to guide your grocery decisions.
+                    <h3 class="mb-2 text-xl font-bold dark:text-black">Healthier Choices</h3>
+                    <p class="text-gray-500 dark:text-black">Using AI, our tool evaluates ingredients to identify and
+                        suggest healthier alternatives for you. No need to google or sift through articles—its time for
+                        AI to guide your grocery decisions.
                     </p>
                 </div>
                 <div>
@@ -168,7 +173,9 @@
                         </svg>
                     </div>
                     <h3 class="mb-2 text-xl font-bold dark:text-black">Diet Friendly</h3>
-                    <p class="text-gray-500 dark:text-black">Our tool doesn’t impose diets or restrictions. Instead, it empowers you with AI-driven insights into what you’re consuming, giving you the freedom to make informed decisions.
+                    <p class="text-gray-500 dark:text-black">Our tool doesn’t impose diets or restrictions. Instead, it
+                        empowers you with AI-driven insights into what you’re consuming, giving you the freedom to make
+                        informed decisions.
                     </p>
                 </div>
             </div>
@@ -176,7 +183,7 @@
     </section>
 
     <!-- How it Works Section -->
-    <section class="bg-gray-50 dark:bg-gray-900 w-full flex justify-center">
+    <section class="bg-gray-100 dark:bg-gray-900 w-full flex justify-center">
 
         <div class="py-12 px-4 mx-auto max-w-screen-xl sm:py-20 lg:px-6">
             <div class="mb-8 lg:mb-16 flex justify-center">
@@ -187,49 +194,54 @@
 
                 <div class="flex flex-col sm:flex-row sm:space-x-4">
                     <div class="flex-none sm:flex-1 p-4">
-                      <div class="flex justify-center items-center mb-4 w-10 h-10 rounded-full bg-blue-200 lg:h-12 lg:w-12 dark:bg-primary-900">
-                        <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
-                          xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-                          <path stroke="currentColor" stroke-linejoin="round" stroke-width="2"
-                            d="M4 4h6v6H4V4Zm10 10h6v6h-6v-6Zm0-10h6v6h-6V4Zm-4 10h.01v.01H10V14Zm0 4h.01v.01H10V18Zm-3 2h.01v.01H7V20Zm0-4h.01v.01H7V16Zm-3 2h.01v.01H4V18Zm0-4h.01v.01H4V14Z" />
-                          <path stroke="currentColor" stroke-linejoin="round" stroke-width="2"
-                            d="M7 7h.01v.01H7V7Zm10 10h.01v.01H17V17Z" />
-                        </svg>
-                      </div>
-                      <h3 class="mb-2 text-xl font-bold dark:text-black">Scan or Type</h3>
-                      <p class="text-gray-500 dark:text-black">
-                        Use your phone to scan a food item's barcode or simply type its barcode.
-                      </p>
+                        <div
+                            class="flex justify-center items-center mb-4 w-10 h-10 rounded-full bg-blue-200 lg:h-12 lg:w-12 dark:bg-primary-900">
+                            <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
+                                xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
+                                viewBox="0 0 24 24">
+                                <path stroke="currentColor" stroke-linejoin="round" stroke-width="2"
+                                    d="M4 4h6v6H4V4Zm10 10h6v6h-6v-6Zm0-10h6v6h-6V4Zm-4 10h.01v.01H10V14Zm0 4h.01v.01H10V18Zm-3 2h.01v.01H7V20Zm0-4h.01v.01H7V16Zm-3 2h.01v.01H4V18Zm0-4h.01v.01H4V14Z" />
+                                <path stroke="currentColor" stroke-linejoin="round" stroke-width="2"
+                                    d="M7 7h.01v.01H7V7Zm10 10h.01v.01H17V17Z" />
+                            </svg>
+                        </div>
+                        <h3 class="mb-2 text-xl font-bold dark:text-black">Scan or Type</h3>
+                        <p class="text-gray-500 dark:text-black">
+                            Use your phone to scan a food item's barcode or simply type its barcode. If scanning wait for a couple of seconds for the camera to fully capture the barcode. Also if needed tap on the screen to focus the camera. Once you scanned you should see the data.
+                        </p>
                     </div>
                     <div class="flex-none sm:flex-1 p-4">
-                      <img src="/static/assets/food-scanner.png" alt="Food Scanner">
+                        <img src="/static/assets/food-scanner.png" alt="Food Scanner">
                     </div>
-                  </div>                  
+                </div>
 
                 <div class="flex flex-col sm:flex-row sm:space-x-4">
                     <div class="flex-none sm:flex-1 p-4">
                         <img src="/static/assets/food-information.png" alt="">
                     </div>
                     <div class="flex-none sm:flex-1 p-4">
-                    <div
-                        class="flex justify-center items-center mb-4 w-10 h-10 rounded-full bg-blue-200 lg:h-12 lg:w-12 dark:bg-primary-900">
-                        <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
-                            xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M10 3v4a1 1 0 0 1-1 1H5m8 7.5 2.5 2.5M19 4v16a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V7.914a1 1 0 0 1 .293-.707l3.914-3.914A1 1 0 0 1 9.914 3H18a1 1 0 0 1 1 1Zm-5 9.5a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0Z" />
-                        </svg>
-                    </div>
-                    <h3 class="mb-2 text-xl font-bold dark:text-black">Learn about each ingredient</h3>
-                    <p class="text-gray-500 dark:text-black">AI explains what each ingredient is and provides a health rating between
-                        
-                         healthy,
-                        
-                         neutral, and
-                        
-                         unhealthy.
-                        
-                        No jargon, just clear, simple guidance you can trust.
-                    </p>
+                        <div
+                            class="flex justify-center items-center mb-4 w-10 h-10 rounded-full bg-blue-200 lg:h-12 lg:w-12 dark:bg-primary-900">
+                            <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
+                                xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
+                                viewBox="0 0 24 24">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                    stroke-width="2"
+                                    d="M10 3v4a1 1 0 0 1-1 1H5m8 7.5 2.5 2.5M19 4v16a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V7.914a1 1 0 0 1 .293-.707l3.914-3.914A1 1 0 0 1 9.914 3H18a1 1 0 0 1 1 1Zm-5 9.5a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0Z" />
+                            </svg>
+                        </div>
+                        <h3 class="mb-2 text-xl font-bold dark:text-black">Learn about each ingredient</h3>
+                        <p class="text-gray-500 dark:text-black">AI explains what each ingredient is and provides a
+                            health rating between
+
+                            healthy,
+
+                            neutral, and
+
+                            unhealthy.
+
+                            No jargon, just clear, simple guidance you can trust.
+                        </p>
                     </div>
                 </div>
 
@@ -239,7 +251,7 @@
 
     </section>
 
-    <section class="bg-gradient-to-r from-sky-200 ... dark:bg-gray-900">
+    <section class=" bg-gray-200 dark:bg-gray-900">
         <div class="py-32 px-4 mx-auto max-w-screen-xl lg:px-6">
             <div class="mx-auto max-w-screen-sm text-center">
                 <h2 class="mb-4 text-4xl tracking-tight font-extrabold leading-tight text-black dark:text-black">
@@ -258,150 +270,158 @@
     </section>
 
     <!-- Ingredients modal -->
-    <section>
-        
-        <div class="block space-y-4 md:flex md:space-y-0 md:space-x-4 rtl:space-x-reverse">
-            <!-- Large Modal -->
-            <div id="large-modal" tabindex="-1"
-                class="fixed top-0 left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
-                <div class="relative w-full max-w-4xl max-h-full">
-                    <!-- Modal content -->
-                    <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
-                        <!-- Modal header -->
-                        <div
-                            class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
-                            <h3 class="text-xl font-bold text-gray-900 dark:text-white">
-                                Ingredients
-                            </h3>
-                            <button type="button"
-                                class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
-                                data-modal-hide="large-modal">
-                                <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
-                                    viewBox="0 0 14 14">
-                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                        stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
-                                </svg>
-                                <span class="sr-only">Close modal</span>
-                            </button>
-                        </div>
-                        <!-- Modal body -->
-                        <div class="p-4 md:p-5 space-y-4">
-                            <div>
-                                <h5 class="text-xl capitalize font-bold">
-                                    {% if ingredients_list %}
-                                    {{ name }}
-                                    {% elif ingredients_list == [] %}
-                                    Sorry no information available
-                                    {% endif %}
-                                </h5>
-                                <h5 class="text-xl capitalize">
-                                    {% with messages = get_flashed_messages() %}
-                                    {% if messages %}
-                                    {% for message in messages %}
-                                    {{ message }}
-                                    {% endfor %}
-                                    {% endif %}
-                                    {% endwith %}
-                                </h5>
-                            </div>
-                            <ul class="list-none">
+
+    <div class="block space-y-4 md:flex md:space-y-0 md:space-x-4 rtl:space-x-reverse">
+        <!-- Large Modal -->
+        <div id="large-modal" tabindex="-1"
+            class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 overflow-x-hidden overflow-y-auto">
+            <div class="relative w-full max-w-4xl bg-gray-200 rounded-lg shadow dark:bg-gray-700">
+                <!-- Modal content -->
+                <div class="relative bg-gray-200 rounded-lg shadow dark:bg-gray-700">
+                    <!-- Modal header -->
+                    <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
+                        <h3 class="text-xl font-bold text-gray-900 dark:text-white">
+                            Ingredients
+                        </h3>
+                        <button type="button"
+                            class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                            data-modal-hide="large-modal">
+                            <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                viewBox="0 0 14 14">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                    stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                            </svg>
+                            <span class="sr-only">Close modal</span>
+                        </button>
+                    </div>
+                    <!-- Modal body -->
+                    <div class="p-4 md:p-5 space-y-4">
+                        <div>
+                            <h5 class="text-xl capitalize font-bold">
                                 {% if ingredients_list %}
-                                <script>
-                                    window.ingredientsListPresent = true;
-                                </script>
+                                {{ name }}
+                                {% elif ingredients_list == [] %}
+                                Sorry no information available
                                 {% endif %}
-
-                                {% for ingredient in ingredients_list %}
-                                <!-- Healthy rating will show green background -->
-                                {% if ingredient['rating'] == "healthy" %}
-                                {% if ingredient['name'] %}
-                                <li class="bg-green-200 p-2 mb-2 rounded-lg">
-                                    
-                                    <p class="font-bold">{{ ingredient['name'] }}:</p>
-                                    <p>{{ ingredient['description'] }}</p>
-                                
-                                </li>
-                                {% endif %}
-                                <!-- Neutral rating will show yellow background -->
-                                {% elif ingredient['rating'] == "neutral" %}
-                                {% if ingredient['name'] %}
-                                <li class="bg-yellow-200 p-2 mb-2 rounded-lg">
-                                    
-                                    <p class="font-bold">{{ ingredient['name'] }}:</p>
-                                    <p>{{ ingredient['description'] }}</p>
-                                
-                                </li>
-                                {% endif %}
-                                <!-- Anything else besides healthy rating will show yellow background -->
-                                {% else %}
-                                {% if ingredient['name'] %}
-                                <li class="bg-red-200 p-2 mb-2 rounded-lg">
-                                    
-                                    <p class="font-bold">{{ ingredient['name'] }}:</p>
-                                    <p>{{ ingredient['description'] }}</p>
-                                
-                                </li>
-                                {% endif %}
-                                {% endif %}
-
-                                {% endfor %}
-                            </ul>
-
-                            <h5 class="text-xl font-bold mb-2">
-                                Nutriscore
                             </h5>
-                            {% if ingredients_list %}
-                            {% set most_recent_year = nutriscore.keys() | max %}
-                            {% set most_recent_nutriscore = nutriscore[most_recent_year] %}
-                            {% set grade = most_recent_nutriscore.grade %}
-
-                            <div>
-                                {% if grade == 'a' %}
-                                <h5 class="capitalize">Nutriscore grade {{ grade }}:</h5>
-                                <p>
-                                    Indicates the product has high nutritional quality. It typically has low levels of
-                                    sugars, saturated fats, and salt, and high levels of fruits, vegetables, fibers, and
-                                    proteins.
-                                </p>
-                                {% elif grade == 'b' %}
-                                <h5 class="capitalize">Nutriscore grade {{ grade }}:</h5>
-                                <p>
-                                    Indicates the product has good nutritional quality, but not as high as grade A.
-                                </p>
-                                {% elif grade == 'c' %}
-                                <h5 class="capitalize">Nutriscore grade {{ grade }}:</h5>
-                                <p>
-                                    Indicates the product has moderate nutritional quality. It is an average score,
-                                    suggesting a balance of beneficial and less beneficial nutrients.
-                                </p>
-                                {% elif grade == 'd' %}
-                                <h5 class="capitalize">Nutriscore grade {{ grade }}:</h5>
-                                <p>
-                                    Indicates the product has lower nutritional quality. It generally has higher levels
-                                    of
-                                    less beneficial nutrients like sugars, saturated fats, and salt.
-                                </p>
-                                {% elif grade == 'e' %}
-                                <h5 class="capitalize">Nutriscore grade {{ grade }}:</h5>
-                                <p>
-                                    Indicates the product has the lowest nutritional quality, with high levels of
-                                    sugars,
-                                    saturated fats, and salt.
-                                </p>
-                                {% else %}
-                                <p>
-                                    No matching grade.
-                                </p>
+                            <h5 class="text-xl capitalize">
+                                {% with messages = get_flashed_messages() %}
+                                {% if messages %}
+                                {% for message in messages %}
+                                {{ message }}
+                                {% endfor %}
                                 {% endif %}
-                            </div>
+                                {% endwith %}
+                            </h5>
+                        </div>
+                        <ul class="list-none">
+                            {% if ingredients_list %}
+                            <script>
+                                window.ingredientsListPresent = true;
+                            </script>
+                            {% endif %}
+
+                            {% for ingredient in ingredients_list %}
+                            <!-- Healthy rating will show green background -->
+                            {% if ingredient['rating'] == "healthy" %}
+                            {% if ingredient['name'] %}
+                            <li class="bg-green-200 p-2 mb-2 rounded-lg">
+
+                                <p class="font-bold">{{ ingredient['name'] }}:</p>
+                                <p>{{ ingredient['description'] }}</p>
+
+                            </li>
+                            {% endif %}
+                            <!-- Neutral rating will show yellow background -->
+                            {% elif ingredient['rating'] == "neutral" %}
+                            {% if ingredient['name'] %}
+                            <li class="bg-yellow-200 p-2 mb-2 rounded-lg">
+
+                                <p class="font-bold">{{ ingredient['name'] }}:</p>
+                                <p>{{ ingredient['description'] }}</p>
+
+                            </li>
+                            {% endif %}
+                            <!-- Anything else besides healthy rating will show yellow background -->
+                            {% else %}
+                            {% if ingredient['name'] %}
+                            <li class="bg-red-200 p-2 mb-2 rounded-lg">
+
+                                <p class="font-bold">{{ ingredient['name'] }}:</p>
+                                <p>{{ ingredient['description'] }}</p>
+
+                            </li>
+                            {% endif %}
+                            {% endif %}
+
+                            {% endfor %}
+                        </ul>
+                        <h5 class="text-xl font-bold mb-2">
+                            Recommendations
+                        </h5>
+                        <div>
+                            {% for product_recommendation in testing %}
+                            <h3>
+
+                                {{product_recommendation}}
+
+                            </h3>
+                            {% endfor %}
+                        </div>
+                        <h5 class="text-xl font-bold mb-2">
+                            Nutriscore
+                        </h5>
+                        {% if ingredients_list %}
+                        {% set most_recent_year = nutriscore.keys() | max %}
+                        {% set most_recent_nutriscore = nutriscore[most_recent_year] %}
+                        {% set grade = most_recent_nutriscore.grade %}
+
+                        <div>
+                            {% if grade == 'a' %}
+                            <h5 class="capitalize">Nutriscore grade {{ grade }}:</h5>
+                            <p>
+                                Indicates the product has high nutritional quality. It typically has low levels of
+                                sugars, saturated fats, and salt, and high levels of fruits, vegetables, fibers, and
+                                proteins.
+                            </p>
+                            {% elif grade == 'b' %}
+                            <h5 class="capitalize">Nutriscore grade {{ grade }}:</h5>
+                            <p>
+                                Indicates the product has good nutritional quality, but not as high as grade A.
+                            </p>
+                            {% elif grade == 'c' %}
+                            <h5 class="capitalize">Nutriscore grade {{ grade }}:</h5>
+                            <p>
+                                Indicates the product has moderate nutritional quality. It is an average score,
+                                suggesting a balance of beneficial and less beneficial nutrients.
+                            </p>
+                            {% elif grade == 'd' %}
+                            <h5 class="capitalize">Nutriscore grade {{ grade }}:</h5>
+                            <p>
+                                Indicates the product has lower nutritional quality. It generally has higher levels
+                                of
+                                less beneficial nutrients like sugars, saturated fats, and salt.
+                            </p>
+                            {% elif grade == 'e' %}
+                            <h5 class="capitalize">Nutriscore grade {{ grade }}:</h5>
+                            <p>
+                                Indicates the product has the lowest nutritional quality, with high levels of
+                                sugars,
+                                saturated fats, and salt.
+                            </p>
+                            {% else %}
+                            <p>
+                                No matching grade.
+                            </p>
                             {% endif %}
                         </div>
+                        {% endif %}
                     </div>
                 </div>
             </div>
         </div>
-        
-    </section>
+    </div>
+
 
     <!-- Footer -->
     {% include 'footer.html' %}

@@ -6,6 +6,7 @@ from ingredients_api import get_ingredient, add_ingredient
 from products_api import add_product, get_specific_ingredient
 from openai_sdk import json_formatter
 from openai_structure_data import product_info_json
+from food_recommender import recommend_healthier_food
 
 # external imports
 from flask import Flask, render_template, request, jsonify, redirect, url_for, flash, abort, session
@@ -137,7 +138,7 @@ def home():
             if boolean:
                 
                 database_tasks = [get_ingredient(ingredient) for ingredient in product_data]
-                
+                testing = recommend_healthier_food(name)
             else:
                 
                 list_of_objects = json_formatter(ingredients_text)
@@ -182,7 +183,7 @@ def home():
                     db.session.commit()
 
             return render_template('index.html', form=form, name=name, ingredients_list=database_tasks,
-                                   nutriscore=nutriscore, logged_in=current_user.is_authenticated)
+                                   nutriscore=nutriscore, logged_in=current_user.is_authenticated, testing=testing)
         else:
             flash('Sorry product key not found in data.')
             return redirect(url_for('home'))
