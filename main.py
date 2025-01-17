@@ -162,7 +162,7 @@ def home():
                 add_product(product_information_json)
 
                 database_tasks = [get_ingredient(ingredient) for ingredient in list_of_ingredients]       
-
+                testing = recommend_healthier_food(name)
             
             # Only if the user is logged in save the product barcode in their account
             if current_user.is_authenticated:
