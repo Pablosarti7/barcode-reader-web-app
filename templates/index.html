@@ -207,7 +207,9 @@
                         </div>
                         <h3 class="mb-2 text-xl font-bold dark:text-black">Scan or Type</h3>
                         <p class="text-gray-500 dark:text-black">
-                            Use your phone to scan a food item's barcode or simply type its barcode. If scanning wait for a couple of seconds for the camera to fully capture the barcode. Also if needed tap on the screen to focus the camera. Once you scanned you should see the data.
+                            Use your phone to scan a food item's barcode or simply type its barcode. If scanning wait
+                            for a couple of seconds for the camera to fully capture the barcode. Also if needed tap on
+                            the screen to focus the camera. Once you scanned you should see the data.
                         </p>
                     </div>
                     <div class="flex-none sm:flex-1 p-4">
@@ -271,156 +273,155 @@
 
     <!-- Ingredients modal -->
 
-    <div class="block space-y-4 md:flex md:space-y-0 md:space-x-4 rtl:space-x-reverse">
-        <!-- Large Modal -->
-        <div id="large-modal" tabindex="-1"
-            class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 overflow-x-hidden overflow-y-auto">
-            <div class="relative w-full max-w-4xl bg-gray-200 rounded-lg shadow dark:bg-gray-700">
-                <!-- Modal content -->
-                <div class="relative bg-gray-200 rounded-lg shadow dark:bg-gray-700">
-                    <!-- Modal header -->
-                    <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
-                        <h3 class="text-xl font-bold text-gray-900 dark:text-white">
-                            Ingredients
-                        </h3>
-                        <button type="button"
-                            class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
-                            data-modal-hide="large-modal">
-                            <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
-                                viewBox="0 0 14 14">
-                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                    stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
-                            </svg>
-                            <span class="sr-only">Close modal</span>
-                        </button>
-                    </div>
-                    <!-- Modal body -->
-                    <div class="p-4 md:p-5 space-y-4">
-                        <div>
-                            <h5 class="text-xl capitalize font-bold">
-                                {% if ingredients_list %}
-                                {{ name }}
-                                {% elif ingredients_list == [] %}
-                                Sorry no information available
-                                {% endif %}
-                            </h5>
-                            <h5 class="text-xl capitalize">
-                                {% with messages = get_flashed_messages() %}
-                                {% if messages %}
-                                {% for message in messages %}
-                                {{ message }}
-                                {% endfor %}
-                                {% endif %}
-                                {% endwith %}
-                            </h5>
-                        </div>
-                        <ul class="list-none">
+    <!-- Large Modal -->
+    <div id="large-modal" tabindex="-1" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 mt-4">
+        <div
+            class="relative w-full max-w-4xl max-h-screen bg-gray-200 rounded-lg shadow dark:bg-gray-700 overflow-y-auto">
+            <!-- Modal content -->
+            <div class="relative bg-gray-200 rounded-lg shadow dark:bg-gray-700">
+                <!-- Modal header -->
+                <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
+                    <h3 class="text-xl font-bold text-gray-900 dark:text-white">Ingredients</h3>
+                    <button type="button"
+                        class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                        data-modal-hide="large-modal">
+                        <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                            viewBox="0 0 14 14">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                        </svg>
+                        <span class="sr-only">Close modal</span>
+                    </button>
+                </div>
+                <!-- Modal body -->
+                <div class="p-4 md:p-5 space-y-4">
+                    <div>
+                        <h5 class="text-xl capitalize font-bold">
                             {% if ingredients_list %}
-                            <script>
-                                window.ingredientsListPresent = true;
-                            </script>
+                            {{ name }}
+                            {% elif ingredients_list == [] %}
+                            Sorry no information available
                             {% endif %}
-
-                            {% for ingredient in ingredients_list %}
-                            <!-- Healthy rating will show green background -->
-                            {% if ingredient['rating'] == "healthy" %}
-                            {% if ingredient['name'] %}
-                            <li class="bg-green-200 p-2 mb-2 rounded-lg">
-
-                                <p class="font-bold">{{ ingredient['name'] }}:</p>
-                                <p>{{ ingredient['description'] }}</p>
-
-                            </li>
-                            {% endif %}
-                            <!-- Neutral rating will show yellow background -->
-                            {% elif ingredient['rating'] == "neutral" %}
-                            {% if ingredient['name'] %}
-                            <li class="bg-yellow-200 p-2 mb-2 rounded-lg">
-
-                                <p class="font-bold">{{ ingredient['name'] }}:</p>
-                                <p>{{ ingredient['description'] }}</p>
-
-                            </li>
-                            {% endif %}
-                            <!-- Anything else besides healthy rating will show yellow background -->
-                            {% else %}
-                            {% if ingredient['name'] %}
-                            <li class="bg-red-200 p-2 mb-2 rounded-lg">
-
-                                <p class="font-bold">{{ ingredient['name'] }}:</p>
-                                <p>{{ ingredient['description'] }}</p>
-
-                            </li>
-                            {% endif %}
-                            {% endif %}
-
-                            {% endfor %}
-                        </ul>
-                        <h5 class="text-xl font-bold mb-2">
-                            Recommendations
                         </h5>
-                        <div>
-                            {% for product_recommendation in testing %}
-                            <h3>
-
-                                {{product_recommendation}}
-
-                            </h3>
+                        <h5 class="text-xl capitalize">
+                            {% with messages = get_flashed_messages() %}
+                            {% if messages %}
+                            {% for message in messages %}
+                            {{ message }}
                             {% endfor %}
-                        </div>
-                        <h5 class="text-xl font-bold mb-2">
-                            Nutriscore
+                            {% endif %}
+                            {% endwith %}
                         </h5>
+                    </div>
+                    <ul class="list-none">
                         {% if ingredients_list %}
-                        {% set most_recent_year = nutriscore.keys() | max %}
-                        {% set most_recent_nutriscore = nutriscore[most_recent_year] %}
-                        {% set grade = most_recent_nutriscore.grade %}
+                        <script>
+                            window.ingredientsListPresent = true;
+                        </script>
+                        {% endif %}
 
-                        <div>
-                            {% if grade == 'a' %}
-                            <h5 class="capitalize">Nutriscore grade {{ grade }}:</h5>
-                            <p>
-                                Indicates the product has high nutritional quality. It typically has low levels of
-                                sugars, saturated fats, and salt, and high levels of fruits, vegetables, fibers, and
-                                proteins.
-                            </p>
-                            {% elif grade == 'b' %}
-                            <h5 class="capitalize">Nutriscore grade {{ grade }}:</h5>
-                            <p>
-                                Indicates the product has good nutritional quality, but not as high as grade A.
-                            </p>
-                            {% elif grade == 'c' %}
-                            <h5 class="capitalize">Nutriscore grade {{ grade }}:</h5>
-                            <p>
-                                Indicates the product has moderate nutritional quality. It is an average score,
-                                suggesting a balance of beneficial and less beneficial nutrients.
-                            </p>
-                            {% elif grade == 'd' %}
-                            <h5 class="capitalize">Nutriscore grade {{ grade }}:</h5>
-                            <p>
-                                Indicates the product has lower nutritional quality. It generally has higher levels
-                                of
-                                less beneficial nutrients like sugars, saturated fats, and salt.
-                            </p>
-                            {% elif grade == 'e' %}
-                            <h5 class="capitalize">Nutriscore grade {{ grade }}:</h5>
-                            <p>
-                                Indicates the product has the lowest nutritional quality, with high levels of
-                                sugars,
-                                saturated fats, and salt.
-                            </p>
-                            {% else %}
-                            <p>
-                                No matching grade.
-                            </p>
-                            {% endif %}
-                        </div>
+                        {% for ingredient in ingredients_list %}
+                        <!-- Healthy rating will show green background -->
+                        {% if ingredient['rating'] == "healthy" %}
+                        {% if ingredient['name'] %}
+                        <li class="bg-green-200 p-2 mb-2 rounded-lg">
+
+                            <p class="font-bold">{{ ingredient['name'] }}:</p>
+                            <p>{{ ingredient['description'] }}</p>
+
+                        </li>
+                        {% endif %}
+                        <!-- Neutral rating will show yellow background -->
+                        {% elif ingredient['rating'] == "neutral" %}
+                        {% if ingredient['name'] %}
+                        <li class="bg-yellow-200 p-2 mb-2 rounded-lg">
+
+                            <p class="font-bold">{{ ingredient['name'] }}:</p>
+                            <p>{{ ingredient['description'] }}</p>
+
+                        </li>
+                        {% endif %}
+                        <!-- Anything else besides healthy rating will show yellow background -->
+                        {% else %}
+                        {% if ingredient['name'] %}
+                        <li class="bg-red-200 p-2 mb-2 rounded-lg">
+
+                            <p class="font-bold">{{ ingredient['name'] }}:</p>
+                            <p>{{ ingredient['description'] }}</p>
+
+                        </li>
+                        {% endif %}
+                        {% endif %}
+
+                        {% endfor %}
+                    </ul>
+                    <h5 class="text-xl font-bold mb-2">
+                        Recommendations
+                    </h5>
+                    <div>
+                        {% for product_recommendation in testing %}
+                        <h3>
+
+                            {{product_recommendation}}
+
+                        </h3>
+                        {% endfor %}
+                    </div>
+                    <h5 class="text-xl font-bold mb-2">
+                        Nutriscore
+                    </h5>
+                    {% if ingredients_list %}
+                    {% set most_recent_year = nutriscore.keys() | max %}
+                    {% set most_recent_nutriscore = nutriscore[most_recent_year] %}
+                    {% set grade = most_recent_nutriscore.grade %}
+
+                    <div>
+                        {% if grade == 'a' %}
+                        <h5 class="capitalize">Nutriscore grade {{ grade }}:</h5>
+                        <p>
+                            Indicates the product has high nutritional quality. It typically has low levels of
+                            sugars, saturated fats, and salt, and high levels of fruits, vegetables, fibers, and
+                            proteins.
+                        </p>
+                        {% elif grade == 'b' %}
+                        <h5 class="capitalize">Nutriscore grade {{ grade }}:</h5>
+                        <p>
+                            Indicates the product has good nutritional quality, but not as high as grade A.
+                        </p>
+                        {% elif grade == 'c' %}
+                        <h5 class="capitalize">Nutriscore grade {{ grade }}:</h5>
+                        <p>
+                            Indicates the product has moderate nutritional quality. It is an average score,
+                            suggesting a balance of beneficial and less beneficial nutrients.
+                        </p>
+                        {% elif grade == 'd' %}
+                        <h5 class="capitalize">Nutriscore grade {{ grade }}:</h5>
+                        <p>
+                            Indicates the product has lower nutritional quality. It generally has higher levels
+                            of
+                            less beneficial nutrients like sugars, saturated fats, and salt.
+                        </p>
+                        {% elif grade == 'e' %}
+                        <h5 class="capitalize">Nutriscore grade {{ grade }}:</h5>
+                        <p>
+                            Indicates the product has the lowest nutritional quality, with high levels of
+                            sugars,
+                            saturated fats, and salt.
+                        </p>
+                        {% else %}
+                        <p>
+                            No matching grade.
+                        </p>
                         {% endif %}
                     </div>
+                    {% endif %}
                 </div>
             </div>
         </div>
     </div>
+
+
+
 
 
     <!-- Footer -->

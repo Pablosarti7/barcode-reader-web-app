@@ -1268,6 +1268,10 @@ input[type="range"]::-ms-fill-lower {
   max-height: 100%;
 }
 
+.max-h-screen {
+  max-height: 100vh;
+}
+
 .min-h-screen {
   min-height: 100vh;
 }
@@ -2418,10 +2422,6 @@ input[type="range"]::-ms-fill-lower {
     display: block;
   }
 
-  .md\:flex {
-    display: flex;
-  }
-
   .md\:grid {
     display: grid;
   }
@@ -2448,12 +2448,6 @@ input[type="range"]::-ms-fill-lower {
 
   .md\:gap-12 {
     gap: 3rem;
-  }
-
-  .md\:space-x-4 > :not([hidden]) ~ :not([hidden]) {
-    --tw-space-x-reverse: 0;
-    margin-right: calc(1rem * var(--tw-space-x-reverse));
-    margin-left: calc(1rem * calc(1 - var(--tw-space-x-reverse)));
   }
 
   .md\:space-y-0 > :not([hidden]) ~ :not([hidden]) {
@@ -2640,8 +2634,4 @@ input[type="range"]::-ms-fill-lower {
     padding-left: 12rem;
     padding-right: 12rem;
   }
-}
-
-.rtl\:space-x-reverse:where([dir="rtl"], [dir="rtl"] *) > :not([hidden]) ~ :not([hidden]) {
-  --tw-space-x-reverse: 1;
 }

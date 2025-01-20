@@ -39,6 +39,7 @@ app.config['REMEMBER_COOKIE_SECURE'] = True
 app.config['SESSION_COOKIE_HTTPONLY'] = True
 # OAuth configurations
 app.config['GOOGLE_CLIENT_ID'] = os.environ.get("CLIENT_ID")
+
 app.config['GOOGLE_CLIENT_SECRET'] = os.environ.get("CLIENT_SECRET")
 app.config['GOOGLE_DISCOVERY_URL'] = (
     'https://accounts.google.com/.well-known/openid-configuration'
