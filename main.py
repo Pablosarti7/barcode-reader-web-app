@@ -63,7 +63,7 @@ login_manager.login_view = 'login'
 login_manager.login_message_category = 'info'
 cache = Cache(app, config={'CACHE_TYPE': 'SimpleCache'})
 
-
+# User loader function
 @login_manager.user_loader
 def load_user(user_id):
     return db.session.get(Users, user_id)
@@ -97,9 +97,11 @@ class ScanHistory(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     item_name = db.Column(db.String(100), nullable=False)
     item_barcode = db.Column(db.String(100), nullable=True)
-    user = db.relationship(
-        'Users', backref=db.backref('scan_history', lazy=True))
+    user = db.relationship('Users', backref=db.backref('scan_history', lazy=True))
 
+# Create the database tables
+# with app.app_context():
+#     db.create_all()
     
 s = URLSafeTimedSerializer(app.secret_key)
 
@@ -355,7 +357,7 @@ def reset_password(token):
             return redirect(url_for('login'))
     return render_template('reset_password.html', form=form)
 
-
+#TODO a lot of the code here we will not need anymore because we are using google login
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     form = RegistrationForm()
@@ -365,7 +367,8 @@ def register():
         msg = Message(subject, recipients=[to])
         msg.body = body
         mail.send(msg)
-
+    
+    #TODO this is for the old form but we not longer have a form so we need to change the code
     if form.validate_on_submit():
         if Users.query.filter_by(email=form.email.data).first():
             flash("You've already signed up with that email, log in instead!")
@@ -428,26 +431,43 @@ def confirm_email(token):
 
 @app.route('/callback')
 def authorize():
+    # helper function to send email
+    def send_email(to, subject, body):
+        msg = Message(subject, sender=os.environ.get("G_EMAIL"), recipients=[to])
+        msg.body = body
+        mail.send(msg)
     
     try:
-        token = google.authorize_access_token()
+        google_token = google.authorize_access_token()
         
-        user_info = google.parse_id_token(token, nonce=session['nonce'])
+        user_info = google.parse_id_token(google_token, nonce=session['nonce'])
 
         email = user_info['email']
         name = user_info['name']
 
-        user = Users.query.filter_by(email=email).first()
+        newest_user = Users.query.filter_by(email=email).first()
 
-        if not user:
-            user = Users(email=email,
+        if not newest_user:
+            newest_user = Users(email=email,
                          name=name,
                          password=None,
                          )
-            db.session.add(user)
+            db.session.add(newest_user)
             db.session.commit()
 
-        login_user(user)
+        login_user(newest_user)
+
+        # We need to check if the user has confirmed their email already, if yes then don't run the code below
+        #TODO is the code below working? This should not send the code on the second login!!!
+        if not newest_user.email_confirmed:
+            # Generate confirmation token
+            email_token = s.dumps(newest_user.email, salt='email-confirmation')
+
+            # Send confirmation email
+            confirm_url = url_for('confirm_email', token=email_token, _external=True)
+            subject = "Please confirm your email"
+            body = f"Welcome! Please confirm your email by clicking on the link: {confirm_url}"
+            send_email(newest_user.email, subject, body)
 
         session.pop('nonce')  # Remove the nonce after successful use
         return redirect(url_for('settings'))
