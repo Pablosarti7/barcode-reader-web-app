@@ -121,6 +121,7 @@ def home():
 
     if request.method == 'POST':
         barcode = request.form.get('barcode') or form.ingredients.data
+        
         # Send the barcode to the OpenFoodFacts API
         ingredients = get_product_info(str(barcode))
 
@@ -156,7 +157,7 @@ def home():
                 
                 ingredients_string = ", ".join(list_of_ingredients)
                 
-                json_product = create_structure(name, ingredients_string)
+                json_product = create_structure(name, ingredients_string, barcode)
                 
                 
                 product_information_json = product_info_json(json_product)
@@ -309,99 +310,67 @@ def login():
 
     return render_template('login.html', form=form, logged_in=current_user.is_authenticated)
 
-
-@app.route('/reset_password_request', methods=['GET', 'POST'])
-def reset_password_request():
+# #TODO not sure if this code is currently being used
+# @app.route('/reset_password_request', methods=['GET', 'POST'])
+# def reset_password_request():
     
-    form = ResetPasswordRequestForm()
+#     form = ResetPasswordRequestForm()
     
-    if form.validate_on_submit():
+#     if form.validate_on_submit():
         
-        user = Users.query.filter_by(email=form.email.data).first()
+#         user = Users.query.filter_by(email=form.email.data).first()
         
-        if user:
-            token = s.dumps(user.email, salt='password-reset-salt')
+#         if user:
+#             token = s.dumps(user.email, salt='password-reset-salt')
             
-            msg = Message('Password Reset Request',
-                        sender=os.environ.get("G_EMAIL"),
-                        recipients=[user.email])
-            msg.body = f"Click the link below to reset your password:\n\n{url_for('reset_password', token=token, _external=True)}"
-            mail.send(msg)
+#             msg = Message('Password Reset Request',
+#                         sender=os.environ.get("G_EMAIL"),
+#                         recipients=[user.email])
+#             msg.body = f"Click the link below to reset your password:\n\n{url_for('reset_password', token=token, _external=True)}"
+#             mail.send(msg)
 
-            # Send email to user with reset link, e.g., url_for('reset_password', token=token, _external=True)
-        flash("Check your email for the instructions to reset your password.")
-        return redirect(url_for('login'))
-    return render_template('reset_password_request.html', form=form)
+#             # Send email to user with reset link, e.g., url_for('reset_password', token=token, _external=True)
+#         flash("Check your email for the instructions to reset your password.")
+#         return redirect(url_for('login'))
+#     return render_template('reset_password_request.html', form=form)
+
+# #TODO the same for this one, now sure if it is being used
+# @app.route('/reset_password/<token>', methods=['GET', 'POST'])
+# def reset_password(token):
+#     try:
+#         email = s.loads(token, salt='password-reset-salt', max_age=1800)  # Link valid for 1 hour
+#     except:
+#         flash("The reset link is invalid or has expired.")
+#         return redirect(url_for('reset_password_request'))
+
+#     form = ResetPasswordForm()
+#     if form.validate_on_submit():
+#         user = Users.query.filter_by(email=email).first()
+#         if user:
+#             new_hashed_password = generate_password_hash(
+#                 form.password.data,
+#                 method='pbkdf2:sha256',
+#                 salt_length=8
+#             )
+#             user.password = new_hashed_password
+#             db.session.commit()
+#             flash("Your password has been updated.")
+#             return redirect(url_for('login'))
+#     return render_template('reset_password.html', form=form)
 
 
-@app.route('/reset_password/<token>', methods=['GET', 'POST'])
-def reset_password(token):
-    try:
-        email = s.loads(token, salt='password-reset-salt', max_age=1800)  # Link valid for 1 hour
-    except:
-        flash("The reset link is invalid or has expired.")
-        return redirect(url_for('reset_password_request'))
-
-    form = ResetPasswordForm()
-    if form.validate_on_submit():
-        user = Users.query.filter_by(email=email).first()
-        if user:
-            new_hashed_password = generate_password_hash(
-                form.password.data,
-                method='pbkdf2:sha256',
-                salt_length=8
-            )
-            user.password = new_hashed_password
-            db.session.commit()
-            flash("Your password has been updated.")
-            return redirect(url_for('login'))
-    return render_template('reset_password.html', form=form)
-
-#TODO a lot of the code here we will not need anymore because we are using google login
 @app.route('/register', methods=['GET', 'POST'])
 def register():
-    form = RegistrationForm()
-
-    # helper function to send email
-    def send_email(to, subject, body):
-        msg = Message(subject, recipients=[to])
-        msg.body = body
-        mail.send(msg)
     
-    #TODO this is for the old form but we not longer have a form so we need to change the code
-    if form.validate_on_submit():
-        if Users.query.filter_by(email=form.email.data).first():
-            flash("You've already signed up with that email, log in instead!")
-            return redirect(url_for('login'))
+    # if something something:
+    #     if Users.query.filter_by(email=form.email.data).first():
+    #         flash("You've already signed up with that email, log in instead!")
+    #         return redirect(url_for('login'))
 
-        hash_and_salted_password = generate_password_hash(
-            form.password.data,
-            method='pbkdf2:sha256',
-            salt_length=8
-        )
-        new_user = Users(
-            email=form.email.data,
-            name=form.name.data,
-            password=hash_and_salted_password,
-            email_confirmed=False  # Add a field in your database for email confirmation status
-        )
+    #     flash('A confirmation email has been sent to your email address. Please confirm your email to complete registration.', 'info')
+    #     return redirect(url_for('login'))
 
-        db.session.add(new_user)
-        db.session.commit()
-
-        # Generate confirmation token
-        token = s.dumps(new_user.email, salt='email-confirmation')
-
-        # Send confirmation email
-        confirm_url = url_for('confirm_email', token=token, _external=True)
-        subject = "Please confirm your email"
-        body = f"Welcome! Please confirm your email by clicking on the link: {confirm_url}"
-        send_email(new_user.email, subject, body)
-
-        flash('A confirmation email has been sent to your email address. Please confirm your email to complete registration.', 'info')
-        return redirect(url_for('login'))
-
-    return render_template("register.html", form=form, logged_in=current_user.is_authenticated)
+    return render_template("register.html", logged_in=current_user.is_authenticated)
 
 
 @app.route('/confirm/<token>')
@@ -474,7 +443,7 @@ def authorize():
     except Exception as e:
         flash("Authorization failed. Please try again or contact support if the problem persists.")
         # Redirect to a custom error page
-        return render_template('error_page')
+        return 'error_page'
 
 
 @app.route('/google/login')
@@ -489,7 +458,7 @@ def googlelogin():
         return google.authorize_redirect(redirect_uri, nonce=nonce)
     except Exception as e:
         flash("Failed to initiate Google login. Please try again later.")
-        return render_template('error_page')
+        return 'error_page'
 
 
 @app.route('/logout')

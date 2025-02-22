@@ -10,6 +10,7 @@ class ProductInfo(BaseModel):
     name: str
     ingredients: str
     category: str = Field(description="The category for the current food product. Be very specific. Please make it singular, e.g., 'snack' instead of 'snacks'.")
+    barcode: str
 
 
 def product_info_json(ingredients_string):

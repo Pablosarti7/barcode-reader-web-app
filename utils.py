@@ -20,8 +20,8 @@ def autosuggest(prefix):
 
 
 # Simple function to create a dictionary structure
-def create_structure(name: str, ingredients: str):
-    return {"name": name, "ingredients": ingredients}
+def create_structure(name: str, ingredients: str, barcode):
+    return {"name": name, "ingredients": ingredients, 'barcode': barcode}
 
 
 def split_string_advanced(input_string):

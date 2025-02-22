@@ -23,6 +23,7 @@ def create_products_df():
     return products_df
 
 
+
 def get_similarity_matrix():
 
     products_df = create_products_df()
@@ -39,11 +40,16 @@ def get_similarity_matrix():
     # Compute cosine similarity between all food items
     cosine_sim = cosine_similarity(tfidf_matrix)
 
-    # Display the similarity matrix
-    similarity_df = pd.DataFrame(
-        cosine_sim, index=products_df['name'], columns=products_df['name'])
-    return products_df, similarity_df
+    # Create a multi-index for rows and columns using both name and barcode
+    multi_index = pd.MultiIndex.from_arrays(
+        [products_df['name'], products_df['barcode']], 
+        names=['name', 'barcode']
+    )
 
+    # Now create the similarity_df using the multi-index for both rows and columns
+    similarity_df = pd.DataFrame(cosine_sim, index=multi_index, columns=multi_index)
+    
+    return products_df, similarity_df
 
 health_rating_to_score = {
     'healthy': 2,
@@ -98,7 +104,7 @@ def recommend_healthier_food(item_name, top_n=3):
     # Get fresh data each time the function is called
     products_df, similarity_df = get_similarity_matrix()
     health_scores = get_health_scores_from_db()
-
+    
     # Apply to dataset
     products_df['health_score'] = products_df['ingredients'].apply(
         lambda x: calculate_health_score(x, health_scores))
@@ -107,6 +113,7 @@ def recommend_healthier_food(item_name, top_n=3):
 
     item_score = item_row['health_score']
     item_category = item_row['category'].lower()
+    
 
     # Check if there is NaN values and set to 0 if true
     if pd.isna(item_score):
@@ -115,11 +122,11 @@ def recommend_healthier_food(item_name, top_n=3):
     # Filter for healthier items in the same category
     healthier_items = products_df[(products_df['health_score'] > item_score) & (
         products_df['category'].str.lower() == item_category)]
-
+    
     # Compute similarity scores
     sim_scores = similarity_df[item_name].loc[healthier_items['name']]
-
+    
     # Sort and return top recommendations
-    recommended_items = sim_scores.sort_values(ascending=False).iloc[:top_n]
-
-    return recommended_items.index.tolist()
+    recommended_items = sim_scores.sort_values(ascending=False, by='name').iloc[:top_n]
+    
+    return recommended_items.index
