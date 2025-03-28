@@ -438,7 +438,7 @@ def cancel():
     return render_template('cancel.html')
 
 
-YOUR_DOMAIN = 'http://127.0.0.1:5000'
+YOUR_DOMAIN = 'https://www.ingredientadvisor.com'
 
 
 @app.route('/create-checkout-session', methods=['POST'])
@@ -492,7 +492,7 @@ def customer_portal():
     
     # This is the URL to which the customer will be redirected after they're
     # done managing their billing with the portal.
-    return_url = "https://barcode-reader-web-app.onrender.com/settings"
+    return_url = "https://www.ingredientadvisor.com/settings"
 
     portalSession = stripe.billing_portal.Session.create(
         customer=checkout_session.customer,
