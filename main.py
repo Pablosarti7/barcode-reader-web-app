@@ -360,7 +360,7 @@ def authorize():
         session.pop('nonce')  # Remove the nonce after successful use
         return redirect(url_for('settings'))
     except Exception as e:
-        flash("Authorization failed. Please try again or contact support if the problem persists.")
+        
         
         # Redirect to a custom error page
         return 'error_page'
@@ -378,7 +378,7 @@ def googlelogin():
         
         return google.authorize_redirect(redirect_uri, nonce=nonce)
     except Exception as e:
-        flash("Failed to initiate Google login. Please try again later.")
+        
         
         return 'error_page'
 
