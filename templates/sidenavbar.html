@@ -13,6 +13,7 @@
             </svg>
             My Profile
         </a>
+        {% if show_scan_history %}
         <a href="{{ url_for('settings', section='scan_history') }}"
             class="mt-1 group flex items-center px-2 py-2 text-base leading-6 font-medium rounded-md text-gray-600 hover:text-gray-900 hover:bg-gray-50 dark:text-gray-300 dark:hover:text-white dark:hover:bg-gray-700 focus:outline-none focus:text-gray-900 focus:bg-gray-100 transition ease-in-out duration-150">
             <svg class="mr-4 h-6 w-6 text-gray-400 group-hover:text-gray-500 group-focus:text-gray-500 transition ease-in-out duration-150"
@@ -22,6 +23,7 @@
             </svg>
             My Scan History
         </a>
+        {% endif %}
         <a href="{{ url_for('settings', section='support') }}"
             class="mt-1 group flex items-center px-2 py-2 text-base leading-6 font-medium rounded-md text-gray-600 hover:text-gray-900 hover:bg-gray-50 dark:text-gray-300 dark:hover:text-white dark:hover:bg-gray-700 focus:outline-none focus:text-gray-900 focus:bg-gray-100 transition ease-in-out duration-150">
             <svg class="mr-4 h-6 w-6 text-gray-400 group-hover:text-gray-500 group-focus:text-gray-500 transition ease-in-out duration-150"

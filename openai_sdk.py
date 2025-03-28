@@ -3,8 +3,11 @@ import os
 from pydantic import BaseModel, Field
 from typing import List
 import json
+from dotenv import load_dotenv
 
-openai = OpenAI(api_key=os.environ.get('API_KEY'))
+load_dotenv()
+
+openai = OpenAI(api_key=os.environ.get('OPENAI_API_KEY'))
 
 class Ingredient(BaseModel):
     name: str = Field(description="This is the name of the ingredient.")

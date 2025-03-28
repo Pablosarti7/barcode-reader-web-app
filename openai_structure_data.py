@@ -4,7 +4,7 @@ from pydantic import BaseModel, Field
 from typing import List
 import json
 
-openai = OpenAI(api_key=os.environ.get('API_KEY'))
+openai = OpenAI(api_key=os.environ.get('OPENAI_API_KEY'))
 
 class ProductInfo(BaseModel):
     name: str

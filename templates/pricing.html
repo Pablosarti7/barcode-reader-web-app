@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="{{ url_for('static', filename='css/tailwind.css') }}" rel="stylesheet">
+    <script src="https://js.stripe.com/v3/"></script>
+    <title>Pricing</title>
+</head>
+
+<body class="bg-gray-100 text-gray-900 antialiased">
+    {% include "navigation.html" %}
+    <section class="max-w-4xl mx-auto p-6">
+        {% if not logged_in %}
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Starter Plan for Non-logged in users -->
+            <div class="flex flex-col items-center bg-white p-6 shadow rounded-lg">
+                <svg class="w-10 h-10 mb-2" xmlns="http://www.w3.org/2000/svg" width="14px" height="16px"
+                    viewBox="0 0 14 16" version="1.1">
+                    <g id="Flow" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                        <g id="0-Default" transform="translate(-121.000000, -40.000000)" fill="#E184DF">
+                            <path
+                                d="M127,50 L126,50 C123.238576,50 121,47.7614237 121,45 C121,42.2385763 123.238576,40 126,40 L135,40 L135,56 L133,56 L133,42 L129,42 L129,56 L127,56 L127,50 Z M127,48 L127,42 L126,42 C124.343146,42 123,43.3431458 123,45 C123,46.6568542 124.343146,48 126,48 L127,48 Z" />
+                        </g>
+                    </g>
+                </svg>
+                <h3 class="text-xl font-bold">Small Subscription</h3>
+                <h5 class="text-lg text-gray-500 mt-2">$1.00 / month</h5>
+                <a href="{{ url_for('register') }}" class="mt-4 w-full">
+                    <button
+                        class="block w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-4 rounded transition duration-150">
+                        Subscribe
+                    </button>
+                </a>
+            </div>
+
+            <!-- Pro Plan for Non-logged in users -->
+            <div class="flex flex-col items-center bg-white p-6 shadow rounded-lg">
+                <svg class="w-10 h-10 mb-2" xmlns="http://www.w3.org/2000/svg" width="14px" height="16px"
+                    viewBox="0 0 14 16" version="1.1">
+                    <g id="Flow" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                        <g id="0-Default" transform="translate(-121.000000, -40.000000)" fill="#4F46E5">
+                            <path
+                                d="M127,50 L126,50 C123.238576,50 121,47.7614237 121,45 C121,42.2385763 123.238576,40 126,40 L135,40 L135,56 L133,56 L133,42 L129,42 L129,56 L127,56 L127,50 Z M127,48 L127,42 L126,42 C124.343146,42 123,43.3431458 123,45 C123,46.6568542 124.343146,48 126,48 L127,48 Z" />
+                        </g>
+                    </g>
+                </svg>
+                <h3 class="text-xl font-bold">Big Subscription</h3>
+                <h5 class="text-lg text-gray-500 mt-2">$5.00 / month</h5>
+                <a href="{{ url_for('register') }}" class="mt-4 w-full">
+                    <button
+                        class="block w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-4 rounded transition duration-150">
+                        Subscribe
+                    </button>
+                </a>
+            </div>
+        </div>
+        {% else %}
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Starter Plan -->
+            <div class="flex flex-col items-center bg-white p-6 shadow rounded-lg">
+                <svg class="w-10 h-10 mb-2" xmlns="http://www.w3.org/2000/svg" width="14px" height="16px"
+                    viewBox="0 0 14 16" version="1.1">
+                    <g id="Flow" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                        <g id="0-Default" transform="translate(-121.000000, -40.000000)" fill="#E184DF">
+                            <path
+                                d="M127,50 L126,50 C123.238576,50 121,47.7614237 121,45 C121,42.2385763 123.238576,40 126,40 L135,40 L135,56 L133,56 L133,42 L129,42 L129,56 L127,56 L127,50 Z M127,48 L127,42 L126,42 C124.343146,42 123,43.3431458 123,45 C123,46.6568542 124.343146,48 126,48 L127,48 Z" />
+                        </g>
+                    </g>
+                </svg>
+                <h3 class="text-xl font-bold">Small Subscription</h3>
+                <h5 class="text-lg text-gray-500 mt-2">$1.00 / month</h5>
+                {% if not redirect_to_pay %}
+                <form action="{{ url_for('create_checkout_session') }}" method="POST" class="mt-4 w-full">
+                    <input type="hidden" name="lookup_key" value="small_monthly" />
+                    <button id="starter-checkout" type="submit"
+                        class="block w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-4 rounded transition duration-150">
+                        Subscribe
+                    </button>
+                </form>
+                {% else %}
+                <form action="{{ url_for('settings') }}" method="POST" class="mt-4 w-full">
+                    <input type="hidden" name="lookup_key" value="small_monthly" />
+                    <button id="starter-checkout" type="submit"
+                        class="block w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-4 rounded transition duration-150">
+                        Subscribe
+                    </button>
+                </form>
+                {% endif %}
+            </div>
+
+            <!-- Pro Plan -->
+            <div class="flex flex-col items-center bg-white p-6 shadow rounded-lg">
+                <svg class="w-10 h-10 mb-2" xmlns="http://www.w3.org/2000/svg" width="14px" height="16px"
+                    viewBox="0 0 14 16" version="1.1">
+                    <g id="Flow" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                        <g id="0-Default" transform="translate(-121.000000, -40.000000)" fill="#4F46E5">
+                            <path
+                                d="M127,50 L126,50 C123.238576,50 121,47.7614237 121,45 C121,42.2385763 123.238576,40 126,40 L135,40 L135,56 L133,56 L133,42 L129,42 L129,56 L127,56 L127,50 Z M127,48 L127,42 L126,42 C124.343146,42 123,43.3431458 123,45 C123,46.6568542 124.343146,48 126,48 L127,48 Z" />
+                        </g>
+                    </g>
+                </svg>
+                <h3 class="text-xl font-bold">Big Subscription</h3>
+                <h5 class="text-lg text-gray-500 mt-2">$5.00 / month</h5>
+                {% if not redirect_to_pay %}
+                <form action="{{ url_for('create_checkout_session') }}" method="POST" class="mt-4 w-full">
+                    <input type="hidden" name="lookup_key" value="big_monthly" />
+                    <button id="pro-checkout" type="submit"
+                        class="block w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-4 rounded transition duration-150">
+                        Subscribe
+                    </button>
+                </form>
+                {% else %}
+                <form action="{{ url_for('settings') }}" method="POST" class="mt-4 w-full">
+                    <input type="hidden" name="lookup_key" value="big_monthly" />
+                    <button id="pro-checkout" type="submit"
+                        class="block w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-4 rounded transition duration-150">
+                        Subscribe
+                    </button>
+                </form>
+                {% endif %}
+            </div>
+        </div>
+        {% endif %}
+    </section>
+    <script src="https://cdn.jsdelivr.net/npm/flowbite@2.4.1/dist/flowbite.min.js"></script>
+    
+</body>
+
+
+
+</html>

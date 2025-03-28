@@ -28,15 +28,14 @@
                         <div class="px-4 py-5 sm:p-6">
                             <h2 class="text-lg font-bold text-gray-900 dark:text-white mb-4">Just for fun</h2>
                             <div class="space-y-4">
-                                {% with messages = get_flashed_messages() %}
+                                <!-- {% with messages = get_flashed_messages() %}
                                 {% if messages %}
                                 {% for message in messages %}
                                 {{ message }}
                                 {% endfor %}
                                 {% else %}
-                                Sign in to your account
                                 {% endif %}
-                                {% endwith %}
+                                {% endwith %} -->
                                 <p>This is a simple project that I made to learn more about Flask and Python. I just like to code and learn new things.</p>
                                 <p>If you have any suggestions or feedback, please let me know.</p>
                             </div>
@@ -52,10 +51,18 @@
                                 store all of your favorite foods information and access it when ever you need it.
                                 We will be adding more features in the future and we are open for suggestions, just send
                                 us an email at support@ingredientadvisor.com.</p>
-
+                            {% if subscribed %}
+                            <form action="{{ url_for('customer_portal') }}" method="POST" class="mt-4">
+                                <input type="hidden" name="session_id" value="{{ current_user.stripe_user_session_id }}">
+                                <button type="submit" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                                    Payment Portal
+                                </button>
+                            </form>
+                            {% endif %}
                             {% elif subsection == 'scan_history' %}
                             <h2 class="text-lg font-medium text-gray-900 dark:text-white mb-4">My Scan History</h2>
                             <div class="space-y-4 overflow-y-auto h-96 md:h-600">
+                                
                                 {% for item in scan_history %}
                                 <div class="bg-gray-100 p-4 rounded shadow">
                                     <div class="flex justify-end">
@@ -202,18 +209,6 @@
                                             dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500")
                                             }}
                                         </div>
-                                        <!-- <div class="w-full">
-                                            {{ form.email.label(class="block mb-2 text-sm font-medium text-gray-900
-                                            dark:text-white") }}
-                                            {{ form.email(placeholder="Users Email",value=users_email, class="bg-gray-50
-                                            border border-gray-300
-                                            text-gray-900 text-sm rounded-lg focus:ring-primary-600
-                                            focus:border-primary-600
-                                            block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600
-                                            dark:placeholder-gray-400
-                                            dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500")
-                                            }}
-                                        </div> -->
                                         <div class="w-full">
                                             <label for="brand"
                                                 class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Email</label>
@@ -338,6 +333,17 @@
                                 </form>
                             </div>
                             {% else %}
+                            
+                                {% with messages = get_flashed_messages() %}
+                                {% if messages %}
+                                <div class="bg-red-600 mt-4 mb-4 p-2 text-white"><p></p>
+                                {% for message in messages %}
+                                {{ message }}
+                                {% endfor %}
+                                </p></div>
+                                {% endif %}
+                                {% endwith %}
+                            
                             <h2 class="text-lg font-medium text-gray-900 dark:text-white mb-4">Welcome, {{ users_name }}
                             </h2>
                             <p class="text-gray-600 dark:text-gray-300">Select an option from the sidebar to manage your
