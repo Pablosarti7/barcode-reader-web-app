@@ -99,6 +99,7 @@ class Users(db.Model, UserMixin):
     customer_id = db.Column(db.String(100))
     invoice_id = db.Column(db.String(100))
     subscription_id = db.Column(db.String(100))
+    subscribed = db.Column(db.Boolean)
 
     def __repr__(self):
         return f'<User {self.email}>'
@@ -412,10 +413,10 @@ def pricing():
             
             if subscription_object["items"]["data"][0]["price"]["lookup_key"] == 'big_monthly':
                 redirect_user_to_pay = True
-                flash('You seem to already have a paid account or if you wish to switch subscriptions contact support.')
+                flash('You seem to already have a paid account. If you wish to switch subscriptions contact support.')
             elif subscription_object["items"]["data"][0]["price"]["lookup_key"] == 'small_monthly':
                 redirect_user_to_pay = True
-                flash('You seem to already have a paid account or if you wish to switch subscriptions contact support.')
+                flash('You seem to already have a paid account. If you wish to switch subscriptions contact support.')
             
     else:
         redirect_user_to_pay = False

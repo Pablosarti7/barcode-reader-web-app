@@ -4,7 +4,7 @@
   "description": "Barcode reader app with TailwindCSS and Flask",
   "main": "index.js",
   "scripts": {
-    "build:css": "npx tailwindcss build src/tailwind.css -o static/css/tailwind.css",
+    "build:css": "npx tailwindcss -i src/tailwind.css -o static/css/tailwind.css",
     "build": "npm install && npm run build:css",
     "start": "gunicorn main:app"
   },
