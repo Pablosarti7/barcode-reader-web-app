@@ -1,0 +1,45 @@
+name: Test Action
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.x'
+    
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+    
+    - name: Install Python dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install flask flask-login flask-sqlalchemy flask-caching authlib flask-mail stripe flask-migrate gunicorn pytest
+
+    - name: Install Node.js dependencies
+      run: npm install
+    
+    - name: Build CSS
+      run: npm run build:css
+    
+    - name: Run tests
+      env:
+        DATABASE_URL: sqlite:///test.db
+        CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
+        CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
+        G_EMAIL: ${{ secrets.G_EMAIL }}
+        G_PASSWORD: ${{ secrets.G_PASSWORD }}
+      run: |
+        pytest
