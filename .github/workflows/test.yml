@@ -37,10 +37,13 @@ jobs:
     
     - name: Run tests
       env:
-        DATABASE_URL: sqlite:///test.db
+        OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        SECRET_API_KEY: ${{ secrets.SECRET_API_KEY }}
         CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
         CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
         G_EMAIL: ${{ secrets.G_EMAIL }}
         G_PASSWORD: ${{ secrets.G_PASSWORD }}
+        STRIPE_SECRET_KEY: ${{ secrets.STRIPE_SECRET_KEY }}
       run: |
         pytest
