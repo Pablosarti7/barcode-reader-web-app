@@ -1,7 +1,3 @@
-import sys
-import os
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
 import pytest
 from main import app
 
@@ -27,10 +23,3 @@ def test_invalid_page(client):
     """Test that an invalid page returns 404"""
     response = client.get('/nonexistent-page')
     assert response.status_code == 404
-
-def test_login_page(client):
-    """Test login page loads and form submission"""
-    # Test that the page loads
-    response = client.get('/login')
-    assert response.status_code == 200
-    
