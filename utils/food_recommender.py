@@ -1,5 +1,5 @@
-from products_api import get_all_products
-from ingredients_api import get_all_ingredients
+from apis.products_api import get_all_products
+from apis.ingredients_api import get_all_ingredients
 import pandas as pd
 import numpy as np
 from sklearn.feature_extraction.text import TfidfVectorizer

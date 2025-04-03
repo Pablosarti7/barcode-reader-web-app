@@ -1,6 +1,6 @@
 import requests
 import os
-from utils import split_string_advanced
+from utils.utils import split_string_advanced
 
 def get_all_products():
     url = "https://food-products-api-production-8b0b.up.railway.app/all-products"

@@ -1,14 +1,15 @@
-# internal imports
+# Internal imports
 from forms import LoginForm, RegistrationForm, SearchBarcode, SearchIngredient, EditProfile, ResetPasswordRequestForm, ResetPasswordForm
-from utils import autosuggest, create_structure
-from openfoodfacts_api import get_product_info
-from ingredients_api import get_ingredient, add_ingredient
-from products_api import add_product, get_specific_ingredient
-from openai_sdk import json_formatter
-from openai_structure_data import product_info_json
-from food_recommender import recommend_healthier_food
+from utils.utils import autosuggest, create_structure
+from apis.openfoodfacts_api import get_product_info
+from apis.ingredients_api import get_ingredient, add_ingredient
+from apis.products_api import add_product, get_specific_ingredient
+from sdks.openai_sdk import json_formatter
+from sdks.openai_structure_data import product_info_json
+from utils.food_recommender import recommend_healthier_food
+from models.models import db, Users, ScanHistory
 
-# external imports
+# External imports
 from flask import Flask, render_template, request, jsonify, redirect, url_for, flash, abort, session, json
 from flask_login import UserMixin, login_user, LoginManager, login_required, current_user, logout_user
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -20,7 +21,7 @@ from flask_mail import Mail, Message
 import stripe
 from flask_migrate import Migrate
 
-# standard python module imports
+# Standard python module imports
 import os
 import secrets
 from functools import wraps
@@ -54,7 +55,7 @@ app.config['MAIL_PASSWORD'] = os.environ.get("G_PASSWORD")
 
 mail = Mail(app)
 
-db = SQLAlchemy(app)
+db.init_app(app)
 
 # Initializing Flask-Migrate for database tables modifications
 migrate = Migrate(app, db)
@@ -87,31 +88,6 @@ google = oauth.register(
         'scope': 'openid email profile'
     }
 )
-
-
-class Users(db.Model, UserMixin):
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(100))
-    email = db.Column(db.String(100), unique=True)
-    password = db.Column(db.String(100))
-    email_confirmed = db.Column(db.Boolean, default=False)
-    stripe_user_session_id = db.Column(db.String(100))
-    customer_id = db.Column(db.String(100))
-    invoice_id = db.Column(db.String(100))
-    subscription_id = db.Column(db.String(100))
-    subscribed = db.Column(db.Boolean)
-
-    def __repr__(self):
-        return f'<User {self.email}>'
-
-
-class ScanHistory(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
-    item_name = db.Column(db.String(100), nullable=False)
-    item_barcode = db.Column(db.String(100), nullable=True)
-    user = db.relationship(
-        'Users', backref=db.backref('scan_history', lazy=True))
 
 
 s = URLSafeTimedSerializer(app.secret_key)
@@ -217,6 +193,7 @@ def search():
 
         searched_ingredient = form.ingredient.data
         ingredient_from_db = get_ingredient(searched_ingredient)
+        
         return render_template('search.html', form=form, ingredient_info=ingredient_from_db)
 
     return render_template('search.html', form=form, logged_in=current_user.is_authenticated)
