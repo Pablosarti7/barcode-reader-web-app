@@ -1,6 +1,6 @@
 import pytest
 from main import app
-from forms import SearchIngredient
+from forms.forms import SearchIngredient
 
 @pytest.fixture
 def client():

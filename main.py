@@ -1,5 +1,5 @@
 # Internal imports
-from forms import LoginForm, RegistrationForm, SearchBarcode, SearchIngredient, EditProfile, ResetPasswordRequestForm, ResetPasswordForm
+from forms.forms import LoginForm, RegistrationForm, SearchBarcode, SearchIngredient, EditProfile, ResetPasswordRequestForm, ResetPasswordForm
 from utils.utils import autosuggest, create_structure
 from apis.openfoodfacts_api import get_product_info
 from apis.ingredients_api import get_ingredient, add_ingredient
@@ -38,13 +38,11 @@ app.config['SESSION_COOKIE_SECURE'] = True
 app.config['REMEMBER_COOKIE_SECURE'] = True
 # Prevents JavaScript access to cookies
 app.config['SESSION_COOKIE_HTTPONLY'] = True
+
 # OAuth configurations
 app.config['GOOGLE_CLIENT_ID'] = os.environ.get("CLIENT_ID")
-
 app.config['GOOGLE_CLIENT_SECRET'] = os.environ.get("CLIENT_SECRET")
-app.config['GOOGLE_DISCOVERY_URL'] = (
-    'https://accounts.google.com/.well-known/openid-configuration'
-)
+app.config['GOOGLE_DISCOVERY_URL'] = ('https://accounts.google.com/.well-known/openid-configuration')
 
 # Mail SMTP configuration
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'
