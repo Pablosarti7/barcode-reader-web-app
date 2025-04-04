@@ -1,5 +1,5 @@
 # Internal imports
-from forms.forms import LoginForm, RegistrationForm, SearchBarcode, SearchIngredient, EditProfile, ResetPasswordRequestForm, ResetPasswordForm
+from forms.forms import SearchBarcode, SearchIngredient, EditProfile
 from utils.utils import autosuggest, create_structure
 from apis.openfoodfacts_api import get_product_info
 from apis.ingredients_api import get_ingredient, add_ingredient
@@ -11,9 +11,7 @@ from models.models import db, Users, ScanHistory
 
 # External imports
 from flask import Flask, render_template, request, jsonify, redirect, url_for, flash, abort, session, json
-from flask_login import UserMixin, login_user, LoginManager, login_required, current_user, logout_user
-from werkzeug.security import generate_password_hash, check_password_hash
-from flask_sqlalchemy import SQLAlchemy
+from flask_login import login_user, LoginManager, login_required, current_user, logout_user
 from flask_caching import Cache  # type: ignore
 from authlib.integrations.flask_client import OAuth  # type: ignore
 from itsdangerous import URLSafeTimedSerializer
@@ -51,14 +49,17 @@ app.config['MAIL_USE_TLS'] = True
 app.config['MAIL_USERNAME'] = os.environ.get("G_EMAIL")
 app.config['MAIL_PASSWORD'] = os.environ.get("G_PASSWORD")
 
-mail = Mail(app)
 
+# Database
 db.init_app(app)
-
+# Google Oauth
+oauth = OAuth(app)
+# Mail SMTP
+mail = Mail(app)
 # Initializing Flask-Migrate for database tables modifications
 migrate = Migrate(app, db)
 
-# Initialize flask-migrate when needed
+
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'login'
@@ -66,8 +67,6 @@ login_manager.login_message_category = 'info'
 cache = Cache(app, config={'CACHE_TYPE': 'SimpleCache'})
 
 # User loader function
-
-
 @login_manager.user_loader
 def load_user(user_id):
     return db.session.get(Users, user_id)
@@ -76,7 +75,7 @@ def load_user(user_id):
 # Getting hold of the stripe secret key
 stripe.api_key = os.environ.get('STRIPE_SECRET_KEY')
 
-oauth = OAuth(app)
+
 google = oauth.register(
     name='google',
     client_id=app.config['GOOGLE_CLIENT_ID'],
@@ -87,8 +86,6 @@ google = oauth.register(
     }
 )
 
-
-s = URLSafeTimedSerializer(app.secret_key)
 
 
 def admin_only(f):
@@ -181,8 +178,6 @@ def home():
     return render_template('index.html', form=form, logged_in=current_user.is_authenticated)
 
 # search page is where users can search for specific ingredients
-
-
 @app.route('/search', methods=['GET', 'POST'])
 def search():
     form = SearchIngredient()
@@ -197,8 +192,6 @@ def search():
     return render_template('search.html', form=form, logged_in=current_user.is_authenticated)
 
 # talking to the javascript code sending requests to this url
-
-
 @app.route('/search-suggestions')
 @cache.cached(timeout=50, query_string=True)
 def search_suggestions():
@@ -282,27 +275,8 @@ def settings():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    form = LoginForm()
 
-    if form.validate_on_submit():
-
-        email = form.email.data
-        password = form.password.data
-
-        # Use ORM method for querying.
-        user = Users.query.filter_by(email=email).first()
-
-        if not user:
-            flash("That email does not exist, please try again.")
-            return redirect(url_for('login'))
-        elif not check_password_hash(user.password, password):
-            flash('Password incorrect, please try again.')
-            return redirect(url_for('login'))
-        else:
-            login_user(user)
-            return redirect(url_for('settings'))
-
-    return render_template('login.html', form=form, logged_in=current_user.is_authenticated)
+    return render_template('login.html', logged_in=current_user.is_authenticated)
 
 
 @app.route('/register', methods=['GET', 'POST'])
