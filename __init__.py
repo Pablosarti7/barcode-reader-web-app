@@ -1,6 +1,6 @@
 from flask import Flask
 from config import Config
-from .models import db
+from .models.models import db
 from auth import auth_bp
 
 def create_app():
