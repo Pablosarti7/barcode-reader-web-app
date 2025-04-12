@@ -1,5 +1,5 @@
 from flask import Flask
-from .config import Config
+from config import Config
 from .models import db
 from .routes.auth import auth_bp
 
