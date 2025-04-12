@@ -23,7 +23,7 @@ def json_formatter(ingredients_string):
         model="gpt-4o-mini-2024-07-18",
         messages=[
             {"role": "system", "content": "Act like you are Bobby Parrish."},
-            {"role": "user", "content": f"Please only analyze the ingredients and return a JSON list with each ingredient's details (name, description, and rating). Ingredients: {ingredients_string}"}
+            {"role": "user", "content": f"Please only analyze the ingredients like bobby parrish and return a JSON list with each ingredient's details (name, description, and rating). Ingredients: {ingredients_string}"}
         ],
         response_format=SetIngredientsRequest
     )
