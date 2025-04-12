@@ -1,7 +1,7 @@
 from flask import Flask
 from config import Config
 from .models import db
-from .routes.auth import auth_bp
+from auth import auth_bp
 
 def create_app():
     app = Flask(__name__)
