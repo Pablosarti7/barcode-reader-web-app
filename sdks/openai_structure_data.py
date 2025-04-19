@@ -1,8 +1,9 @@
 from openai import OpenAI
 import os
 from pydantic import BaseModel, Field
-from typing import List
-import json
+from dotenv import load_dotenv
+
+load_dotenv()
 
 openai = OpenAI(api_key=os.environ.get('OPENAI_API_KEY'))
 
