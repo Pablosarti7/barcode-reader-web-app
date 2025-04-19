@@ -18,11 +18,14 @@ from itsdangerous import URLSafeTimedSerializer
 from flask_mail import Mail, Message
 import stripe
 from flask_migrate import Migrate
+from dotenv import load_dotenv
 
 # Standard python module imports
 import os
 import secrets
 from functools import wraps
+
+load_dotenv()
 
 app = Flask(__name__)
 app.secret_key = os.urandom(24)
