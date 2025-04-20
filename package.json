@@ -1,8 +1,7 @@
 {
   "name": "barcode-reader-web-app",
   "version": "1.0.0",
-  "description": "Barcode reader app with TailwindCSS and Flask",
-  "main": "index.js",
+  "description": "Flask ingredients advisor web app with TailwindCSS for styling",
   "scripts": {
     "build:css": "npx tailwindcss -i src/tailwind.css -o static/css/tailwind.css",
     "build": "npm install && npm run build:css",

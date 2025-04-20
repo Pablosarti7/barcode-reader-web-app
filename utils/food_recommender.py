@@ -104,25 +104,34 @@ def recommend_healthier_food(item_name, top_n=3):
     # Get fresh data each time the function is called
     products_df, similarity_df = get_similarity_matrix()
     health_scores = get_health_scores_from_db()
-    
+
     # Apply to dataset
     products_df['health_score'] = products_df['ingredients'].apply(
         lambda x: calculate_health_score(x, health_scores))
 
-    item_row = products_df[products_df['name'] == item_name].iloc[0]
-
+    filtered_df = products_df[products_df['name'] == item_name]
+    if not filtered_df.empty:
+        item_row = filtered_df.iloc[0]
+    else:
+        # Handle the case where no matching item was found
+        # For example:
+        # raise ValueError(f"No product found with name '{item_name}'")
+        # or return None, depending on your needs
+        return None
+    
     item_score = item_row['health_score']
     item_category = item_row['category'].lower()
-    
+
 
     # Check if there is NaN values and set to 0 if true
     if pd.isna(item_score):
         item_score = 0
+        
 
     # Filter for healthier items in the same category
     healthier_items = products_df[(products_df['health_score'] > item_score) & (
         products_df['category'].str.lower() == item_category)]
-    
+
     # Compute similarity scores
     sim_scores = similarity_df[item_name].loc[healthier_items['name']]
     
