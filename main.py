@@ -127,7 +127,7 @@ def home():
 
                 database_tasks = [get_ingredient(
                     ingredient) for ingredient in product_data]
-                testing = recommend_healthier_food(name)
+                # testing = recommend_healthier_food(name)
             else:
 
                 list_of_objects = json_formatter(ingredients_text)
@@ -152,7 +152,7 @@ def home():
 
                 database_tasks = [get_ingredient(
                     ingredient) for ingredient in list_of_ingredients]
-                testing = recommend_healthier_food(name)
+                # testing = recommend_healthier_food(name)
 
             # Only if the user is logged in save the product barcode in their account
             if current_user.is_authenticated:
@@ -173,7 +173,7 @@ def home():
                     db.session.commit()
 
             return render_template('index.html', form=form, name=name, ingredients_list=database_tasks,
-                                   nutriscore=nutriscore, logged_in=current_user.is_authenticated, testing=testing)
+                                   nutriscore=nutriscore, logged_in=current_user.is_authenticated)
         else:
             flash('Sorry product key not found in data.')
             return redirect(url_for('home'))
