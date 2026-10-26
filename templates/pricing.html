@@ -74,6 +74,7 @@
                 <h5 class="text-lg text-gray-500 mt-2">$1.00 / month</h5>
                 {% if not redirect_to_pay %}
                 <form action="{{ url_for('create_checkout_session') }}" method="POST" class="mt-4 w-full">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                     <input type="hidden" name="lookup_key" value="small_monthly" />
                     <button id="starter-checkout" type="submit"
                         class="block w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-4 rounded transition duration-150">
@@ -82,6 +83,7 @@
                 </form>
                 {% else %}
                 <form action="{{ url_for('settings') }}" method="POST" class="mt-4 w-full">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                     <input type="hidden" name="lookup_key" value="small_monthly" />
                     <button id="starter-checkout" type="submit"
                         class="block w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-4 rounded transition duration-150">
@@ -106,6 +108,7 @@
                 <h5 class="text-lg text-gray-500 mt-2">$5.00 / month</h5>
                 {% if not redirect_to_pay %}
                 <form action="{{ url_for('create_checkout_session') }}" method="POST" class="mt-4 w-full">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                     <input type="hidden" name="lookup_key" value="big_monthly" />
                     <button id="pro-checkout" type="submit"
                         class="block w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-4 rounded transition duration-150">
@@ -114,6 +117,7 @@
                 </form>
                 {% else %}
                 <form action="{{ url_for('settings') }}" method="POST" class="mt-4 w-full">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                     <input type="hidden" name="lookup_key" value="big_monthly" />
                     <button id="pro-checkout" type="submit"
                         class="block w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-4 rounded transition duration-150">

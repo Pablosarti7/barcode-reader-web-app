@@ -1,29 +1,22 @@
-import pytest
-from main import app
-from forms.forms import SearchIngredient
+from unittest.mock import patch
 
-@pytest.fixture
-def client():
-    app.config['TESTING'] = True
-    with app.test_client() as client:
-        yield client
-
-def test_search_ingredient_form_submission(client):
+@patch('main.get_ingredient', return_value={'name': 'Salt', 'description': 'A seasoning', 'rating': 'neutral'})
+def test_search_ingredient_form_submission(lookup, client, post):
     """Test the search ingredient form submission and response"""
-    # Make a POST request to the search endpoint with test data
-    response = client.post('/search', data={
+    # Verify a valid submission actually queries and displays the ingredient.
+    response = post('/search', data={
         'ingredient': 'salt',  # The form field name from SearchIngredient form
-        'csrf_token': 'dummy',  # Required for form validation
     }, follow_redirects=True)
     
     # Check if the request was successful
     assert response.status_code == 200
+    lookup.assert_called_once_with('salt')
+    assert b'A seasoning' in response.data
 
-def test_search_ingredient_form_empty(client):
+def test_search_ingredient_form_empty(client, post):
     """Test the search ingredient form with empty input"""
-    response = client.post('/search', data={
+    response = post('/search', data={
         'ingredient': '',
-        'csrf_token': 'dummy',
     }, follow_redirects=True)
     
     # Should still return 200 but with empty results

@@ -129,6 +129,7 @@
                     </form>
                     <div class="result-box rounded-lg mt-4 bg-gray-100 z-10"></div>
                     <form id="barcodeForm" method="POST" action="/" style="display: none;">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                         <input type="hidden" name="barcode" id="hiddenBarcodeInput">
                     </form>
                 </div>

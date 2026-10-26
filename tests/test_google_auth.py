@@ -1,24 +1,13 @@
-import pytest
-from unittest.mock import patch, MagicMock
+from unittest.mock import patch
 from main import app, Users, db
-from flask import session
 
-@pytest.fixture
-def client():
-    app.config['TESTING'] = True
-    app.config['WTF_CSRF_ENABLED'] = False
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'
-    
-    with app.test_client() as client:
-        with app.app_context():
-            db.create_all()
-        yield client
-        with app.app_context():
-            db.drop_all()
-
-def test_google_login_route(client):
+@patch('main.google.authorize_redirect')
+def test_google_login_route(authorize_redirect, client):
     """Test that the Google login route redirects to Google"""
+    from flask import redirect
+    authorize_redirect.return_value = redirect('https://accounts.google.com/test')
     response = client.get('/google/login')
+    assert authorize_redirect.call_args.kwargs['nonce']
     assert response.status_code == 302  # Should be a redirect
     assert 'accounts.google.com' in response.location  # Should redirect to Google
 

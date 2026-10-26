@@ -3,8 +3,6 @@ import os
 from pydantic import BaseModel, Field
 
 
-openai = OpenAI(api_key=os.environ.get('OPENAI_API_KEY'))
-
 class ProductInfo(BaseModel):
     name: str
     ingredients: str
@@ -14,7 +12,7 @@ class ProductInfo(BaseModel):
 
 def product_info_json(ingredients_string):
     # Making the completion call
-    completion = openai.beta.chat.completions.parse(
+    completion = OpenAI(api_key=os.environ.get('OPENAI_API_KEY')).beta.chat.completions.parse(
         model="gpt-4o-mini-2024-07-18",
         messages=[
             {"role": "system", "content": "You are a structure output helper."},
