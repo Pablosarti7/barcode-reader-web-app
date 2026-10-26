@@ -17,6 +17,6 @@
     Create an account
     {% endif %}
     {% endwith %}
-    <a href="{{ url_for('logout') }}"><p>Logout instead</p></a>
+    <form method="POST" action="{{ url_for('logout') }}"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><button type="submit"><p>Logout instead</p></button></form>
 </body>
 </html>

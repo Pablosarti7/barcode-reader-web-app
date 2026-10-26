@@ -6,19 +6,20 @@ from apis.ingredients_api import get_ingredient, add_ingredient
 from apis.products_api import add_product, get_specific_ingredient
 from sdks.openai_sdk import json_formatter
 from sdks.openai_structure_data import product_info_json
-from utils.food_recommender import recommend_healthier_food
 from models.models import db, Users, ScanHistory
 
 # External imports
-from flask import Flask, render_template, request, jsonify, redirect, url_for, flash, abort, session, json
+from flask import Flask, render_template, request, jsonify, redirect, url_for, flash, abort, session
 from flask_login import login_user, LoginManager, login_required, current_user, logout_user
 from flask_caching import Cache  # type: ignore
 from authlib.integrations.flask_client import OAuth  # type: ignore
-from itsdangerous import URLSafeTimedSerializer
-from flask_mail import Mail, Message
+from flask_mail import Mail
 import stripe
 from flask_migrate import Migrate
 from dotenv import load_dotenv
+from flask_wtf.csrf import CSRFProtect
+from config import configure_app
+import click
 
 # Standard python module imports
 import os
@@ -28,17 +29,8 @@ from functools import wraps
 load_dotenv()
 
 app = Flask(__name__)
-app.secret_key = os.urandom(24)
-
-
-# SQLalchemy database configurations
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("DATABASE_URL")
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-# Ensures cookies are only sent over HTTPS
-app.config['SESSION_COOKIE_SECURE'] = True
-app.config['REMEMBER_COOKIE_SECURE'] = True
-# Prevents JavaScript access to cookies
-app.config['SESSION_COOKIE_HTTPONLY'] = True
+configure_app(app)
+csrf = CSRFProtect(app)
 
 # OAuth configurations
 app.config['GOOGLE_CLIENT_ID'] = os.environ.get("CLIENT_ID")
@@ -61,6 +53,15 @@ oauth = OAuth(app)
 mail = Mail(app)
 # Initializing Flask-Migrate for database tables modifications
 migrate = Migrate(app, db)
+
+
+@app.cli.command('init-db')
+def init_db():
+    """Create tables in the local development database only."""
+    if not app.config['DEVELOPMENT']:
+        raise click.ClickException('init-db is for local development only.')
+    db.create_all()
+    click.echo('Local database tables created.')
 
 
 login_manager = LoginManager()
@@ -105,7 +106,9 @@ def home():
     form = SearchBarcode()
 
     if request.method == 'POST':
-        barcode = request.form.get('barcode') or form.ingredients.data
+        barcode = (request.form.get('barcode') or form.ingredients.data or '').strip()
+        if not barcode.isascii() or not barcode.isdigit() or len(barcode) not in {8, 12, 13, 14}:
+            abort(400, description='Enter a barcode with 8, 12, 13, or 14 digits.')
 
         # Send the barcode to the OpenFoodFacts API
         ingredients = get_product_info(str(barcode))
@@ -129,7 +132,8 @@ def home():
                     ingredient) for ingredient in product_data]
                 # testing = recommend_healthier_food(name)
             else:
-
+                if not os.environ.get('OPENAI_API_KEY'):
+                    abort(503, description='AI ingredient analysis is not configured yet. See README.md.')
                 list_of_objects = json_formatter(ingredients_text)
 
                 for obj in list_of_objects:
@@ -199,7 +203,9 @@ def search():
 @cache.cached(timeout=50, query_string=True)
 def search_suggestions():
 
-    query = request.args['q'].lower()
+    query = request.args.get('q', '').strip().lower()
+    if not query:
+        return jsonify(suggestions=[])
 
     prefix = autosuggest(query)
 
@@ -212,6 +218,7 @@ def about():
 
 
 @app.route('/settings', methods=['GET', 'POST'])
+@login_required
 def settings():
 
     subsection = request.args.get('section', 'main')
@@ -239,20 +246,20 @@ def settings():
         
         # Only try to retrieve subscription if the user has a subscription_id
         if current_user.subscription_id:
-            subscription_object = stripe.Subscription.retrieve(current_user.subscription_id)
+            subscription_object = active_subscription(current_user)
             
-            if subscription_object["items"]["data"][0]["price"]["lookup_key"] == 'big_monthly':
+            if subscription_object and subscription_object["items"]["data"][0]["price"]["lookup_key"] == 'big_monthly':
                 show_history_to_user = True
 
                 # Get all of the items under current users id only if the user is a premium subscriber.
                 users_scan_history = ScanHistory.query.filter_by(
                 user_id=current_user.id).all()
 
-            elif subscription_object["items"]["data"][0]["price"]["lookup_key"] == 'small_monthly':
+            elif subscription_object and subscription_object["items"]["data"][0]["price"]["lookup_key"] == 'small_monthly':
                 show_history_to_user = False
 
             # User has a valid subscription
-            if_subscribed_object = True
+            if_subscribed_object = bool(subscription_object)
 
 
     if form.validate_on_submit():
@@ -267,9 +274,7 @@ def settings():
 
         # If user click on delete then perform this action
         elif action == 'delete':
-            # db.session.delete(id)
-            # db.session.commit()
-            return "Account deleted successfully"
+            return 'Account deletion is not available yet. Please contact support.', 501
         else:
             return "Unknown action", 400
 
@@ -321,6 +326,9 @@ def authorize():
 
 @app.route('/google/login')
 def googlelogin():
+    if not app.config['GOOGLE_CLIENT_ID'] or not app.config['GOOGLE_CLIENT_SECRET']:
+        flash('Google login is not configured in this environment yet. See README.md.')
+        return redirect(url_for('login'))
     
     try:
         nonce = secrets.token_urlsafe(16)
@@ -336,168 +344,170 @@ def googlelogin():
         return 'error_page'
 
 
-@app.route('/logout')
+@app.route('/logout', methods=['POST'])
 @login_required
 def logout():
     logout_user()
     return redirect(url_for('home'))
 
 
-@app.route('/delete/<int:item_id>')
+@app.route('/delete/<int:item_id>', methods=['POST'])
+@login_required
 def delete(item_id):
 
-    item = ScanHistory.query.get_or_404(item_id)
+    item = ScanHistory.query.filter_by(id=item_id, user_id=current_user.id).first_or_404()
     db.session.delete(item)
     db.session.commit()
     return redirect("/settings?section=scan_history")
 
 
+def active_subscription(user):
+    """Grant access only while Stripe reports an active subscription."""
+    if not user.subscription_id:
+        return None
+    try:
+        subscription = stripe.Subscription.retrieve(user.subscription_id)
+    except stripe.StripeError:
+        app.logger.exception('Unable to check subscription status')
+        abort(503, description='Billing is temporarily unavailable. Please try again later.')
+    return subscription if subscription.get('status') in {'active', 'trialing'} else None
+
+
 @app.route('/pricing')
 def pricing():
-    # Variable to None for declaration purposes.
-    redirect_user_to_pay = None
-
-    if current_user.is_authenticated:
-
-        if current_user.subscription_id:
-
-            subscription_object = stripe.Subscription.retrieve(current_user.subscription_id)
-            
-            if subscription_object["items"]["data"][0]["price"]["lookup_key"] == 'big_monthly':
-                redirect_user_to_pay = True
-                flash('You seem to already have a paid account. If you wish to switch subscriptions contact support.')
-            elif subscription_object["items"]["data"][0]["price"]["lookup_key"] == 'small_monthly':
-                redirect_user_to_pay = True
-                flash('You seem to already have a paid account. If you wish to switch subscriptions contact support.')
-            
-    else:
-        redirect_user_to_pay = False
-        flash('You need to be logged in or create an account first.')
-    
-    return render_template('pricing.html', logged_in=current_user.is_authenticated, redirect_to_pay=redirect_user_to_pay)
+    subscribed = current_user.is_authenticated and bool(active_subscription(current_user))
+    return render_template('pricing.html', logged_in=current_user.is_authenticated,
+                           redirect_to_pay=subscribed)
 
 
 @app.route('/success')
 @login_required
 def success():
-
+    # A browser redirect is not proof of payment. The webhook updates the account.
     return render_template('success.html')
 
 
 @app.route('/cancel')
 @login_required
 def cancel():
-
     return render_template('cancel.html')
 
 
-YOUR_DOMAIN = 'https://www.ingredientadvisor.com'
+def require_billing():
+    if not stripe.api_key:
+        abort(503, description='Billing is not configured in this environment.')
 
 
 @app.route('/create-checkout-session', methods=['POST'])
+@login_required
 def create_checkout_session():
+    require_billing()
+    lookup_key = request.form.get('lookup_key')
+    if lookup_key not in {'small_monthly', 'big_monthly'}:
+        abort(400, description='Choose a valid subscription plan.')
+    if active_subscription(current_user):
+        abort(409, description='Manage your existing subscription from Settings.')
     try:
-        prices = stripe.Price.list(
-            lookup_keys=[request.form['lookup_key']],
-            expand=['data.product']
-        )
-
+        prices = stripe.Price.list(lookup_keys=[lookup_key], expand=['data.product'])
+        if not prices.data:
+            abort(400, description='This plan is not available.')
+        if not current_user.customer_id:
+            customer = stripe.Customer.create(
+                email=current_user.email,
+                metadata={'user_id': str(current_user.id)},
+                idempotency_key=f'ingredient-advisor-customer-{current_user.id}',
+            )
+            current_user.customer_id = customer.id
+            db.session.commit()
         checkout_session = stripe.checkout.Session.create(
-            line_items=[
-                {
-                    'price': prices.data[0].id,
-                    'quantity': 1,
-                },
-            ],
+            customer=current_user.customer_id,
+            client_reference_id=str(current_user.id),
+            metadata={'user_id': str(current_user.id)},
+            subscription_data={'metadata': {'user_id': str(current_user.id)}},
+            line_items=[{'price': prices.data[0].id, 'quantity': 1}],
             mode='subscription',
-            success_url=YOUR_DOMAIN +
-            '/success?session_id={CHECKOUT_SESSION_ID}',
-            cancel_url=YOUR_DOMAIN + '/cancel',
+            success_url=app.config['PUBLIC_BASE_URL'] + '/success',
+            cancel_url=app.config['PUBLIC_BASE_URL'] + '/cancel',
         )
-
         return redirect(checkout_session.url, code=303)
-    except Exception as e:
-        print(e)
-        return "Server error", 500
+    except stripe.StripeError:
+        app.logger.exception('Unable to create checkout')
+        abort(503, description='Billing is temporarily unavailable. Please try again later.')
 
 
 @app.route('/create-portal-session', methods=['POST'])
+@login_required
 def customer_portal():
-    # For demonstration purposes, we're using the Checkout session to retrieve the customer ID.
-    # Typically this is stored alongside the authenticated user in your database.
-    checkout_session_id = request.form.get('session_id')
-
-    
-
-    checkout_session = stripe.checkout.Session.retrieve(checkout_session_id)
-    
-    if current_user.is_authenticated:
-        email = current_user.email
-
-        # Storing the users stripe portal ID to be able to retrieve the session
-        user_to_add_sessionid = Users.query.filter_by(email=email).first()
-        if not user_to_add_sessionid.stripe_user_session_id:
-            user_to_add_sessionid.customer_id = checkout_session["customer"]
-            user_to_add_sessionid.stripe_user_session_id = checkout_session["id"]
-            user_to_add_sessionid.invoice_id = checkout_session["invoice"]
-            user_to_add_sessionid.subscription_id = checkout_session["subscription"]
-            db.session.commit()
-    
-    # This is the URL to which the customer will be redirected after they're
-    # done managing their billing with the portal.
-    return_url = "https://www.ingredientadvisor.com/settings"
-
-    portalSession = stripe.billing_portal.Session.create(
-        customer=checkout_session.customer,
-        return_url=return_url,
-    )
-    return redirect(portalSession.url, code=303)
+    require_billing()
+    if not current_user.customer_id:
+        abort(409, description='No billing account is linked. Please contact support.')
+    try:
+        portal = stripe.billing_portal.Session.create(
+            customer=current_user.customer_id,
+            return_url=app.config['PUBLIC_BASE_URL'] + '/settings',
+        )
+        return redirect(portal.url, code=303)
+    except stripe.StripeError:
+        app.logger.exception('Unable to create billing portal')
+        abort(503, description='Billing is temporarily unavailable. Please try again later.')
 
 
 @app.route('/webhook', methods=['POST'])
+@csrf.exempt
 def webhook_received():
-    # Replace this endpoint secret with your endpoint's unique secret
-    # If you are testing with the CLI, find the secret by running 'stripe listen'
-    # If you are using an endpoint defined with the API or dashboard, look in your webhook settings
-    # at https://dashboard.stripe.com/webhooks
-    webhook_secret = 'whsec_4cOPjgclgjZ4tq8kaB6Cwwre9hPTQXCI'
-    request_data = json.loads(request.data)
+    webhook_secret = app.config['STRIPE_WEBHOOK_SECRET']
+    if not webhook_secret:
+        abort(503, description='Stripe webhook is not configured.')
+    try:
+        event = stripe.Webhook.construct_event(
+            payload=request.get_data(),
+            sig_header=request.headers.get('Stripe-Signature'),
+            secret=webhook_secret,
+        )
+    except (ValueError, stripe.SignatureVerificationError):
+        return jsonify(error='Invalid webhook signature or payload.'), 400
 
-    if webhook_secret:
-        # Retrieve the event by verifying the signature using the raw body and secret if webhook signing is configured.
-        signature = request.headers.get('stripe-signature')
-        try:
-            event = stripe.Webhook.construct_event(
-                payload=request.data, sig_header=signature, secret=webhook_secret)
-            data = event['data']
-        except Exception as e:
-            return e
-        # Get the type of webhook event sent - used to check the status of PaymentIntents.
-        event_type = event['type']
-    else:
-        data = request_data['data']
-        event_type = request_data['type']
-    data_object = data['object']
-
-    print('event ' + event_type)
-
+    event_type = event['type']
+    obj = event['data']['object']
+    handled_events = {
+        'checkout.session.completed', 'customer.subscription.created',
+        'customer.subscription.updated', 'customer.subscription.deleted',
+    }
+    if event_type not in handled_events:
+        return jsonify(status='success')
+    # The customer association was stored on the server before checkout.
+    user = Users.query.filter_by(customer_id=obj.get('customer')).first() if obj.get('customer') else None
+    if not user:
+        return jsonify(status='ignored')
     if event_type == 'checkout.session.completed':
-        print('🔔 Payment succeeded!')
-    elif event_type == 'customer.subscription.trial_will_end':
-        print('Subscription trial will end')
-    elif event_type == 'customer.subscription.created':
-        print('Subscription created %s', event.id)
-    elif event_type == 'customer.subscription.updated':
-        print('Subscription created %s', event.id)
-    elif event_type == 'customer.subscription.deleted':
-        # handle subscription canceled automatically based
-        # upon your subscription settings. Or if the user cancels it.
-        print('Subscription canceled: %s', event.id)
-    elif event_type == 'entitlements.active_entitlement_summary.updated':
-        # handle active entitlement summary updated
-        print('Active entitlement summary updated: %s', event.id)
+        if (obj.get('mode') != 'subscription'
+                or obj.get('client_reference_id') != str(user.id)
+                or not obj.get('subscription')):
+            return jsonify(status='ignored')
+        subscription_id = obj['subscription']
+    else:
+        subscription_id = obj['id']
+        # An old subscription event must not overwrite a newer subscription.
+        if user.subscription_id and user.subscription_id != subscription_id:
+            return jsonify(status='ignored')
 
-    return jsonify({'status': 'success'})
+    try:
+        # Fetch current state so duplicates and delayed events cannot restore stale access.
+        subscription = stripe.Subscription.retrieve(subscription_id)
+        if user.subscription_id and user.subscription_id != subscription_id:
+            existing = stripe.Subscription.retrieve(user.subscription_id)
+            if (existing.get('status') in {'active', 'trialing'}
+                    or subscription.get('status') not in {'active', 'trialing'}):
+                return jsonify(status='ignored')
+    except stripe.StripeError:
+        app.logger.exception('Unable to synchronize subscription')
+        return jsonify(error='Unable to synchronize subscription.'), 503
+    if subscription.get('customer') != user.customer_id:
+        return jsonify(status='ignored')
+    user.subscription_id = subscription_id
+    user.subscribed = subscription.get('status') in {'active', 'trialing'}
+    db.session.commit()
+    return jsonify(status='success')
 
 
 @app.errorhandler(404)
@@ -511,4 +521,4 @@ def internal_server_error(e):
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=app.config['DEVELOPMENT'])

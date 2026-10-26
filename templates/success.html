@@ -3,7 +3,6 @@
 <head>
   <title>Thanks for your order!</title>
   <link href="{{ url_for('static', filename='css/tailwind.css') }}" rel="stylesheet">
-  <script src="{{ url_for('static', filename='js/client.js') }}" defer></script>
 </head>
     <body class="bg-gray-100 text-gray-900 antialiased">
     <section class="max-w-md mx-auto p-6">
@@ -17,16 +16,16 @@
             </g>
         </svg>
         <div class="flex-1">
-          <h3 class="text-xl font-bold">Subscription to Starter plan successful!</h3>
+          <h3 class="text-xl font-bold">Thank you! Your subscription is being confirmed.</h3>
         </div>
       </div>
       <form action="/create-portal-session" method="POST" class="mt-6">
-        <input type="hidden" id="session-id" name="session_id" value="" />
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
         <button id="checkout-and-portal-button" type="submit" class="block w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-4 rounded transition duration-150">
           Manage your billing information
         </button>
       </form>
     </section>
     </body>
-  
+
 </html>

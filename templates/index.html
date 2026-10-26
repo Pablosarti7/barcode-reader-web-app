@@ -87,6 +87,7 @@
                     </div>
                 </form>
                 <form id="barcodeForm" method="POST" style="display: none;">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                     <input type="hidden" name="barcode" id="hiddenBarcodeInput">
                 </form>
             </div>
@@ -370,7 +371,7 @@
                     <h5 class="text-xl font-bold mb-2">
                         Nutriscore
                     </h5>
-                    {% if ingredients_list %}
+                    {% if nutriscore %}
                     {% set most_recent_year = nutriscore.keys() | max %}
                     {% set most_recent_nutriscore = nutriscore[most_recent_year] %}
                     {% set grade = most_recent_nutriscore.grade %}
@@ -414,6 +415,8 @@
                         </p>
                         {% endif %}
                     </div>
+                    {% else %}
+                    <p>Nutri-Score is not available for this product.</p>
                     {% endif %}
                 </div>
             </div>

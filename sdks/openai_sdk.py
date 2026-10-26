@@ -5,8 +5,6 @@ from typing import List
 import json
 
 
-openai = OpenAI(api_key=os.environ.get('OPENAI_API_KEY'))
-
 class Ingredient(BaseModel):
     name: str = Field(description="This is the name of the ingredient.")
     description: str = Field(description="Short description of the ingredient, e.g., 'synthetic dye derived from petroleum' or 'gut-disrupting artificial sweetener'.")
@@ -17,7 +15,7 @@ class SetIngredientsRequest(BaseModel):
 
 def json_formatter(ingredients_string):
     # Making the completion call
-    completion = openai.beta.chat.completions.parse(
+    completion = OpenAI(api_key=os.environ.get('OPENAI_API_KEY')).beta.chat.completions.parse(
         model="gpt-4.1-mini-2025-04-14",
         messages=[
             {"role": "system", "content": "Act like you are Bobby Parrish or Dr. Eric Berg."},

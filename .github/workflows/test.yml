@@ -11,39 +11,28 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
-        python-version: '3.x'
+        python-version: '3.12'
     
     - name: Set up Node.js
-      uses: actions/setup-node@v3
+      uses: actions/setup-node@v4
       with:
-        node-version: '18'
+        node-version: '22'
     
     - name: Install Python dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install -r requirements.txt
-        pip install pytest
+        pip install -r requirements-dev.txt
 
     - name: Install Node.js dependencies
-      run: npm install
+      run: npm ci
     
     - name: Build CSS
       run: npm run build:css
     
-    - name: Run tests
-      env:
-        OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-        DATABASE_URL: ${{ secrets.DATABASE_URL }}
-        SECRET_API_KEY: ${{ secrets.SECRET_API_KEY }}
-        CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
-        CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
-        G_EMAIL: ${{ secrets.G_EMAIL }}
-        G_PASSWORD: ${{ secrets.G_PASSWORD }}
-        STRIPE_SECRET_KEY: ${{ secrets.STRIPE_SECRET_KEY }}
-      run: |
-        pytest
+    - name: Run isolated tests (no service credentials required)
+      run: python -m pytest -q
